@@ -67,7 +67,7 @@ int main()
 {
     Mode mode;
     VideoSaveMode videosavemode;
-    VideoResolution vres;
+    VideoResolution vres = VideoResolution::rNone;
 
     char filename[MAX_PATH];
 
