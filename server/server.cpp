@@ -7,9 +7,14 @@
 #include <Windows.h>
 #include <db.h> 
 #include "ConfigParser.h"
+#include "logger.h"
 
-//4 support multiple users using multi thread
+//5 support multiple users using multi thread
 DWORD WINAPI ProcessClient(LPVOID arg);
+DWORD WINAPI Logging_info_perSec(LPVOID arg);
+HANDLE ghMutex;
+static int Query[6][3];//[Number of Client][0:logging disable or enable, 1: Port Number, 2: Quert Info]
+static int Client_num;
 
 //Minimum threshold from config (server.conf)
 float MinThreshold;
@@ -21,16 +26,14 @@ int main()
     struct sockaddr_in cli_addr;
     socklen_t          clilen;
     bool NeedStringLength = true;
-    unsigned short PlateStringLength;
-    char PlateString[1024];
-    char DBRecord[2048];
-    DBT key, data;
-    DB* dbp; /* DB structure handle */
-    u_int32_t flags; /* database open flags */
-    int ret; /* function return value */
-    ssize_t result;
 
+    HANDLE aThread[MAXCLIENT];
+    HANDLE loggingThread;
     DWORD threadID;
+
+    int i;
+
+
 
     // load config
     CConfigParser conf("server.conf");
@@ -44,6 +47,18 @@ int main()
         MinThreshold = 80.0;   // default 80%
     }
 
+    /*1초당 1번씩 Loggging 하는 thread 생성*/
+    loggingThread = CreateThread(NULL, 0, Logging_info_perSec, 0, 0, &threadID);
+    if (loggingThread == NULL)
+    {
+        printf("thread not created");
+    }
+    /*Mutex 생성*/
+    ghMutex = CreateMutex(NULL, FALSE, NULL);
+    if (ghMutex == NULL)
+    {
+        printf("logging thread not created");
+    }
     /* TCP/IP 부분. */
 
     //TCP 연결
@@ -54,6 +69,7 @@ int main()
         return(-1);
     }
     clilen = sizeof(cli_addr);
+
     while (1)
     {
 
@@ -62,17 +78,40 @@ int main()
             printf("AcceptTcpConnection Failed\n");
             return(-1);
         }
-        printf("connected\n");
 
-        // 스레드 생성 2 
-        HANDLE hThread = CreateThread(NULL, 0, ProcessClient, (LPVOID)TcpConnectedPort, 0, &threadID);
-        if (hThread == NULL)
+        if (Client_num < 5)
         {
-            printf("thread not created");
+            printf("connected\n");
+
+            // 스레드 생성 2 
+            aThread[Client_num] = CreateThread(NULL, 0, ProcessClient, (LPVOID)TcpConnectedPort, 0, &threadID);
+            if (aThread[Client_num] == NULL)
+            {
+                printf("thread not created");
+            }
+            else
+            {
+                //Maximum 5 client can connect
+                Client_num++;
+            }
         }
+        else
+        {
+            std::cout << "can not connect lookup server " << "\n";
 
-    }    
+            //CLOSE_SOCKET((*TcpConnectedPort).ConnectedFd);
+        }
+    }
 
+    //Wait for all threads to terminate
+    WaitForMultipleObjects(MAXCLIENT, aThread, TRUE, INFINITE);
+
+    // close thread and mutex handles
+    for (i = 0; i < MAXCLIENT; i++)
+        CloseHandle(aThread[i]);
+    CloseHandle(ghMutex);
+
+    //Close TCP listen Port
     CloseTcpListenPort(&TcpListenPort);
 }
 
@@ -173,9 +212,9 @@ DWORD WINAPI ProcessClient(LPVOID arg)
     unsigned short PlateStringLength;
     char PlateString[1024];
     char DBRecord[2048];
-    TTcpConnectedPort* TcpConnectedPort;
-    // 전달된 소켓 3 
-    TcpConnectedPort = (TTcpConnectedPort*)arg;
+    TTcpConnectedPort* TcpConnectedPort = (TTcpConnectedPort*)arg;
+    int Query_num = 0;
+    int i;
 
      bool matchResult;  // Result of Partial Match 
 
@@ -211,6 +250,21 @@ DWORD WINAPI ProcessClient(LPVOID arg)
         printf("DB Open Success\n");
     }
 
+    /*add query Port ID*/
+    WaitForSingleObject(ghMutex, INFINITE);
+    for (i = 1; i < 6; i++)
+    {
+        if (Query[i][0] != VALID_LOGGER)
+        {
+            Query[i][0] = VALID_LOGGER;
+            Query[i][1] = (int)TcpConnectedPort->ConnectedFd;
+            Query_num = i;
+            break;
+        }
+    }
+    //std::cout << "QUERY start at : " << Query_num <<"\n";
+    ReleaseMutex(ghMutex);
+
     while (1)
     {
         //데이터 수신부분
@@ -218,6 +272,14 @@ DWORD WINAPI ProcessClient(LPVOID arg)
             sizeof(PlateStringLength)) != sizeof(PlateStringLength))
         {
             printf("exit and disconnected\n");
+
+            WaitForSingleObject(ghMutex, INFINITE);
+            Query[Query_num][0] = 0;
+            Query[Query_num][1] = 0;
+            Query[Query_num][2] = 0;
+            Client_num--;
+            //std::cout << "Delate Query" << Query[1][0] << ", " << Query[2][0] << ", " << Query[3][0] << ", " << Query[4][0] << ", " << Query[5][0]  << "\n";
+            ReleaseMutex(ghMutex);
             break;
         }
         PlateStringLength = ntohs(PlateStringLength); //data ordering (little 
@@ -235,6 +297,12 @@ DWORD WINAPI ProcessClient(LPVOID arg)
         }
         printf("Plate is : %s\n", PlateString);
 
+        /*Query incremental*/
+        WaitForSingleObject(ghMutex, INFINITE);
+        Query[0][2]++; //Total Query
+        Query[Query_num][2]++; // Client Query
+        std::cout << "Total Query " << Query[0][2] << "    Port Number : " <<  Query[Query_num][1] << "   Number of QUERY : " << Query[Query_num][2] << "\n";
+        ReleaseMutex(ghMutex);
 
         /* Zero out the DBTs before using them. */
                 /* Zero out the DBTs before using them. */
@@ -297,5 +365,19 @@ DWORD WINAPI ProcessClient(LPVOID arg)
     }
    
     CLOSE_SOCKET((*TcpConnectedPort).ConnectedFd);
+    return 0;
+}
+
+DWORD WINAPI Logging_info_perSec(LPVOID arg)
+{
+    while (1)
+    {
+        Sleep(1000);
+        /*logging 시작 부분*/
+        //WaitForSingleObject(ghMutex, INFINITE);
+        //Logging_Index(Query);
+        //ReleaseMutex(ghMutex);
+        //printf("logging \n");
+    }
     return 0;
 }
