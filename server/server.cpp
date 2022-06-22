@@ -19,6 +19,8 @@ static int Client_num;
 //Minimum threshold from config (server.conf)
 float MinThreshold;
 
+const char code[12] = { 0x32, 0x54, 0x65, 0x61, 0x6d, 0x5f, 0x41, 0x68, 0x6e, 0x4c, 0x61, 0x62 };
+
 int main()
 {
     TTcpListenPort* TcpListenPort;
@@ -229,6 +231,24 @@ DWORD WINAPI ProcessClient(LPVOID arg)
         printf("DB Create Error\n");
         return -1;
     }
+
+    /* Database encrypt flags */
+    // get encrypt flag
+    ret = dbp->get_encrypt_flags(dbp, &flags);
+    if (ret != 0) {
+        /* Error handling goes here */
+        printf("DB Encrypt Error\n");
+        return -1;
+    }
+
+    flags = DB_ENCRYPT_AES;
+    ret = dbp->set_encrypt(dbp, code, flags);
+    if (ret != 0) {
+        /* Error handling goes here */
+        printf("DB Encrypt Error\n");
+        return -1;
+    }
+
     /* Database open flags */
     flags = DB_CREATE; /* If the database does not exist,
      * create it.*/
