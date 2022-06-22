@@ -6,12 +6,13 @@
 #include "NetworkTCP.h"
 #include <Windows.h>
 #include <db.h> 
-
-
+#include "ConfigParser.h"
 
 //4 support multiple users using multi thread
 DWORD WINAPI ProcessClient(LPVOID arg);
 
+//Minimum threshold from config (server.conf)
+float MinThreshold;
 
 int main()
 {
@@ -31,7 +32,17 @@ int main()
 
     DWORD threadID;
 
-  
+    // load config
+    CConfigParser conf("server.conf");
+
+    if (conf.IsSuccess())
+    {
+        MinThreshold = conf.GetFloat("MinThreshold");
+    }
+    else
+    {
+        MinThreshold = 80.0;   // default 80%
+    }
 
     /* TCP/IP 何盒. */
 
@@ -60,16 +71,101 @@ int main()
             printf("thread not created");
         }
 
-    }
-    
+    }    
 
     CloseTcpListenPort(&TcpListenPort);
 }
 
 
+// Fills lps[] for given patttern pat[0..M-1]
+void computeLPS(char* pat, int M, int* lps)
+{
+    // length of the previous longest prefix suffix
+    int len = 0;
+
+    lps[0] = 0; // lps[0] is always 0
+
+    // the loop calculates lps[i] for i = 1 to M-1
+    int i = 1;
+    while (i < M) {
+        if (pat[i] == pat[len]) {
+            len++;
+            lps[i] = len;
+            i++;
+        }
+        else // (pat[i] != pat[len])
+        {
+            // This is tricky. Consider the example.
+            // AAACAAAA and i = 7. The idea is similar
+            // to search step.
+            if (len != 0) {
+                len = lps[len - 1];
+
+                // Also, note that we do not increment
+                // i here
+            }
+            else // if (len == 0)
+            {
+                lps[i] = 0;
+                i++;
+            }
+        }
+    }
+}
+
+// Check Partial Match using KMP (Knuth Morris Pratt) pattern searching algorithm
+bool checkPartialMatch(char* pat, char* txt)
+{
+    int M = strlen(pat);
+    int N = strlen(txt);
+
+    float threshold =(float) (M*100)/N;
+
+    // filtering by Minimum  Threshold
+    if (threshold < MinThreshold) {
+        return FALSE;
+    }
+  
+    // create lps[] that will hold the longest prefix suffix
+    // values for pattern
+    int lps[24];
+
+    // Preprocess the pattern (calculate lps[] array)
+    computeLPS(pat, M, lps);
+
+    int i = 0; // index for txt[]
+    int j = 0; // index for pat[]
+    while (i < N) {
+        if (pat[j] == txt[i]) {
+            j++;
+            i++;
+        }
+
+        if (j == M) {
+            printf("Found pattern at index %d ", i - j);
+            j = lps[j - 1];
+
+            return TRUE;
+        }
+
+        // mismatch after j matches
+        else if (i < N && pat[j] != txt[i]) {
+            // Do not match lps[0..lps[j-1]] characters,
+            // they will match anyway
+            if (j != 0)
+                j = lps[j - 1];
+            else
+                i = i + 1;
+        }
+    }
+
+    return FALSE;
+}
+
 DWORD WINAPI ProcessClient(LPVOID arg)
 {
     DBT key, data;
+    DBC* dbcp;
     DB* dbp; /* DB structure handle */
     u_int32_t flags; /* database open flags */
     int ret; /* function return value */
@@ -80,6 +176,8 @@ DWORD WINAPI ProcessClient(LPVOID arg)
     TTcpConnectedPort* TcpConnectedPort;
     // 傈崔等 家南 3 
     TcpConnectedPort = (TTcpConnectedPort*)arg;
+
+     bool matchResult;  // Result of Partial Match 
 
     /*DB 何盒. */
 
@@ -157,7 +255,45 @@ DWORD WINAPI ProcessClient(LPVOID arg)
                 printf("WriteDataTcp %lld\n", result);
             printf("sent ->%s\n", (char*)data.data);
         }
-        else printf("not Found\n");
+        else
+        {
+            /* Acquire a cursor for the database. */
+            if ((ret = dbp->cursor(dbp, NULL, &dbcp, 0)) != 0) {
+                /* Error handling goes here */
+                printf("DB Cursor Error\n");
+                return -1;
+            }
+
+            memset(&key, 0, sizeof(DBT));
+            memset(&data, 0, sizeof(DBT));
+
+            while ((ret = dbcp->get(dbcp, &key, &data, DB_NEXT)) == 0)
+            {
+                if (PlateStringLength <= (int)key.size)
+                {
+                    matchResult = checkPartialMatch(PlateString, (char*)key.data);
+                }
+                else
+                {
+                    matchResult = checkPartialMatch((char*)key.data, PlateString);                    
+                }
+
+                if (matchResult)
+                {
+ 
+                    int sendlength = (int)(strlen((char*)data.data) + 1);
+                    short SendMsgHdr = ntohs(sendlength);
+                    if ((result = WriteDataTcp(TcpConnectedPort, (unsigned char*)&SendMsgHdr, sizeof(SendMsgHdr))) != sizeof(SendMsgHdr))
+                        printf("WriteDataTcp %lld\n", result);
+                    if ((result = WriteDataTcp(TcpConnectedPort, (unsigned char*)data.data, sendlength)) != sendlength)
+                        printf("WriteDataTcp %lld\n", result);
+                    
+                    // debug
+                    printf("[Partial Match]Org Plate [%s]\n", PlateString);
+                    printf("Matched Plate ->%s\n", (char*)data.data);
+                }
+            }
+        }
     }
    
     CLOSE_SOCKET((*TcpConnectedPort).ConnectedFd);
