@@ -7,6 +7,8 @@
 #include <string>
 #include <db.h> 
 
+const char code[12] = { 0x32, 0x54, 0x65, 0x61, 0x6d, 0x5f, 0x41, 0x68, 0x6e, 0x4c, 0x61, 0x62 };
+
 int main()
 {
     std::ifstream file("datafile.txt");
@@ -22,6 +24,15 @@ int main()
     if (ret != 0) {
         /* Error handling goes here */
         printf("DB Create Error\n");
+        return -1;
+    }
+    
+    /* Database encrypt flags */
+    flags = DB_ENCRYPT_AES;
+    ret = dbp->set_encrypt(dbp, code, flags);
+    if (ret != 0) {
+        /* Error handling goes here */
+        printf("DB Encrypt Error\n");
         return -1;
     }
     /* Database open flags */
