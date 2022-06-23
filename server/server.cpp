@@ -1,10 +1,11 @@
 // server.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
 
-#include <iostream>
 #include <string.h>
+#include <iostream>
 #include "NetworkTCP.h"
 #include <Windows.h>
+#include <stdio.h>
 #include <db.h> 
 #include "ConfigParser.h"
 #include "logger.h"
@@ -323,7 +324,7 @@ DWORD WINAPI ProcessClient(LPVOID arg)
         WaitForSingleObject(ghMutex, INFINITE);
         Query[0][2]++; //Total Query
         Query[Query_num][2]++; // Client Query
-
+        Logging_Index(PlateString);
         ReleaseMutex(ghMutex);
         //std::cout << "Total Query " << Query[0][2] << "    Port Number : " <<  Query[Query_num][1] << "   Number of QUERY : " << Query[Query_num][2] << "\n";
         /* Zero out the DBTs before using them. */
@@ -393,26 +394,35 @@ DWORD WINAPI ProcessClient(LPVOID arg)
 DWORD WINAPI Logging_info_perSec(LPVOID arg)
 {
     int i;
+    int j;
+    char test[1024];
     while (1)
     {
+        j = 0;
+        ::memset(test, 0, 100);
         Sleep(1000);
         /*logging 시작 부분*/
         WaitForSingleObject(ghMutex, INFINITE);
         //print logging
         if (Client_num > 0)
         {
-            Logging_Index(Query);
-            std::cout << "Total Query " << Query[0][2] << Client_num  <<"\n";
+            
+            j = sprintf_s(test, 1024, "Total Query = %d", Query[0][2]);
+            //std::cout << "Total Query " << Query[0][2] << Client_num  <<"\n";
+
             Query[0][2] = 0;
             for (i = 1; i < MAXCLIENT; i++)
             {
                 if (Query[i][0] == VALID_LOGGER)
                 {
-                    std::cout << "Port Number : " << Query[i][1] << "  Query Per Second :  " << Query[i][2] << "  ";
+                    j += sprintf_s(test + j, 1024 - j, " Port Number : %d , Query Per Second : %d ", Query[i][1], Query[i][2]);
+                    //std::cout << "Port Number : " << Query[i][1] << "  Query Per Second :  " << Query[i][2] << "  ";
                     Query[i][2] = 0;
                 }
             }
-            std::cout << "\n";
+            //std::cout << "\n";
+            Logging_Index(test);
+
         }
         ReleaseMutex(ghMutex);
     }

@@ -14,11 +14,10 @@ bool logging_start()
     return 1;
 }
 
-int Logging_Index(int arr[][3])
+int Logging_Index(char * data)
 {
-    std::cout << "hello\n";
-
-    PLOGD << "Hello log!";
+    std::cout << data << "\n";
+    PLOGD << data;
 
 
     return 0;
