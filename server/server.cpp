@@ -18,9 +18,21 @@ static int Query[6][3];//[Number of Client][0:logging disable or enable, 1: Port
 static int Client_num;
 
 //Minimum threshold from config (server.conf)
+int MaxClientNum;
 float MinThreshold;
+
 const char code[12] = { 0x32, 0x54, 0x65, 0x61, 0x6d, 0x5f, 0x41, 0x68, 0x6e, 0x4c, 0x61, 0x62 };
 
+void Config_WriteInit(void)
+{
+    FILE* stream = NULL;
+    errno_t num = fopen_s(&stream, "server.conf", "w");
+
+    fprintf(stream, "%s%d\n", "MaxClientNum=", 5);
+    fprintf(stream, "%s%f\n", "MinThreshold=", 80.0);
+
+    fclose(stream);
+}
 
 int main()
 {
@@ -36,19 +48,20 @@ int main()
 
     int i;
 
-
-
     // load config
     CConfigParser conf("server.conf");
-
     if (conf.IsSuccess())
     {
-        MinThreshold = conf.GetFloat("MinThreshold");
+        MaxClientNum = conf.GetInt("MaxClientNum");
+        MinThreshold = conf.GetFloat("MinThreshold");       
     }
     else
     {
-        MinThreshold = 80.0;   // default 80%
+        Config_WriteInit();     // make config by default
+        MaxClientNum = 5;       // default 5
+        MinThreshold = 80.0;    // default 80%     
     }
+	//printf("MaxClientNum is %d & MinThreshold is %f\n", MaxClientNum, MinThreshold);
 
     /*Start Logging Thread*/
     loggingThread = CreateThread(NULL, 0, Logging_info_perSec, 0, 0, &threadID);
@@ -84,7 +97,7 @@ int main()
             return(-1);
         }
 
-        if (Client_num < 5)
+        if (Client_num < MaxClientNum)
         {
             printf("connected\n");
 
