@@ -10,6 +10,18 @@
 #include <stdio.h>
 #include <string.h>
 #include "NetworkTCP.h"
+WSADATA wsaData;
+SOCKET ListenSocket = INVALID_SOCKET;
+SOCKET ClientSocket = INVALID_SOCKET;
+addrinfo* result = NULL;
+addrinfo hints;
+int client = 0;
+SOCKET sClient;
+SSL_CTX* ctx;
+SSL* ssl;
+SOCKET_FD_TYPE ConnectedFd_ssl;
+const char* KeyFile = { "serverKey.pem" };
+const char* CertFile = { "serverCrt.pem" };
 //-----------------------------------------------------------------
 // OpenTCPListenPort - Creates a Listen TCP port to accept
 // connection requests
@@ -140,6 +152,9 @@ TTcpConnectedPort *AcceptTcpConnection(TTcpListenPort *TcpListenPort,
          perror("setsockopt SO_SNDBUF failed");
          return(NULL);
 	}
+
+ client = TcpConnectedPort->ConnectedFd;
+ ConnectedFd_ssl = TcpConnectedPort->ConnectedFd;
 
 
  return TcpConnectedPort;
@@ -277,14 +292,25 @@ ssize_t BytesAvailableTcp(TTcpConnectedPort* TcpConnectedPort)
 ssize_t ReadDataTcp(TTcpConnectedPort *TcpConnectedPort,unsigned char *data, size_t length)
 {
  ssize_t bytes;
- 
+ int err;
+ printf("ReadDataTcp len : %d\n",length);
+
+
+
+#if 0
  for (size_t i = 0; i < length; i += bytes)
     {
       if ((bytes = recv(TcpConnectedPort->ConnectedFd, (char *)(data+i), (int)(length  - i),0)) == -1) 
       {
        return (-1);
       }
+      
     }
+#else
+  err = SSL_read(ssl, data, length);
+#endif 
+
+
   return(length);
 }
 //-----------------------------------------------------------------
@@ -297,8 +323,16 @@ ssize_t WriteDataTcp(TTcpConnectedPort *TcpConnectedPort,unsigned char *data, si
 {
   ssize_t total_bytes_written = 0;
   ssize_t bytes_written;
+  int err;
+
+  printf("WriteDataTcp len : %d\n", length);
+
+
+#if 0 
   while (total_bytes_written != length)
     {
+
+      
      bytes_written = send(TcpConnectedPort->ConnectedFd,
 	                               (char *)(data+total_bytes_written),
                                   (int)(length - total_bytes_written),0);
@@ -309,10 +343,144 @@ ssize_t WriteDataTcp(TTcpConnectedPort *TcpConnectedPort,unsigned char *data, si
      total_bytes_written += bytes_written;
    }
    return(total_bytes_written);
+#else
+  err = SSL_write(ssl, data, length);
+  return(length);
+#endif 
+
 }
 //-----------------------------------------------------------------
 // END WriteDataTcp
 //-----------------------------------------------------------------
+/*---------------------------------------------------------------------*/
+/*--- InitOpensslServer - initialize SSL server  and create context ---*/
+/*---------------------------------------------------------------------*/
+int InitOpensslServer(void)
+{
+
+    InitServerCTX();/* initialize SSL */
+    LoadCertificates(ctx, KeyFile, CertFile); /* load certs */
+
+    ssl = SSL_new(ctx);
+    /* get new SSL state with context */
+    SSL_set_fd(ssl, ConnectedFd_ssl);
+
+    if (SSL_accept(ssl) == FAIL)
+    {
+        SSL_free(ssl);                                    /* release SSL state */
+        SSL_CTX_free(ctx);                                /* release context */
+        return -1;
+    }
+
+
+    /* Check for Client authentication error */
+#ifdef ClientCertVerify
+    if (SSL_get_verify_result(ssl) != X509_V_OK) {
+        printf("SSL Client Authentication error\n");
+        SSL_free(ssl);
+        SSL_CTX_free(ctx);
+        exit(0);
+    }
+#endif 
+
+
+
+    /*Print out connection details*/
+    printf("SSL connection on socket %x,Version: %s, Cipher: %s\n",
+        ConnectedFd_ssl,
+        SSL_get_version(ssl),
+        SSL_get_cipher(ssl));
+
+    printf("SSL connected\n");
+
+    return 0;
+}
+
+
+
+/*---------------------------------------------------------------------*/
+/*--- InitServerCTX - initialize SSL server  and create context     ---*/
+/*---------------------------------------------------------------------*/
+SSL_CTX* InitServerCTX(void) {
+    char errorStr[10] = "ctx error";
+    const SSL_METHOD* method;
+    //SSL_CTX* ctx;
+    SSL_library_init();
+    OpenSSL_add_all_algorithms();
+    /* load & register all cryptos, etc. */
+    SSL_load_error_strings();
+    /* load all error messages */
+    method = TLS_server_method();
+    /* create new server-method instance */
+    ctx = SSL_CTX_new(method);
+    /* create new context from method */
+    if (ctx == NULL) {
+        ErrorHandling(errorStr);
+    }
+
+    /*Set the Cipher List*/
+    if (SSL_CTX_set_cipher_list(ctx, CIPHER_LIST) <= 0) {
+        printf("Error setting the cipher list.\n");
+        exit(0);
+    }
+
+
+    return ctx;
+}
+/*---------------------------------------------------------------------*/
+/*--- InitCTX - initialize the SSL engine.                          ---*/
+/*---------------------------------------------------------------------*/
+SSL_CTX* InitCTX(void) 
+{ 
+    char errorStr[10] = "ctx error";
+    const SSL_METHOD * method;
+    //SSL_CTX * ctx;
+    SSL_library_init(); 
+    OpenSSL_add_all_algorithms();
+    /* Load cryptos, et.al. */  
+    SSL_load_error_strings(); 
+    /* Bring in and register error messages */
+    method  = TLS_client_method();
+    /* Create new client-method instance */ 
+    ctx  = SSL_CTX_new(method);    
+    /* Create new context */  
+    if (ctx  == NULL) 
+    { 
+        ErrorHandling(errorStr);
+    }    
+    return ctx; 
+}
+
+/*---------------------------------------------------------------------*/
+/*--- LoadCertificates - load from files.                           ---*/
+/*---------------------------------------------------------------------*/
+void LoadCertificates(SSL_CTX* ctx, const char* KeyFile, const char* CertFile)
+{
+    char errorStr1[37] = "SSL_CTX_use_certificate_file() error";
+    char errorStr2[36] = "SSL_CTX_use_PrivateKey_file() error";
+    char errorStr3[34] = "SSL_CTX_check_private_key() error";
+
+    /* set the local certificate from CertFile */
+    if (SSL_CTX_use_certificate_file(ctx, CertFile, SSL_FILETYPE_PEM) <= 0)
+    {
+        ErrorHandling(errorStr1);
+    }
+    /* set the private key from KeyFile (may be the same as CertFile) */
+    if (SSL_CTX_use_PrivateKey_file(ctx, KeyFile, SSL_FILETYPE_PEM) <= 0)
+    {
+        ErrorHandling(errorStr2);
+    }
+    /* verify private key */
+    if (!SSL_CTX_check_private_key(ctx))
+    {
+        ErrorHandling(errorStr3);
+    }
+}
+
+void ErrorHandling(char* message) {
+    puts(message);
+    exit(1);
+}
 //-----------------------------------------------------------------
 // END of File
 //-----------------------------------------------------------------

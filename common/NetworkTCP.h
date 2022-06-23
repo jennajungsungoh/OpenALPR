@@ -11,11 +11,18 @@
 #include <Winsock2.h>
 #include <ws2tcpip.h>
 #include <BaseTsd.h>
+
+#include <openssl/ssl.h>
+#include <openssl/err.h>
+#include <ws2def.h>
 typedef SSIZE_T ssize_t;
 #define  CLOSE_SOCKET closesocket
 #define  SOCKET_FD_TYPE SOCKET
 #define  BAD_SOCKET_FD INVALID_SOCKET
 
+#define FAIL   -1
+#define PORT "1209"
+#define CIPHER_LIST "AES128-SHA"
 
 //------------------------------------------------------------------------------------------------
 // Types
@@ -31,6 +38,10 @@ typedef struct
  SOCKET_FD_TYPE ConnectedFd;
 } TTcpConnectedPort;
 
+
+extern int client; //for server
+extern SSL* ssl;
+extern SSL_CTX* ctx;
 //------------------------------------------------------------------------------------------------
 //  Function Prototypes 
 //------------------------------------------------------------------------------------------------
@@ -44,6 +55,11 @@ ssize_t ReadDataTcp(TTcpConnectedPort *TcpConnectedPort,unsigned char *data, siz
 ssize_t BytesAvailableTcp(TTcpConnectedPort* TcpConnectedPort);
 ssize_t WriteDataTcp(TTcpConnectedPort *TcpConnectedPort,unsigned char *data, size_t length);
 #endif
+int InitOpensslServer(void);
+SSL_CTX* InitServerCTX(void);
+SSL_CTX* InitCTX(void);
+void LoadCertificates(SSL_CTX* ctx, const char* KeyFile, const char* CertFile);
+void ErrorHandling(char* message);
 //------------------------------------------------------------------------------------------------
 //END of Include
 //------------------------------------------------------------------------------------------------
