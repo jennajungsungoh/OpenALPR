@@ -13,6 +13,8 @@
 #include "DeviceEnumerator.h"
 
 
+#define CA_DIR  NULL
+
 using namespace alpr;
 using namespace std;
 using namespace cv;
@@ -60,6 +62,8 @@ static bool getconchar(KEY_EVENT_RECORD& krec);
 static double avgdur(double newdur);
 static double avgfps();
 static void GetResponses(void);
+
+const char* RootCertFile = { "rootca.crt" };
 /***********************************************************************************/
 /* Main                                                                            */
 /***********************************************************************************/
@@ -80,6 +84,8 @@ int main()
     int apiID = cv::CAP_ANY;      // 0 = autodetect default API
 
     std::string county;
+    SSL_CTX* ctx;
+    int res;
 
 
     if ((TcpConnectedPort = OpenTcpConnection("127.0.0.1", "2222")) == NULL)
@@ -87,7 +93,36 @@ int main()
         std::cout << "Connection Failed" << std::endl;
         return(-1);
     }
+
     else std::cout << "Connected" << std::endl;
+
+	 ctx = InitCTX();
+
+    /* Set the list of trusted CAs based on the file and/or directory provided*/
+    if (SSL_CTX_load_verify_locations(ctx, RootCertFile, NULL) < 1) {
+        printf("Error setting verify location\n");
+        exit(0);
+    }
+
+    /* Set for server verification*/
+    SSL_CTX_set_verify(ctx, SSL_VERIFY_PEER, NULL);
+
+    ssl = SSL_new(ctx);/*?create?new?SSL?connection?state?*/
+    SSL_set_fd(ssl, TcpConnectedPort->ConnectedFd);/*?attach?the?socket?descriptor?*/
+
+    if(SSL_connect(ssl) == FAIL)
+    {
+        std::cout << "SSL_connect() Error" << std::endl;
+        return(-1);
+    }
+    
+    /*Print out connection details*/
+    printf("SSL connection on socket %x,Version: %s, Cipher: %s\n",
+        TcpConnectedPort->ConnectedFd,
+        SSL_get_version(ssl),
+        SSL_get_cipher(ssl));
+
+	std::cout << "SSL Connected" << std::endl;
 
     county = "us";
 
@@ -193,7 +228,7 @@ int main()
         if (videosavemode != VideoSaveMode::vSaveWithNoALPR)
         {
             detectandshow(&alpr, frame, "", false);
-            GetResponses();
+            //GetResponses();
 
             cv::putText(frame, text,
                 cv::Point(10, frame.rows - 10), //top-left position
