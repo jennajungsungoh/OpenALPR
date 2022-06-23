@@ -1,5 +1,7 @@
 
 #include <iostream>
+#include <string>
+#include <vector>
 #include "plog/Log.h"
 #include "plog/Initializers/RollingFileInitializer.h"
 #include "logger.h"
@@ -10,7 +12,7 @@
 int Logging_Index(int arr[][3])
 {
     std::cout << "hello\n";
-    plog::init(plog::debug, "Hello.txt"); // Step2: initialize the logger
+    plog::init(plog::debug, "logger.txt"); // Step2: initialize the logger
 
     // Step3: write log messages using a special macro
     // There are several log macros, use the macro you liked the most

@@ -18,6 +18,7 @@ static int Client_num;
 
 //Minimum threshold from config (server.conf)
 float MinThreshold;
+const char code[12] = { 0x32, 0x54, 0x65, 0x61, 0x6d, 0x5f, 0x41, 0x68, 0x6e, 0x4c, 0x61, 0x62 };
 
 int main()
 {
@@ -158,13 +159,13 @@ bool checkPartialMatch(char* pat, char* txt)
     int M = strlen(pat);
     int N = strlen(txt);
 
-    float threshold =(float) (M*100)/N;
+    float threshold = (float)(M * 100) / N;
 
     // filtering by Minimum  Threshold
     if (threshold < MinThreshold) {
         return FALSE;
     }
-  
+
     // create lps[] that will hold the longest prefix suffix
     // values for pattern
     int lps[24];
@@ -216,19 +217,37 @@ DWORD WINAPI ProcessClient(LPVOID arg)
     int Query_num = 0;
     int i;
 
-     bool matchResult;  // Result of Partial Match 
+    bool matchResult;  // Result of Partial Match 
 
-    /*DB 부분. */
+   /*DB 부분. */
 
-  /* Initialize the structure. This
-   * database is not opened in an environment,
-   * so the environment pointer is NULL. */
+ /* Initialize the structure. This
+  * database is not opened in an environment,
+  * so the environment pointer is NULL. */
     ret = db_create(&dbp, NULL, 0);
     if (ret != 0) {
         /* Error handling goes here */
         printf("DB Create Error\n");
         return -1;
     }
+
+    /* Database encrypt flags */
+    // get encrypt flag
+    ret = dbp->get_encrypt_flags(dbp, &flags);
+    if (ret != 0) {
+        /* Error handling goes here */
+        printf("DB Encrypt Error\n");
+        return -1;
+    }
+
+    flags = DB_ENCRYPT_AES;
+    ret = dbp->set_encrypt(dbp, code, flags);
+    if (ret != 0) {
+        /* Error handling goes here */
+        printf("DB Encrypt Error\n");
+        return -1;
+    }
+
     /* Database open flags */
     flags = DB_CREATE; /* If the database does not exist,
      * create it.*/
@@ -301,9 +320,9 @@ DWORD WINAPI ProcessClient(LPVOID arg)
         WaitForSingleObject(ghMutex, INFINITE);
         Query[0][2]++; //Total Query
         Query[Query_num][2]++; // Client Query
-        std::cout << "Total Query " << Query[0][2] << "    Port Number : " <<  Query[Query_num][1] << "   Number of QUERY : " << Query[Query_num][2] << "\n";
-        ReleaseMutex(ghMutex);
 
+        ReleaseMutex(ghMutex);
+        //std::cout << "Total Query " << Query[0][2] << "    Port Number : " <<  Query[Query_num][1] << "   Number of QUERY : " << Query[Query_num][2] << "\n";
         /* Zero out the DBTs before using them. */
                 /* Zero out the DBTs before using them. */
         memset(&key, 0, sizeof(DBT));
@@ -343,19 +362,19 @@ DWORD WINAPI ProcessClient(LPVOID arg)
                 }
                 else
                 {
-                    matchResult = checkPartialMatch((char*)key.data, PlateString);                    
+                    matchResult = checkPartialMatch((char*)key.data, PlateString);
                 }
 
                 if (matchResult)
                 {
- 
+
                     int sendlength = (int)(strlen((char*)data.data) + 1);
                     short SendMsgHdr = ntohs(sendlength);
                     if ((result = WriteDataTcp(TcpConnectedPort, (unsigned char*)&SendMsgHdr, sizeof(SendMsgHdr))) != sizeof(SendMsgHdr))
                         printf("WriteDataTcp %lld\n", result);
                     if ((result = WriteDataTcp(TcpConnectedPort, (unsigned char*)data.data, sendlength)) != sendlength)
                         printf("WriteDataTcp %lld\n", result);
-                    
+
                     // debug
                     printf("[Partial Match]Org Plate [%s]\n", PlateString);
                     printf("Matched Plate ->%s\n", (char*)data.data);
@@ -363,21 +382,36 @@ DWORD WINAPI ProcessClient(LPVOID arg)
             }
         }
     }
-   
+
     CLOSE_SOCKET((*TcpConnectedPort).ConnectedFd);
     return 0;
 }
 
 DWORD WINAPI Logging_info_perSec(LPVOID arg)
 {
+    int i;
     while (1)
     {
         Sleep(1000);
         /*logging 시작 부분*/
-        //WaitForSingleObject(ghMutex, INFINITE);
+        WaitForSingleObject(ghMutex, INFINITE);
         //Logging_Index(Query);
-        //ReleaseMutex(ghMutex);
-        //printf("logging \n");
+        //print logging
+        if (Client_num > 0)
+        {
+            std::cout << "Total Query " << Query[0][2] << "\n";
+            Query[0][2] = 0;
+            for (i = 1; i < MAXCLIENT; i++)
+            {
+                if (Query[i][0] == VALID_LOGGER)
+                {
+                    std::cout << "Port Number : " << Query[i][1] << "  Query Per Second :  " << Query[i][2] << "  ";
+                    Query[i][2] = 0;
+                }
+            }
+            std::cout << "\n";
+        }
+        ReleaseMutex(ghMutex);
     }
     return 0;
 }
