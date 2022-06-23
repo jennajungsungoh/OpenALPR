@@ -220,6 +220,15 @@ DWORD WINAPI ProcessClient(LPVOID arg)
 
      bool matchResult;  // Result of Partial Match 
 
+     /*Openssl init 부분*/
+     if (InitOpensslServer() == -1)
+     {
+         printf("Failed init openssl\n");
+         CLOSE_SOCKET((*TcpConnectedPort).ConnectedFd);
+         return 0;
+     }
+
+
     /*DB 부분. */
 
   /* Initialize the structure. This
