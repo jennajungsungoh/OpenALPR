@@ -49,13 +49,15 @@ int main()
         MinThreshold = 80.0;   // default 80%
     }
 
-    /*1초당 1번씩 Loggging 하는 thread 생성*/
+    /*Start Logging Thread*/
     loggingThread = CreateThread(NULL, 0, Logging_info_perSec, 0, 0, &threadID);
     if (loggingThread == NULL)
     {
         printf("thread not created");
     }
-    /*Mutex 생성*/
+    /*start Logging*/
+    logging_start();
+    /*Mutex*/
     ghMutex = CreateMutex(NULL, FALSE, NULL);
     if (ghMutex == NULL)
     {
@@ -396,11 +398,11 @@ DWORD WINAPI Logging_info_perSec(LPVOID arg)
         Sleep(1000);
         /*logging 시작 부분*/
         WaitForSingleObject(ghMutex, INFINITE);
-        //Logging_Index(Query);
         //print logging
         if (Client_num > 0)
         {
-            std::cout << "Total Query " << Query[0][2] << "\n";
+            Logging_Index(Query);
+            std::cout << "Total Query " << Query[0][2] << Client_num  <<"\n";
             Query[0][2] = 0;
             for (i = 1; i < MAXCLIENT; i++)
             {
