@@ -231,7 +231,7 @@ DWORD WINAPI ProcessClient(LPVOID arg)
          return 0;
      }
 
-    /*DB 부분. */
+   /*DB 부분. */
 
   /* Initialize the structure. This
    * database is not opened in an environment,
