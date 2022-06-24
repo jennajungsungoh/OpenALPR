@@ -1,10 +1,11 @@
 // server.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
 
-#include <iostream>
 #include <string.h>
+#include <iostream>
 #include "NetworkTCP.h"
 #include <Windows.h>
+#include <stdio.h>
 #include <db.h> 
 #include "ConfigParser.h"
 #include "logger.h"
@@ -17,9 +18,21 @@ static int Query[6][3];//[Number of Client][0:logging disable or enable, 1: Port
 static int Client_num;
 
 //Minimum threshold from config (server.conf)
+int MaxClientNum;
 float MinThreshold;
 
 const char code[12] = { 0x32, 0x54, 0x65, 0x61, 0x6d, 0x5f, 0x41, 0x68, 0x6e, 0x4c, 0x61, 0x62 };
+
+void Config_WriteInit(void)
+{
+    FILE* stream = NULL;
+    errno_t num = fopen_s(&stream, "server.conf", "w");
+
+    fprintf(stream, "%s%d\n", "MaxClientNum=", 5);
+    fprintf(stream, "%s%f\n", "MinThreshold=", 80.0);
+
+    fclose(stream);
+}
 
 int main()
 {
@@ -35,27 +48,30 @@ int main()
 
     int i;
 
-
-
     // load config
     CConfigParser conf("server.conf");
-
     if (conf.IsSuccess())
     {
-        MinThreshold = conf.GetFloat("MinThreshold");
+        MaxClientNum = conf.GetInt("MaxClientNum");
+        MinThreshold = conf.GetFloat("MinThreshold");       
     }
     else
     {
-        MinThreshold = 80.0;   // default 80%
+        Config_WriteInit();     // make config by default
+        MaxClientNum = 5;       // default 5
+        MinThreshold = 80.0;    // default 80%     
     }
+	//printf("MaxClientNum is %d & MinThreshold is %f\n", MaxClientNum, MinThreshold);
 
-    /*1초당 1번씩 Loggging 하는 thread 생성*/
+    /*Start Logging Thread*/
     loggingThread = CreateThread(NULL, 0, Logging_info_perSec, 0, 0, &threadID);
     if (loggingThread == NULL)
     {
         printf("thread not created");
     }
-    /*Mutex 생성*/
+    /*start Logging*/
+    logging_start();
+    /*Mutex*/
     ghMutex = CreateMutex(NULL, FALSE, NULL);
     if (ghMutex == NULL)
     {
@@ -81,7 +97,7 @@ int main()
             return(-1);
         }
 
-        if (Client_num < 5)
+        if (Client_num < MaxClientNum)
         {
             printf("connected\n");
 
@@ -161,13 +177,13 @@ bool checkPartialMatch(char* pat, char* txt)
     int M = strlen(pat);
     int N = strlen(txt);
 
-    float threshold =(float) (M*100)/N;
+    float threshold = (float)(M * 100) / N;
 
     // filtering by Minimum  Threshold
     if (threshold < MinThreshold) {
         return FALSE;
     }
-  
+
     // create lps[] that will hold the longest prefix suffix
     // values for pattern
     int lps[24];
@@ -220,7 +236,7 @@ DWORD WINAPI ProcessClient(LPVOID arg)
     int i;
     SSL* ssl = 0;;
 
-     bool matchResult;  // Result of Partial Match 
+    bool matchResult;  // Result of Partial Match 
 
      /*Openssl init 부분*/
      ssl = InitOpensslServer();
@@ -233,9 +249,9 @@ DWORD WINAPI ProcessClient(LPVOID arg)
 
    /*DB 부분. */
 
-  /* Initialize the structure. This
-   * database is not opened in an environment,
-   * so the environment pointer is NULL. */
+ /* Initialize the structure. This
+  * database is not opened in an environment,
+  * so the environment pointer is NULL. */
     ret = db_create(&dbp, NULL, 0);
     if (ret != 0) {
         /* Error handling goes here */
@@ -332,9 +348,9 @@ DWORD WINAPI ProcessClient(LPVOID arg)
         WaitForSingleObject(ghMutex, INFINITE);
         Query[0][2]++; //Total Query
         Query[Query_num][2]++; // Client Query
-        std::cout << "Total Query " << Query[0][2] << "    Port Number : " <<  Query[Query_num][1] << "   Number of QUERY : " << Query[Query_num][2] << "\n";
+        Logging_Index(PlateString);
         ReleaseMutex(ghMutex);
-
+        //std::cout << "Total Query " << Query[0][2] << "    Port Number : " <<  Query[Query_num][1] << "   Number of QUERY : " << Query[Query_num][2] << "\n";
         /* Zero out the DBTs before using them. */
                 /* Zero out the DBTs before using them. */
         memset(&key, 0, sizeof(DBT));
@@ -374,19 +390,19 @@ DWORD WINAPI ProcessClient(LPVOID arg)
                 }
                 else
                 {
-                    matchResult = checkPartialMatch((char*)key.data, PlateString);                    
+                    matchResult = checkPartialMatch((char*)key.data, PlateString);
                 }
 
                 if (matchResult)
                 {
- 
+
                     int sendlength = (int)(strlen((char*)data.data) + 1);
                     short SendMsgHdr = ntohs(sendlength);
                     if ((result = WriteDataTcp(ssl,TcpConnectedPort, (unsigned char*)&SendMsgHdr, sizeof(SendMsgHdr))) != sizeof(SendMsgHdr))
                         printf("WriteDataTcp %lld\n", result);
                     if ((result = WriteDataTcp(ssl, TcpConnectedPort, (unsigned char*)data.data, sendlength)) != sendlength)
                         printf("WriteDataTcp %lld\n", result);
-                    
+
                     // debug
                     printf("[Partial Match]Org Plate [%s]\n", PlateString);
                     printf("Matched Plate ->%s\n", (char*)data.data);
@@ -402,14 +418,38 @@ DWORD WINAPI ProcessClient(LPVOID arg)
 
 DWORD WINAPI Logging_info_perSec(LPVOID arg)
 {
+    int i;
+    int j;
+    char test[1024];
     while (1)
     {
+        j = 0;
+        ::memset(test, 0, 100);
         Sleep(1000);
         /*logging 시작 부분*/
-        //WaitForSingleObject(ghMutex, INFINITE);
-        //Logging_Index(Query);
-        //ReleaseMutex(ghMutex);
-        //printf("logging \n");
+        WaitForSingleObject(ghMutex, INFINITE);
+        //print logging
+        if (Client_num > 0)
+        {
+            
+            j = sprintf_s(test, 1024, "Total Query = %d", Query[0][2]);
+            //std::cout << "Total Query " << Query[0][2] << Client_num  <<"\n";
+
+            Query[0][2] = 0;
+            for (i = 1; i < MAXCLIENT; i++)
+            {
+                if (Query[i][0] == VALID_LOGGER)
+                {
+                    j += sprintf_s(test + j, 1024 - j, " Port Number : %d , Query Per Second : %d ", Query[i][1], Query[i][2]);
+                    //std::cout << "Port Number : " << Query[i][1] << "  Query Per Second :  " << Query[i][2] << "  ";
+                    Query[i][2] = 0;
+                }
+            }
+            //std::cout << "\n";
+            Logging_Index(test);
+
+        }
+        ReleaseMutex(ghMutex);
     }
     return 0;
 }

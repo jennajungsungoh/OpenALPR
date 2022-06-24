@@ -7,8 +7,8 @@
 
 
 
-
-int Logging_Index(int arr[][3]);
+bool logging_start();
+int Logging_Index(char* data);
 
 
 

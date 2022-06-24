@@ -1,24 +1,23 @@
 
 #include <iostream>
+#include <string>
+#include <vector>
 #include "plog/Log.h"
 #include "plog/Initializers/RollingFileInitializer.h"
 #include "logger.h"
 
 
 //gboolean log_enable(const char* _log_domain)
-
-int Logging_Index(int arr[][3])
+bool logging_start()
 {
-    std::cout << "hello\n";
-    plog::init(plog::debug, "Hello.txt"); // Step2: initialize the logger
+    plog::init(plog::debug, "logger.txt"); // Step2: initialize the logger
+    return 1;
+}
 
-    // Step3: write log messages using a special macro
-    // There are several log macros, use the macro you liked the most
-
-    PLOGD << "Hello log!"; // short macro
-    PLOG_DEBUG << "Hello log!"; // long macro
-    PLOG(plog::debug) << "Hello log!"; // function-style macro
-
+int Logging_Index(char * data)
+{
+    std::cout << data << "\n";
+    PLOGD << data;
 
 
     return 0;
