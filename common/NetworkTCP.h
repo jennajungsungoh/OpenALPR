@@ -51,15 +51,17 @@ TTcpConnectedPort *AcceptTcpConnection(TTcpListenPort *TcpListenPort,
                        struct sockaddr_in *cli_addr,socklen_t *clilen);
 TTcpConnectedPort *OpenTcpConnection(const char *remotehostname, const char * remoteportno);
 void CloseTcpConnectedPort(TTcpConnectedPort **TcpConnectedPort);
-ssize_t ReadDataTcp(TTcpConnectedPort *TcpConnectedPort,unsigned char *data, size_t length);
+ssize_t ReadDataTcp(SSL* ssl,TTcpConnectedPort *TcpConnectedPort,unsigned char *data, size_t length);
 ssize_t BytesAvailableTcp(TTcpConnectedPort* TcpConnectedPort);
-ssize_t WriteDataTcp(TTcpConnectedPort *TcpConnectedPort,unsigned char *data, size_t length);
+ssize_t WriteDataTcp(SSL* ssl,TTcpConnectedPort *TcpConnectedPort,unsigned char *data, size_t length);
 #endif
-int InitOpensslServer(void);
+SSL* InitOpensslServer(void);
 SSL_CTX* InitServerCTX(void);
 SSL_CTX* InitCTX(void);
 void LoadCertificates(SSL_CTX* ctx, const char* KeyFile, const char* CertFile);
 void ErrorHandling(char* message);
+int closeSSL(SSL* ssl);
+int closeCTX();
 //------------------------------------------------------------------------------------------------
 //END of Include
 //------------------------------------------------------------------------------------------------

@@ -115,6 +115,7 @@ int main()
 
     //Close TCP listen Port
     CloseTcpListenPort(&TcpListenPort);
+    int closeCTX();
 }
 
 
@@ -217,17 +218,24 @@ DWORD WINAPI ProcessClient(LPVOID arg)
     TTcpConnectedPort* TcpConnectedPort = (TTcpConnectedPort*)arg;
     int Query_num = 0;
     int i;
+    SSL* ssl = 0;;
 
      bool matchResult;  // Result of Partial Match 
 
+     printf("[SOCEKT %d] Start Init SSL! \n", (*TcpConnectedPort).ConnectedFd);
+
      /*Openssl init 부분*/
-     if (InitOpensslServer() == -1)
+
+     ssl = InitOpensslServer();
+
+     if (ssl == 0)
      {
          printf("Failed init openssl\n");
          CLOSE_SOCKET((*TcpConnectedPort).ConnectedFd);
          return 0;
      }
 
+     printf("[SOCEKT %d] End Init SSL! \n", (*TcpConnectedPort).ConnectedFd);
 
     /*DB 부분. */
 
@@ -296,8 +304,9 @@ DWORD WINAPI ProcessClient(LPVOID arg)
 
     while (1)
     {
+        printf("[SOCEKT %d] Heart Beat! \n", (*TcpConnectedPort).ConnectedFd);
         //데이터 수신부분
-        if (ReadDataTcp(TcpConnectedPort, (unsigned char*)&PlateStringLength,
+        if (ReadDataTcp(ssl, TcpConnectedPort, (unsigned char*)&PlateStringLength,
             sizeof(PlateStringLength)) != sizeof(PlateStringLength))
         {
             printf("exit and disconnected\n");
@@ -318,7 +327,7 @@ DWORD WINAPI ProcessClient(LPVOID arg)
             printf("Plate string length  error\n");
             break;
         }
-        if (ReadDataTcp(TcpConnectedPort, (unsigned char*)&PlateString,
+        if (ReadDataTcp(ssl, TcpConnectedPort, (unsigned char*)&PlateString,
             PlateStringLength) != PlateStringLength)
         {
             printf("ReadDataTcp 2 error\n");
@@ -346,9 +355,9 @@ DWORD WINAPI ProcessClient(LPVOID arg)
         {
             int sendlength = (int)(strlen((char*)data.data) + 1);
             short SendMsgHdr = ntohs(sendlength);
-            if ((result = WriteDataTcp(TcpConnectedPort, (unsigned char*)&SendMsgHdr, sizeof(SendMsgHdr))) != sizeof(SendMsgHdr))
+            if ((result = WriteDataTcp(ssl, TcpConnectedPort, (unsigned char*)&SendMsgHdr, sizeof(SendMsgHdr))) != sizeof(SendMsgHdr))
                 printf("WriteDataTcp %lld\n", result);
-            if ((result = WriteDataTcp(TcpConnectedPort, (unsigned char*)data.data, sendlength)) != sendlength)
+            if ((result = WriteDataTcp(ssl, TcpConnectedPort, (unsigned char*)data.data, sendlength)) != sendlength)
                 printf("WriteDataTcp %lld\n", result);
             printf("sent ->%s\n", (char*)data.data);
         }
@@ -380,9 +389,9 @@ DWORD WINAPI ProcessClient(LPVOID arg)
  
                     int sendlength = (int)(strlen((char*)data.data) + 1);
                     short SendMsgHdr = ntohs(sendlength);
-                    if ((result = WriteDataTcp(TcpConnectedPort, (unsigned char*)&SendMsgHdr, sizeof(SendMsgHdr))) != sizeof(SendMsgHdr))
+                    if ((result = WriteDataTcp(ssl,TcpConnectedPort, (unsigned char*)&SendMsgHdr, sizeof(SendMsgHdr))) != sizeof(SendMsgHdr))
                         printf("WriteDataTcp %lld\n", result);
-                    if ((result = WriteDataTcp(TcpConnectedPort, (unsigned char*)data.data, sendlength)) != sendlength)
+                    if ((result = WriteDataTcp(ssl, TcpConnectedPort, (unsigned char*)data.data, sendlength)) != sendlength)
                         printf("WriteDataTcp %lld\n", result);
                     
                     // debug
@@ -393,7 +402,10 @@ DWORD WINAPI ProcessClient(LPVOID arg)
         }
     }
    
+    printf("[SOCEKT %d]The END\n", (*TcpConnectedPort).ConnectedFd);
+
     CLOSE_SOCKET((*TcpConnectedPort).ConnectedFd);
+    closeSSL(ssl);
     return 0;
 }
 

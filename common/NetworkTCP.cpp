@@ -18,7 +18,6 @@ addrinfo hints;
 int client = 0;
 SOCKET sClient;
 SSL_CTX* ctx;
-SSL* ssl;
 SOCKET_FD_TYPE ConnectedFd_ssl;
 const char* KeyFile = { "serverKey.pem" };
 const char* CertFile = { "serverCrt.pem" };
@@ -289,13 +288,10 @@ ssize_t BytesAvailableTcp(TTcpConnectedPort* TcpConnectedPort)
 //-----------------------------------------------------------------
 // ReadDataTcp - Reads the specified amount TCP data 
 //-----------------------------------------------------------------
-ssize_t ReadDataTcp(TTcpConnectedPort *TcpConnectedPort,unsigned char *data, size_t length)
+ssize_t ReadDataTcp(SSL* ssl, TTcpConnectedPort *TcpConnectedPort,unsigned char *data, size_t length)
 {
  ssize_t bytes;
  int err;
- printf("ReadDataTcp len : %d\n",length);
-
-
 
 #if 0
  for (size_t i = 0; i < length; i += bytes)
@@ -319,14 +315,11 @@ ssize_t ReadDataTcp(TTcpConnectedPort *TcpConnectedPort,unsigned char *data, siz
 //-----------------------------------------------------------------
 // WriteDataTcp - Writes the specified amount TCP data 
 //-----------------------------------------------------------------
-ssize_t WriteDataTcp(TTcpConnectedPort *TcpConnectedPort,unsigned char *data, size_t length)
+ssize_t WriteDataTcp(SSL* ssl, TTcpConnectedPort *TcpConnectedPort,unsigned char *data, size_t length)
 {
   ssize_t total_bytes_written = 0;
   ssize_t bytes_written;
   int err;
-
-  printf("WriteDataTcp len : %d\n", length);
-
 
 #if 0 
   while (total_bytes_written != length)
@@ -355,10 +348,10 @@ ssize_t WriteDataTcp(TTcpConnectedPort *TcpConnectedPort,unsigned char *data, si
 /*---------------------------------------------------------------------*/
 /*--- InitOpensslServer - initialize SSL server  and create context ---*/
 /*---------------------------------------------------------------------*/
-int InitOpensslServer(void)
+SSL* InitOpensslServer()
 {
-
-    InitServerCTX();/* initialize SSL */
+    SSL* ssl;
+    ctx = InitServerCTX();/* initialize SSL */
     LoadCertificates(ctx, KeyFile, CertFile); /* load certs */
 
     ssl = SSL_new(ctx);
@@ -369,7 +362,7 @@ int InitOpensslServer(void)
     {
         SSL_free(ssl);                                    /* release SSL state */
         SSL_CTX_free(ctx);                                /* release context */
-        return -1;
+        return 0;
     }
 
 
@@ -382,9 +375,6 @@ int InitOpensslServer(void)
         exit(0);
     }
 #endif 
-
-
-
     /*Print out connection details*/
     printf("SSL connection on socket %x,Version: %s, Cipher: %s\n",
         ConnectedFd_ssl,
@@ -393,7 +383,7 @@ int InitOpensslServer(void)
 
     printf("SSL connected\n");
 
-    return 0;
+    return ssl;
 }
 
 
@@ -404,7 +394,7 @@ int InitOpensslServer(void)
 SSL_CTX* InitServerCTX(void) {
     char errorStr[10] = "ctx error";
     const SSL_METHOD* method;
-    //SSL_CTX* ctx;
+    SSL_CTX* ctx;
     SSL_library_init();
     OpenSSL_add_all_algorithms();
     /* load & register all cryptos, etc. */
@@ -434,7 +424,7 @@ SSL_CTX* InitCTX(void)
 { 
     char errorStr[10] = "ctx error";
     const SSL_METHOD * method;
-    //SSL_CTX * ctx;
+    SSL_CTX * ctx;
     SSL_library_init(); 
     OpenSSL_add_all_algorithms();
     /* Load cryptos, et.al. */  
@@ -481,6 +471,25 @@ void ErrorHandling(char* message) {
     puts(message);
     exit(1);
 }
+
+/*---------------------------------------------------------------------*/
+/*--- closeSSL - closeSSL                           ---*/
+/*---------------------------------------------------------------------*/
+int closeSSL(SSL* ssl)
+{
+    SSL_free(ssl);
+    //SSL_CTX_free(ctx);
+
+    return 0;
+}
+
+int closeCTX()
+{
+    SSL_CTX_free(ctx);
+
+    return 0;
+}
+
 //-----------------------------------------------------------------
 // END of File
 //-----------------------------------------------------------------
