@@ -222,20 +222,14 @@ DWORD WINAPI ProcessClient(LPVOID arg)
 
      bool matchResult;  // Result of Partial Match 
 
-     printf("[SOCEKT %d] Start Init SSL! \n", (*TcpConnectedPort).ConnectedFd);
-
      /*Openssl init 부분*/
-
      ssl = InitOpensslServer();
-
      if (ssl == 0)
      {
          printf("Failed init openssl\n");
          CLOSE_SOCKET((*TcpConnectedPort).ConnectedFd);
          return 0;
      }
-
-     printf("[SOCEKT %d] End Init SSL! \n", (*TcpConnectedPort).ConnectedFd);
 
     /*DB 부분. */
 
@@ -304,7 +298,6 @@ DWORD WINAPI ProcessClient(LPVOID arg)
 
     while (1)
     {
-        printf("[SOCEKT %d] Heart Beat! \n", (*TcpConnectedPort).ConnectedFd);
         //데이터 수신부분
         if (ReadDataTcp(ssl, TcpConnectedPort, (unsigned char*)&PlateStringLength,
             sizeof(PlateStringLength)) != sizeof(PlateStringLength))
@@ -401,8 +394,6 @@ DWORD WINAPI ProcessClient(LPVOID arg)
             }
         }
     }
-   
-    printf("[SOCEKT %d]The END\n", (*TcpConnectedPort).ConnectedFd);
 
     CLOSE_SOCKET((*TcpConnectedPort).ConnectedFd);
     closeSSL(ssl);
