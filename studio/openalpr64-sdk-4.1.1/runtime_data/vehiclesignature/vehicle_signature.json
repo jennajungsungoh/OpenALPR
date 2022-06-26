@@ -1,0 +1,17 @@
+{
+  "high_res": {
+    "width": 224,
+    "height": 224,
+    "num_signature_outputs": 128,
+    "sigmoid_cutoff": 0.62
+  },
+  "low_res": {
+    "width": 128,
+    "height": 128,
+    "num_signature_outputs": 128,
+    "sigmoid_cutoff": 0.60
+  },
+  "max_probability": 0.95,
+  "version": 1
+}
+

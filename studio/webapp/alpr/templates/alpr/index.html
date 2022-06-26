@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LGE Tartan, Team 2</title>
+    <link href="{% static 'style.css' %}" rel="stylesheet" type="text/css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script src="{% static 'generate-table.js' %}"></script>
+
+    <script>
+        $(document).ready(function () {
+            $("#btplay").on("click", function (event) {
+
+                (function poll() {
+                    $.ajax({
+                        url: '/alpr/get_vehicle?pid=' + $("#pid").val(),
+                        type: 'GET',
+                        dataType: 'json',
+                        success: function (response) {
+                            // console.log(response[0].plate_number)
+                            $('#information').children('tbody').remove();
+                            $("#information").generateTable(response, ['plate', 'count']);
+
+                        },
+                        error: function (request, status, error) {
+                            console.log("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+                        },
+                        timeout: 3000,
+                        complete: setTimeout(function () { poll(); }, 3000)
+                    })
+                })();
+
+                $.ajax({
+                    type: "POST",
+                    url: "/alpr/play",
+                    headers: {
+                        'X-CSRFTOKEN': '{{ csrf_token }}'
+                    },
+                    data: {
+                        'pid': $("#pid").val() // from form
+                    },
+                    success: function (data) {
+                        $('#player').attr("src", "playback?pid=" + data.pid)
+                    },
+                    error: function (data) {
+                        console.log("error")
+                    }
+                });
+                return false;
+            });
+        });
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
+        * {
+            font-family: "Roboto";
+            font-size: small;
+        }
+
+        body {
+            background-color: #F5F5F5;
+        }
+
+        form {
+            background-color: #FFFFFF;
+            padding: 25px;
+        }
+
+        table {
+            width: 100%;
+            text-align: center;
+            margin-top: 0px;
+            padding: 0px;
+            background-color: #FFFFFF;
+        }
+
+        table tr td {
+            padding-top: 15px;
+        }
+    </style>
+</head>
+
+<body>
+    <form action="{% url 'alpr:upload' %}" method="POST" enctype="multipart/form-data">
+        <input type="file" name="uploadedFile">
+        {% csrf_token %}
+        <input type="submit" value="Upload">
+    </form>
+    <form action="" method="POST" enctype="multipart/form-data" id="playback">
+        <input type="text" id="pid" name="pid">
+        {% csrf_token %}
+        <input type="button" id="btplay" value="play">
+    </form>
+    <table id="tbInfo">
+        <tr>
+            <td id="tdLeft">
+                <!-- {% if pid != None %}
+                <img src="http://127.0.0.1:8000/alpr/playback?pid={{pid}}" />
+                {% endif %} -->
+                <div id="dvPlayer"><img id="player" /></div>
+            </td>
+            <td id="tdRight">
+                <div id="dvPlate">
+                    <table id="information">
+                        <thead>
+                            <tr>
+                                <th>Plante No.</th>
+                                <th>Confidence(Avg.)</th>
+                                <th>Logged Time</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </td>
+
+        </tr>
+    </table>
+
+</body>

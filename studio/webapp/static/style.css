@@ -1,0 +1,46 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
+* {
+    font-family: "Roboto";
+    font-size: small;
+}
+
+body {
+    background-color: #F5F5F5;
+}
+
+form {
+    background-color: #FFFFFF;
+    padding: 25px;
+}
+
+table {
+    width: 100%;
+    text-align: center;
+    margin-top: 0px;
+    padding: 0px;
+    background-color: #FFFFFF;
+}
+
+#dvPlate {
+    overflow: auto;
+    height: 500px;
+}
+
+#tdLeft {
+    width: 700px;
+}
+
+#tdLeft,
+#tdRight {
+    border: solid 1px grey;
+    padding: 0px;
+}
+
+#tbInfo {
+    width: 1000px;
+}
+
+#info thead {
+    border: solid 1px grey;
+}

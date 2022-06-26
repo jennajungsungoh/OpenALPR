@@ -1,0 +1,5 @@
+This software is copyrighted by OpenALPR Technology, Inc. 
+
+In order to make use of this software, you must have an evaluation or commercial license with OpenALPR Technology, Inc.
+
+Please contact info@openalpr.com for more information.

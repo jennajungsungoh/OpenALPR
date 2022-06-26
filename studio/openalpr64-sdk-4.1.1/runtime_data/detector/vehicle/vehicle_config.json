@@ -1,0 +1,17 @@
+{
+	"fast": {
+		"width": 300,
+		"height": 300,
+		"model": "edge_x"
+	},
+	"balanced": {
+		"width": 512,
+		"height": 256,
+		"model": "vehicle_med"
+	},
+	"accurate": {
+		"width": 512,
+		"height": 512,
+		"model": "vehicle_high"
+	}
+}
