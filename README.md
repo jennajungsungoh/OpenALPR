@@ -2,7 +2,7 @@
 
 ## Python Environment
 ```
-$ cd Script
+$ cd studio/Script
 $ activate
 ```
 
