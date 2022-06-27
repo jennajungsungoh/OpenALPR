@@ -5,7 +5,7 @@
         {% csrf_token %}
         {% include "form_errors.html" %}
         {% if user.is_authenticated %}
-        <h5 class="my-3 border-bottom pb-2">Login ID : {% user.username %}</h5>
+        <h5 class="my-3 border-bottom pb-2">Login ID : {{ user.username }}</h5>
         {% else %}
         <div class="mb-3">
             <label for="username">User ID</label>
