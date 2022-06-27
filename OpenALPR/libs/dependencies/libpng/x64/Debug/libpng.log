@@ -1,0 +1,47 @@
+﻿  png.c
+  pngerror.c
+  pngget.c
+  pngmem.c
+  pngpread.c
+D:\VS_ws\OpenALPR.git2\OpenALPR\libs\dependencies\libpng\src\pngpread.c(594,31): warning C4267: '-=': 'size_t'에서 'png_uint_32'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR.git2\OpenALPR\libs\dependencies\libpng\src\pngpread.c(610,31): warning C4267: '-=': 'size_t'에서 'png_uint_32'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR.git2\OpenALPR\libs\dependencies\libpng\src\pngpread.c(784,29): warning C4267: '-=': 'size_t'에서 'png_uint_32'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR.git2\OpenALPR\libs\dependencies\libpng\src\pngpread.c(808,29): warning C4267: '-=': 'size_t'에서 'png_uint_32'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  pngread.c
+  pngrio.c
+  pngrtran.c
+D:\VS_ws\OpenALPR.git2\OpenALPR\libs\dependencies\libpng\src\pngrtran.c(1689,41): warning C4267: '초기화 중': 'size_t'에서 'png_uint_32'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR.git2\OpenALPR\libs\dependencies\libpng\src\pngrtran.c(1703,41): warning C4267: '초기화 중': 'size_t'에서 'png_uint_32'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  pngrutil.c
+D:\VS_ws\OpenALPR.git2\OpenALPR\libs\dependencies\libpng\src\pngrutil.c(211,32): warning C4267: '=': 'size_t'에서 'uInt'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR.git2\OpenALPR\libs\dependencies\libpng\src\pngrutil.c(221,43): warning C4267: '=': 'size_t'에서 'uInt'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR.git2\OpenALPR\libs\dependencies\libpng\src\pngrutil.c(224,34): warning C4267: '=': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR.git2\OpenALPR\libs\dependencies\libpng\src\pngrutil.c(233,36): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR.git2\OpenALPR\libs\dependencies\libpng\src\pngrutil.c(1109,33): warning C4267: '=': 'size_t'에서 'png_uint_32'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR.git2\OpenALPR\libs\dependencies\libpng\src\pngrutil.c(1238,27): warning C4267: '=': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR.git2\OpenALPR\libs\dependencies\libpng\src\pngrutil.c(2931,38): warning C4267: '초기화 중': 'size_t'에서 'png_uint_32'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR.git2\OpenALPR\libs\dependencies\libpng\src\pngrutil.c(2946,38): warning C4267: '초기화 중': 'size_t'에서 'png_uint_32'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR.git2\OpenALPR\libs\dependencies\libpng\src\pngrutil.c(2964,49): warning C4267: '초기화 중': 'size_t'에서 'png_uint_32'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR.git2\OpenALPR\libs\dependencies\libpng\src\pngrutil.c(2989,47): warning C4267: '초기화 중': 'size_t'에서 'png_uint_32'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR.git2\OpenALPR\libs\dependencies\libpng\src\pngrutil.c(3338,48): warning C4267: '=': 'size_t'에서 'png_uint_32'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR.git2\OpenALPR\libs\dependencies\libpng\src\pngrutil.c(3346,48): warning C4267: '=': 'size_t'에서 'png_uint_32'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR.git2\OpenALPR\libs\dependencies\libpng\src\pngrutil.c(3351,48): warning C4267: '=': 'size_t'에서 'png_uint_32'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR.git2\OpenALPR\libs\dependencies\libpng\src\pngrutil.c(3366,54): warning C4267: '=': 'size_t'에서 'png_uint_32'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  pngset.c
+D:\VS_ws\OpenALPR.git2\OpenALPR\libs\dependencies\libpng\src\pngset.c(591,29): warning C4267: '=': 'size_t'에서 'png_uint_32'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR.git2\OpenALPR\libs\dependencies\libpng\src\pngset.c(903,39): warning C4267: '=': 'size_t'에서 'png_uint_32'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  pngtrans.c
+D:\VS_ws\OpenALPR.git2\OpenALPR\libs\dependencies\libpng\src\pngtrans.c(210,35): warning C4267: '초기화 중': 'size_t'에서 'png_uint_32'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR.git2\OpenALPR\libs\dependencies\libpng\src\pngtrans.c(223,35): warning C4267: '초기화 중': 'size_t'에서 'png_uint_32'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR.git2\OpenALPR\libs\dependencies\libpng\src\pngtrans.c(236,35): warning C4267: '초기화 중': 'size_t'에서 'png_uint_32'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  pngwio.c
+D:\VS_ws\OpenALPR.git2\OpenALPR\libs\dependencies\libpng\src\pngwio.c(56,12): warning C4267: '=': 'size_t'에서 'png_uint_32'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  pngwrite.c
+  pngwtran.c
+D:\VS_ws\OpenALPR.git2\OpenALPR\libs\dependencies\libpng\src\pngwtran.c(257,42): warning C4267: '초기화 중': 'size_t'에서 'png_uint_32'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  pngwutil.c
+D:\VS_ws\OpenALPR.git2\OpenALPR\libs\dependencies\libpng\src\pngwutil.c(218,26): warning C4267: '=': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR.git2\OpenALPR\libs\dependencies\libpng\src\pngwutil.c(1578,45): warning C4267: '=': 'size_t'에서 'png_uint_32'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR.git2\OpenALPR\libs\dependencies\libpng\src\pngwutil.c(2106,36): warning C4267: '초기화 중': 'size_t'에서 'png_uint_32'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  코드를 생성하고 있습니다...
+  libpng.vcxproj -> D:\VS_ws\OpenALPR.git2\OpenALPR\x64\Debug\libpng.lib

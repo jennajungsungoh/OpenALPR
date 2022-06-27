@@ -1,0 +1,695 @@
+﻿  alpr.cpp
+  alpr_impl.cpp
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\alpr_impl.cpp(139,50): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\alpr_impl.cpp(301,113): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\alpr_impl.cpp(334,59): warning C4267: '=': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\alpr_impl.cpp(373,51): warning C4244: '=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\alpr_impl.cpp(404,58): warning C4244: '=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\alpr_impl.cpp(504,5): warning C4244: '인수': 'const int64_t'에서 'double'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\alpr_impl.cpp(615,90): warning C4244: '=': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\alpr_impl.cpp(641,81): warning C4244: '=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\alpr_impl.cpp(666,89): warning C4244: '=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\alpr_impl.cpp(773,60): warning C4244: '인수': 'int'에서 '_Tp'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+          with
+          [
+              _Tp=float
+          ]
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\alpr_impl.cpp(774,90): warning C4244: '인수': 'int'에서 '_Tp'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+          with
+          [
+              _Tp=float
+          ]
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\alpr_impl.cpp(774,60): warning C4244: '인수': 'int'에서 '_Tp'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+          with
+          [
+              _Tp=float
+          ]
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\alpr_impl.cpp(775,62): warning C4244: '인수': 'int'에서 '_Tp'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+          with
+          [
+              _Tp=float
+          ]
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\alpr_impl.cpp(787,52): warning C4244: '인수': '_Tp'에서 '_Tp'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+          with
+          [
+              _Tp=int
+          ]
+          and
+          [
+              _Tp=float
+          ]
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\alpr_impl.cpp(787,39): warning C4244: '인수': '_Tp'에서 '_Tp'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+          with
+          [
+              _Tp=int
+          ]
+          and
+          [
+              _Tp=float
+          ]
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\alpr_impl.cpp(788,70): warning C4244: '인수': '_Tp'에서 '_Tp'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+          with
+          [
+              _Tp=int
+          ]
+          and
+          [
+              _Tp=float
+          ]
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\alpr_impl.cpp(788,42): warning C4244: '인수': '_Tp'에서 '_Tp'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+          with
+          [
+              _Tp=int
+          ]
+          and
+          [
+              _Tp=float
+          ]
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\alpr_impl.cpp(789,73): warning C4244: '인수': '_Tp'에서 '_Tp'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+          with
+          [
+              _Tp=int
+          ]
+          and
+          [
+              _Tp=float
+          ]
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\alpr_impl.cpp(789,42): warning C4244: '인수': '_Tp'에서 '_Tp'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+          with
+          [
+              _Tp=int
+          ]
+          and
+          [
+              _Tp=float
+          ]
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\alpr_impl.cpp(790,55): warning C4244: '인수': '_Tp'에서 '_Tp'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+          with
+          [
+              _Tp=int
+          ]
+          and
+          [
+              _Tp=float
+          ]
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\alpr_impl.cpp(790,39): warning C4244: '인수': '_Tp'에서 '_Tp'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+          with
+          [
+              _Tp=int
+          ]
+          and
+          [
+              _Tp=float
+          ]
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\alpr_impl.cpp(802,22): warning C4244: '=': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\alpr_impl.cpp(803,22): warning C4244: '=': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  binarize_wolf.cpp
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\binarize_wolf.cpp(70,25): warning C4244: '=': 'double'에서 '_Tp'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+          with
+          [
+              _Tp=float
+          ]
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\binarize_wolf.cpp(71,25): warning C4244: '=': 'double'에서 '_Tp'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+          with
+          [
+              _Tp=float
+          ]
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\binarize_wolf.cpp(87,33): warning C4244: '=': 'double'에서 '_Tp'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+          with
+          [
+              _Tp=float
+          ]
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\binarize_wolf.cpp(88,33): warning C4244: '=': 'double'에서 '_Tp'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+          with
+          [
+              _Tp=float
+          ]
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\binarize_wolf.cpp(154,14): warning C4244: '=': 'double'에서 '_Tp'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+          with
+          [
+              _Tp=float
+          ]
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\binarize_wolf.cpp(159,25): warning C4244: '=': 'double'에서 '_Tp'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+          with
+          [
+              _Tp=float
+          ]
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\binarize_wolf.cpp(165,20): warning C4244: '=': 'double'에서 '_Tp'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+          with
+          [
+              _Tp=float
+          ]
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\binarize_wolf.cpp(171,20): warning C4244: '=': 'double'에서 '_Tp'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+          with
+          [
+              _Tp=float
+          ]
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\binarize_wolf.cpp(177,13): warning C4244: '=': 'double'에서 '_Tp'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+          with
+          [
+              _Tp=float
+          ]
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\binarize_wolf.cpp(182,13): warning C4244: '=': 'double'에서 '_Tp'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+          with
+          [
+              _Tp=float
+          ]
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\binarize_wolf.cpp(187,17): warning C4244: '=': 'double'에서 '_Tp'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+          with
+          [
+              _Tp=float
+          ]
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\binarize_wolf.cpp(193,12): warning C4244: '=': 'double'에서 '_Tp'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+          with
+          [
+              _Tp=float
+          ]
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\binarize_wolf.cpp(199,12): warning C4244: '=': 'double'에서 '_Tp'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+          with
+          [
+              _Tp=float
+          ]
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\binarize_wolf.cpp(112,10): warning C4101: 'my' :참조되지 않은 지역 변수입니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\binarize_wolf.cpp(112,6): warning C4101: 'mx' :참조되지 않은 지역 변수입니다.
+  colorfilter.cpp
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\colorfilter.cpp(165,30): warning C4244: '인수': '_Tp'에서 '_Ty'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+          with
+          [
+              _Tp=double
+          ]
+          and
+          [
+              _Ty=float
+          ]
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\colorfilter.cpp(166,30): warning C4244: '인수': '_Tp'에서 '_Ty'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+          with
+          [
+              _Tp=double
+          ]
+          and
+          [
+              _Ty=float
+          ]
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\colorfilter.cpp(167,30): warning C4244: '인수': '_Tp'에서 '_Ty'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+          with
+          [
+              _Tp=double
+          ]
+          and
+          [
+              _Ty=float
+          ]
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\colorfilter.cpp(168,34): warning C4244: '인수': '_Tp'에서 '_Ty'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+          with
+          [
+              _Tp=double
+          ]
+          and
+          [
+              _Ty=float
+          ]
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\colorfilter.cpp(169,34): warning C4244: '인수': '_Tp'에서 '_Ty'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+          with
+          [
+              _Tp=double
+          ]
+          and
+          [
+              _Ty=float
+          ]
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\colorfilter.cpp(170,34): warning C4244: '인수': '_Tp'에서 '_Ty'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+          with
+          [
+              _Tp=double
+          ]
+          and
+          [
+              _Ty=float
+          ]
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\colorfilter.cpp(176,64): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\colorfilter.cpp(177,64): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\colorfilter.cpp(178,64): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\colorfilter.cpp(235,37): warning C4244: '=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\colorfilter.cpp(236,37): warning C4244: '=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\colorfilter.cpp(271,23): warning C4244: '초기화 중': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\colorfilter.cpp(312,26): warning C4244: '=': 'double'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\colorfilter.cpp(316,26): warning C4244: '=': 'double'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  config.cpp
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\config.cpp(192,101): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\config.cpp(199,99): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\config.cpp(247,33): warning C4244: '=': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\config.cpp(248,34): warning C4244: '=': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\config.cpp(314,28): warning C4244: '=': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\config.cpp(315,29): warning C4244: '=': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\config.cpp(316,32): warning C4244: '=': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\config.cpp(317,33): warning C4244: '=': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  config_helper.cpp
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\config_helper.cpp(44,15): warning C4244: '초기화 중': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\config_helper.cpp(68,30): warning C4244: '인수': 'double'에서 '_Ty'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+          with
+          [
+              _Ty=float
+          ]
+  detector.cpp
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\detection\detector.cpp(119,59): warning C4244: '인수': 'float'에서 '_Tp'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+          with
+          [
+              _Tp=int
+          ]
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\detection\detector.cpp(119,41): warning C4244: '인수': 'float'에서 '_Tp'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+          with
+          [
+              _Tp=int
+          ]
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\detection\detector.cpp(124,60): warning C4244: '인수': 'float'에서 '_Tp'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+          with
+          [
+              _Tp=int
+          ]
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\detection\detector.cpp(124,31): warning C4244: '인수': 'float'에서 '_Tp'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+          with
+          [
+              _Tp=int
+          ]
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\detection\detector.cpp(125,35): warning C4244: '인수': 'float'에서 '_Tp'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+          with
+          [
+              _Tp=int
+          ]
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\detection\detector.cpp(125,25): warning C4244: '인수': 'float'에서 '_Tp'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+          with
+          [
+              _Tp=int
+          ]
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\detection\detector.cpp(132,44): warning C4244: '=': 'float'에서 '_Tp'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+          with
+          [
+              _Tp=int
+          ]
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\detection\detector.cpp(133,44): warning C4244: '=': 'float'에서 '_Tp'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+          with
+          [
+              _Tp=int
+          ]
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\detection\detector.cpp(134,51): warning C4244: '=': 'float'에서 '_Tp'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+          with
+          [
+              _Tp=int
+          ]
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\detection\detector.cpp(135,53): warning C4244: '=': 'float'에서 '_Tp'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+          with
+          [
+              _Tp=int
+          ]
+  detectorcpu.cpp
+  detectorcuda.cpp
+  detectorfactory.cpp
+  detectormask.cpp
+  detectormorph.cpp
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\detection\detectormorph.cpp(170,47): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\detection\detectormorph.cpp(171,53): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\detection\detectormorph.cpp(208,22): warning C4305: '초기화 중': 'double'에서 'float'(으)로 잘립니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\detection\detectormorph.cpp(212,13): warning C4244: '초기화 중': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\detection\detectormorph.cpp(213,13): warning C4244: '초기화 중': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\detection\detectormorph.cpp(218,14): warning C4244: '초기화 중': '_Tp'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+          with
+          [
+              _Tp=float
+          ]
+  detectorocl.cpp
+  edgefinder.cpp
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\edges\edgefinder.cpp(73,19): warning C4244: '초기화 중': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\edges\edgefinder.cpp(74,19): warning C4244: '초기화 중': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\edges\edgefinder.cpp(87,29): warning C4244: '초기화 중': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\edges\edgefinder.cpp(93,28): warning C4244: '초기화 중': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\edges\edgefinder.cpp(94,30): warning C4244: '초기화 중': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\edges\edgefinder.cpp(114,19): warning C4244: '초기화 중': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\edges\edgefinder.cpp(115,19): warning C4244: '초기화 중': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\edges\edgefinder.cpp(167,38): warning C4244: '인수': 'int'에서 '_Tp'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+          with
+          [
+              _Tp=float
+          ]
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\edges\edgefinder.cpp(168,52): warning C4244: '인수': 'int'에서 '_Tp'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+          with
+          [
+              _Tp=float
+          ]
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\edges\edgefinder.cpp(168,38): warning C4244: '인수': 'int'에서 '_Tp'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+          with
+          [
+              _Tp=float
+          ]
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\edges\edgefinder.cpp(169,41): warning C4244: '인수': 'int'에서 '_Tp'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+          with
+          [
+              _Tp=float
+          ]
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\edges\edgefinder.cpp(185,52): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\edges\edgefinder.cpp(216,20): warning C4244: '초기화 중': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\edges\edgefinder.cpp(232,27): warning C4244: '초기화 중': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\edges\edgefinder.cpp(234,28): warning C4244: '초기화 중': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\edges\edgefinder.cpp(239,20): warning C4244: '초기화 중': 'double'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\edges\edgefinder.cpp(240,20): warning C4244: '초기화 중': 'double'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\edges\edgefinder.cpp(253,48): warning C4305: '초기화 중': 'double'에서 'float'(으)로 잘립니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\edges\edgefinder.cpp(314,32): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\edges\edgefinder.cpp(316,34): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\edges\edgefinder.cpp(325,32): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\edges\edgefinder.cpp(327,34): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\edges\edgefinder.cpp(329,24): warning C4244: '+=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  platecorners.cpp
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\edges\platecorners.cpp(40,46): warning C4305: '=': '__int64'에서 'float'(으)로 잘립니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\edges\platecorners.cpp(41,44): warning C4305: '=': '__int64'에서 'float'(으)로 잘립니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\edges\platecorners.cpp(58,67): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\edges\platecorners.cpp(59,63): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\edges\platecorners.cpp(143,27): warning C4244: '초기화 중': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\edges\platecorners.cpp(162,30): warning C4244: '+=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\edges\platecorners.cpp(163,30): warning C4244: '+=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\edges\platecorners.cpp(170,30): warning C4244: '+=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\edges\platecorners.cpp(177,30): warning C4244: '+=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\edges\platecorners.cpp(196,117): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\edges\platecorners.cpp(205,24): warning C4244: '초기화 중': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\edges\platecorners.cpp(298,25): warning C4244: '초기화 중': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\edges\platecorners.cpp(306,99): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\edges\platecorners.cpp(316,33): warning C4244: '초기화 중': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\edges\platecorners.cpp(317,36): warning C4244: '초기화 중': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\edges\platecorners.cpp(333,117): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\edges\platecorners.cpp(350,13): warning C4101: 'scorecomponent' :참조되지 않은 지역 변수입니다.
+  platelines.cpp
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\edges\platelines.cpp(25,33): warning C4305: '초기화 중': 'double'에서 'float'(으)로 잘립니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\edges\platelines.cpp(140,32): warning C4244: '초기화 중': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\edges\platelines.cpp(141,30): warning C4244: '초기화 중': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\edges\platelines.cpp(148,42): warning C4244: '=': 'double'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\edges\platelines.cpp(150,44): warning C4244: '=': 'double'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\edges\platelines.cpp(188,118): warning C4244: '=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\edges\platelines.cpp(206,21): warning C4244: '초기화 중': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\edges\platelines.cpp(207,44): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\edges\platelines.cpp(207,21): warning C4244: '초기화 중': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\edges\platelines.cpp(211,118): warning C4244: '=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\edges\platelines.cpp(236,20): warning C4244: '초기화 중': 'double'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\edges\platelines.cpp(242,37): warning C4244: '=': 'double'에서 '_Tp'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+          with
+          [
+              _Tp=uchar
+          ]
+  scorekeeper.cpp
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\edges\scorekeeper.cpp(58,29): warning C4267: 'return': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\edges\scorekeeper.cpp(68,51): warning C4267: '=': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  textlinecollection.cpp
+  licenseplatecandidate.cpp
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\licenseplatecandidate.cpp(84,72): warning C4244: '인수': 'int'에서 '_Tp'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+          with
+          [
+              _Tp=float
+          ]
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\licenseplatecandidate.cpp(85,107): warning C4244: '인수': 'int'에서 '_Tp'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+          with
+          [
+              _Tp=float
+          ]
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\licenseplatecandidate.cpp(85,72): warning C4244: '인수': 'int'에서 '_Tp'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+          with
+          [
+              _Tp=float
+          ]
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\licenseplatecandidate.cpp(86,74): warning C4244: '인수': 'int'에서 '_Tp'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+          with
+          [
+              _Tp=float
+          ]
+  motiondetector.cpp
+  컴파일하고 있습니다...
+  ocr.cpp
+  ocrfactory.cpp
+  charactersegmenter.cpp
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\ocr\segmentation\charactersegmenter.cpp(100,166): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\ocr\segmentation\charactersegmenter.cpp(402,111): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\ocr\segmentation\charactersegmenter.cpp(452,68): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\ocr\segmentation\charactersegmenter.cpp(452,25): warning C4244: '초기화 중': 'double'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\ocr\segmentation\charactersegmenter.cpp(464,56): warning C4244: '=': '_Ty'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+          with
+          [
+              _Ty=int
+          ]
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\ocr\segmentation\charactersegmenter.cpp(476,22): warning C4244: '초기화 중': '_Tp'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+          with
+          [
+              _Tp=int
+          ]
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\ocr\segmentation\charactersegmenter.cpp(482,32): warning C4305: '=': '__int64'에서 'float'(으)로 잘립니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\ocr\segmentation\charactersegmenter.cpp(484,30): warning C4244: '=': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\ocr\segmentation\charactersegmenter.cpp(486,29): warning C4244: '=': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\ocr\segmentation\charactersegmenter.cpp(488,19): warning C4244: '초기화 중': 'double'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\ocr\segmentation\charactersegmenter.cpp(489,19): warning C4244: '초기화 중': 'double'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\ocr\segmentation\charactersegmenter.cpp(491,21): warning C4244: '초기화 중': 'double'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\ocr\segmentation\charactersegmenter.cpp(499,54): warning C4244: '인수': 'float'에서 '_Tp'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+          with
+          [
+              _Tp=int
+          ]
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\ocr\segmentation\charactersegmenter.cpp(506,76): warning C4244: '인수': 'int'에서 '_Tp'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+          with
+          [
+              _Tp=float
+          ]
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\ocr\segmentation\charactersegmenter.cpp(506,53): warning C4244: '인수': '_Tp'에서 '_Tp'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+          with
+          [
+              _Tp=int
+          ]
+          and
+          [
+              _Tp=float
+          ]
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\ocr\segmentation\charactersegmenter.cpp(530,50): warning C4305: '초기화 중': 'double'에서 'float'(으)로 잘립니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\ocr\segmentation\charactersegmenter.cpp(532,47): warning C4305: '초기화 중': 'double'에서 'float'(으)로 잘립니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\ocr\segmentation\charactersegmenter.cpp(585,37): warning C4244: '+=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\ocr\segmentation\charactersegmenter.cpp(646,48): warning C4305: '초기화 중': 'double'에서 'float'(으)로 잘립니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\ocr\segmentation\charactersegmenter.cpp(657,26): warning C4244: '초기화 중': '_Tp'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+          with
+          [
+              _Tp=double
+          ]
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\ocr\segmentation\charactersegmenter.cpp(662,25): warning C4244: '초기화 중': '_Tp'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+          with
+          [
+              _Tp=double
+          ]
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\ocr\segmentation\charactersegmenter.cpp(735,48): warning C4244: '=': '_Tp'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+          with
+          [
+              _Tp=int
+          ]
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\ocr\segmentation\charactersegmenter.cpp(759,24): warning C4244: '초기화 중': 'double'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\ocr\segmentation\charactersegmenter.cpp(793,45): warning C4305: '초기화 중': 'double'에서 'float'(으)로 잘립니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\ocr\segmentation\charactersegmenter.cpp(794,35): warning C4244: '초기화 중': 'double'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\ocr\segmentation\charactersegmenter.cpp(798,19): warning C4244: '초기화 중': 'double'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\ocr\segmentation\charactersegmenter.cpp(917,45): warning C4305: '초기화 중': 'double'에서 'float'(으)로 잘립니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\ocr\segmentation\charactersegmenter.cpp(920,29): warning C4244: '초기화 중': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\ocr\segmentation\charactersegmenter.cpp(978,28): warning C4305: '=': 'double'에서 'float'(으)로 잘립니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\ocr\segmentation\charactersegmenter.cpp(991,31): warning C4244: '=': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\ocr\segmentation\charactersegmenter.cpp(1006,35): warning C4244: '초기화 중': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\ocr\segmentation\charactersegmenter.cpp(1010,19): warning C4244: '초기화 중': 'double'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\ocr\segmentation\charactersegmenter.cpp(1012,33): warning C4244: '=': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\ocr\segmentation\charactersegmenter.cpp(1042,43): warning C4244: '=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\ocr\segmentation\charactersegmenter.cpp(1076,66): warning C4244: '인수': '_Ty1'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+          with
+          [
+              _Ty1=int
+          ]
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\ocr\segmentation\charactersegmenter.cpp(1076,74): warning C4244: '인수': 'float'에서 '_Tp'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+          with
+          [
+              _Tp=int
+          ]
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\ocr\segmentation\charactersegmenter.cpp(1077,71): warning C4244: '인수': '_Ty2'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+          with
+          [
+              _Ty2=int
+          ]
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\ocr\segmentation\charactersegmenter.cpp(1077,80): warning C4244: '인수': 'float'에서 '_Tp'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+          with
+          [
+              _Tp=int
+          ]
+  histogram.cpp
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\ocr\segmentation\histogram.cpp(86,46): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\ocr\segmentation\histogram.cpp(92,36): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+  histogramhorizontal.cpp
+  histogramvertical.cpp
+  tesseract_ocr.cpp
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\ocr\tesseract_ocr.cpp(73,104): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  pipeline_data.cpp
+  postprocess.cpp
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\postprocess\postprocess.cpp(111,7): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\postprocess\postprocess.cpp(170,5): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\postprocess\postprocess.cpp(380,27): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\postprocess\postprocess.cpp(381,25): warning C4018: '>': signed 또는 unsigned가 일치하지 않습니다.
+  regexrule.cpp
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\postprocess\regexrule.cpp(133,26): warning C4244: '초기화 중': '__int64'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  prewarp.cpp
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\prewarp.cpp(44,20): warning C4244: '초기화 중': '__int64'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\prewarp.cpp(65,49): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\prewarp.cpp(159,47): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\prewarp.cpp(159,35): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  result_aggregator.cpp
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\result_aggregator.cpp(54,26): warning C4305: '초기화 중': 'double'에서 'float'(으)로 잘립니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\result_aggregator.cpp(67,19): warning C4244: '=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\result_aggregator.cpp(155,93): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\result_aggregator.cpp(235,54): warning C4244: '=': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\result_aggregator.cpp(355,58): warning C4244: '인수': 'double'에서 '_Tp'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+          with
+          [
+              _Tp=float
+          ]
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\result_aggregator.cpp(355,42): warning C4244: '인수': 'double'에서 '_Tp'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+          with
+          [
+              _Tp=float
+          ]
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\result_aggregator.cpp(356,23): warning C4244: '=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\result_aggregator.cpp(380,19): warning C4244: '초기화 중': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\result_aggregator.cpp(381,19): warning C4244: '초기화 중': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  filesystem.cpp
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\support\filesystem.cpp(44,57): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\support\filesystem.cpp(122,47): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\support\filesystem.cpp(128,47): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  platform.cpp
+  bitstate.cc
+  compile.cc
+  dfa.cc
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\support\re2\dfa.cc(1966,18): warning C4267: 'return': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  filtered_re2.cc
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\support\re2\filtered_re2.h(79,26): warning C4267: 'return': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\support\re2\filtered_re2.cc(36,26): warning C4267: '=': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\support\re2\filtered_re2.cc(61,15): warning C4267: 'return': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  mimics_pcre.cc
+  nfa.cc
+  컴파일하고 있습니다...
+  onepass.cc
+  parse.cc
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\support\re2\unicode_casefold.h(1,1): warning C4819: 현재 코드 페이지(949)에서 표시할 수 없는 문자가 파일에 들어 있습니다. 데이터가 손실되지 않게 하려면 해당 파일을 유니코드 형식으로 저장하십시오.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\support\re2\parse.cc(1621,39): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\support\re2\parse.cc(1622,29): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\support\re2\parse.cc(1905,43): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\support\re2\parse.cc(1906,40): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  perl_groups.cc
+  prefilter.cc
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\support\re2\unicode_casefold.h(1,1): warning C4819: 현재 코드 페이지(949)에서 표시할 수 없는 문자가 파일에 들어 있습니다. 데이터가 손실되지 않게 하려면 해당 파일을 유니코드 형식으로 저장하십시오.
+  prefilter_tree.cc
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\support\re2\prefilter_tree.cc(175,30): warning C4267: '인수': 'size_t'에서 '_Ty'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+          with
+          [
+              _Ty=int
+          ]
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\support\re2\prefilter_tree.cc(196,3): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\support\re2\prefilter_tree.cc(218,3): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\support\re2\prefilter_tree.cc(231,3): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\support\re2\prefilter_tree.cc(271,70): warning C4267: '=': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\support\re2\prefilter_tree.cc(285,31): warning C4267: '인수': 'size_t'에서 '_Ty'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+          with
+          [
+              _Ty=int
+          ]
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\support\re2\prefilter_tree.cc(297,27): warning C4267: '인수': 'size_t'에서 '_Ty'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+          with
+          [
+              _Ty=int
+          ]
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\support\re2\prefilter_tree.cc(300,47): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\support\re2\prefilter_tree.cc(320,31): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\support\re2\prefilter_tree.cc(321,30): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  prog.cc
+  re2.cc
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\support\re2\re2.cc(380,6): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\support\re2\re2.cc(407,8): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\support\re2\re2.cc(491,25): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\support\re2\re2.cc(603,31): warning C4267: '=': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  regexp.cc
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\support\re2\regexp.cc(462,23): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\support\re2\regexp.cc(932,48): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\support\re2\regexp.cc(936,19): warning C4267: '=': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  set.cc
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\support\re2\set.cc(48,21): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\support\re2\set.cc(79,58): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  simplify.cc
+  stringpiece.cc
+  tostring.cc
+  unicode_casefold.cc
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\support\re2\unicode_casefold.h(1,1): warning C4819: 현재 코드 페이지(949)에서 표시할 수 없는 문자가 파일에 들어 있습니다. 데이터가 손실되지 않게 하려면 해당 파일을 유니코드 형식으로 저장하십시오.
+  unicode_groups.cc
+  hash.cc
+  rune.cc
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\support\re2\util\rune.cc(136,12): warning C4244: '=': 'unsigned long'에서 'char'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\support\re2\util\rune.cc(145,15): warning C4244: '=': 'unsigned long'에서 'char'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\support\re2\util\rune.cc(164,15): warning C4244: '=': 'unsigned long'에서 'char'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\support\re2\util\rune.cc(174,14): warning C4244: '=': 'unsigned long'에서 'char'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  stringprintf.cc
+  strutil.cc
+  valgrind.cc
+  timing.cpp
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\support\timing.cpp(68,18): warning C4244: '=': 'double'에서 'LONGLONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\support\timing.cpp(89,21): warning C4244: 'return': 'double'에서 'int64_t'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  컴파일하고 있습니다...
+  tinythread.cpp
+  utf8.cpp
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\support\utf8.cpp(16,23): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  version.cpp
+  characteranalysis.cpp
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\textdetection\characteranalysis.cpp(210,20): warning C4244: '초기화 중': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\textdetection\characteranalysis.cpp(231,26): warning C4244: '초기화 중': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\textdetection\characteranalysis.cpp(306,29): warning C4244: '초기화 중': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\textdetection\characteranalysis.cpp(307,29): warning C4244: '초기화 중': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\textdetection\characteranalysis.cpp(308,21): warning C4244: '초기화 중': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\textdetection\characteranalysis.cpp(375,22): warning C4244: '초기화 중': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\textdetection\characteranalysis.cpp(490,54): warning C4305: '초기화 중': 'double'에서 'float'(으)로 잘립니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\textdetection\characteranalysis.cpp(491,56): warning C4305: '초기화 중': 'double'에서 'float'(으)로 잘립니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\textdetection\characteranalysis.cpp(503,118): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\textdetection\characteranalysis.cpp(545,30): warning C4244: '초기화 중': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\textdetection\characteranalysis.cpp(546,33): warning C4244: '초기화 중': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\textdetection\characteranalysis.cpp(569,48): warning C4305: '초기화 중': 'double'에서 'float'(으)로 잘립니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\textdetection\characteranalysis.cpp(570,59): warning C4305: '초기화 중': 'double'에서 'float'(으)로 잘립니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\textdetection\characteranalysis.cpp(600,33): warning C4244: '초기화 중': '_Tp'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+          with
+          [
+              _Tp=double
+          ]
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\textdetection\characteranalysis.cpp(601,32): warning C4244: '초기화 중': '_Tp'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+          with
+          [
+              _Tp=double
+          ]
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\textdetection\characteranalysis.cpp(669,42): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\textdetection\characteranalysis.cpp(669,41): warning C4244: '인수': 'float'에서 '_Tp'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+          with
+          [
+              _Tp=int
+          ]
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\textdetection\characteranalysis.cpp(670,43): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\textdetection\characteranalysis.cpp(670,42): warning C4244: '인수': 'float'에서 '_Tp'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+          with
+          [
+              _Tp=int
+          ]
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\textdetection\characteranalysis.cpp(671,46): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\textdetection\characteranalysis.cpp(671,45): warning C4244: '인수': 'float'에서 '_Tp'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+          with
+          [
+              _Tp=int
+          ]
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\textdetection\characteranalysis.cpp(672,45): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\textdetection\characteranalysis.cpp(672,44): warning C4244: '인수': 'float'에서 '_Tp'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+          with
+          [
+              _Tp=int
+          ]
+  linefinder.cpp
+  platemask.cpp
+  textcontours.cpp
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\libopenalpr\textdetection\textcontours.cpp(62,27): warning C4267: 'return': 'size_t'에서 'unsigned int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  textline.cpp
+  transformation.cpp
+  utility.cpp
+  cjson.c
+  ConvertUTF.c
+  libopenalpr.vcxproj -> D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\x64\Release\libopenalpr.lib

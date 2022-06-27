@@ -1,0 +1,26 @@
+﻿  dev2gif.c
+D:\VS_ws\OpenALPR.git2\OpenALPR\libs\dependencies\giflib\src\dev2gif.c(94,15): warning C4101: 'k' :참조되지 않은 지역 변수입니다.
+D:\VS_ws\OpenALPR.git2\OpenALPR\libs\dependencies\giflib\src\dev2gif.c(94,12): warning C4101: 'j' :참조되지 않은 지역 변수입니다.
+  dgif_lib.c
+  egif_lib.c
+D:\VS_ws\OpenALPR.git2\OpenALPR\libs\dependencies\giflib\src\egif_lib.c(266,1): warning C4267: '함수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR.git2\OpenALPR\libs\dependencies\giflib\src\egif_lib.c(495,14): warning C4267: '=': 'size_t'에서 'unsigned int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR.git2\OpenALPR\libs\dependencies\giflib\src\egif_lib.c(492,27): warning C4267: '초기화 중': 'size_t'에서 'unsigned int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  getarg.c
+D:\VS_ws\OpenALPR.git2\OpenALPR\libs\dependencies\giflib\src\getarg.c(252,30): warning C4267: '=': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  gifalloc.c
+  gif_err.c
+  gif_font.c
+D:\VS_ws\OpenALPR.git2\OpenALPR\libs\dependencies\giflib\src\gif_font.c(254,52): warning C4267: '=': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  gif_hash.c
+D:\VS_ws\OpenALPR.git2\OpenALPR\libs\dependencies\giflib\src\gif_hash.c(71,43): warning C4013: 'malloc'이(가) 정의되지 않았습니다. extern은 int형을 반환하는 것으로 간주합니다.
+D:\VS_ws\OpenALPR.git2\OpenALPR\libs\dependencies\giflib\src\gif_hash.c(71,75): warning C4312: '형식 캐스트': 'int'에서 더 큰 'GifHashTableType *'(으)로의 변환입니다.
+  qprintf.c
+  quantize.c
+D:\VS_ws\OpenALPR.git2\OpenALPR\libs\dependencies\giflib\src\quantize.c(153,25): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+D:\VS_ws\OpenALPR.git2\OpenALPR\libs\dependencies\giflib\src\quantize.c(162,19): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+D:\VS_ws\OpenALPR.git2\OpenALPR\libs\dependencies\giflib\src\quantize.c(173,72): warning C4244: '=': 'long'에서 'GifByteType'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR.git2\OpenALPR\libs\dependencies\giflib\src\quantize.c(174,76): warning C4244: '=': 'long'에서 'GifByteType'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR.git2\OpenALPR\libs\dependencies\giflib\src\quantize.c(175,74): warning C4244: '=': 'long'에서 'GifByteType'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  코드를 생성하고 있습니다...
+  giflib.vcxproj -> D:\VS_ws\OpenALPR.git2\OpenALPR\x64\Debug\giflib.lib

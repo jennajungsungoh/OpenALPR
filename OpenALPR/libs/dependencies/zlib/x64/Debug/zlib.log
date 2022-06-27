@@ -1,0 +1,17 @@
+﻿  adler32.c
+  compress.c
+  crc32.c
+  deflate.c
+  gzclose.c
+  gzlib.c
+  gzread.c
+  gzwrite.c
+  infback.c
+  inffast.c
+  inflate.c
+  inftrees.c
+  trees.c
+  uncompr.c
+  zutil.c
+  코드를 생성하고 있습니다...
+  zlib.vcxproj -> D:\VS_ws\OpenALPR.git2\OpenALPR\x64\Debug\zlib.lib
