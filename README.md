@@ -2,8 +2,8 @@
 
 ## Python Environment
 ```
-cd Script
-activate
+$ cd Script
+$ activate
 ```
 
 ## Start Server
