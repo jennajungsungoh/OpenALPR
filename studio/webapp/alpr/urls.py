@@ -12,6 +12,8 @@ urlpatterns = [
     path('webcam', views.webcam, name='webcam'),
     path('upload', views.upload, name='upload'),
     path('upload_view', views.upload_view, name='upload_view'),
+    path('remove', views.remove, name='remove'),
+
     path('play', views.play, name='play'),
     path('get_vehicle', views.get_vehicle, name='get_vehicle'),
     path('', views.index, name='index'),

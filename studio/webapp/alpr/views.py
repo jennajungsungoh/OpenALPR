@@ -47,13 +47,13 @@ class VideoStream(object):
         self._pid=pid
         if request is not None:
             self.session_key = request.session.session_key
-            self.user = request.user.username
+            self.user = request.user
         else : 
             self.session_key = 0
         self.remove_vehicle_by_session()
 
         if playback: 
-            self.TEST_VIDEO_FILE_PATH = settings.MEDIA_ROOT + settings.MEDIA_URL + self.user + '/' + self._pid 
+            self.TEST_VIDEO_FILE_PATH = settings.MEDIA_ROOT + settings.MEDIA_URL + self.user.username + '/' + self._pid 
             self.video = cv2.VideoCapture(self.TEST_VIDEO_FILE_PATH)
         else:
             self.video = cv2.VideoCapture(0)
@@ -118,7 +118,8 @@ class VideoStream(object):
             plate_number = pn,
             confidence = cd,
             frame_no = self.framenumber,
-            session_key = self.session_key
+            session_key = self.session_key,
+            user = self.user
         )
         vehicle.save()
 
@@ -152,6 +153,10 @@ class VideoStream(object):
                     width = results['img_width']
                     height = results['img_height']
  
+                    
+
+                    # todo : connet with server(ssl)
+                    # 하헌진.
                     self.add_database(pn, cd)
                 else :  
                     self.clear_text() 
@@ -253,22 +258,37 @@ def index(request):
         return render(request, 'alpr/index.html',
         {'mode':mode, 'pid':pid})
     else:
-        mode = 0
-        pid = 0
-        return render(request, 'alpr/index.html',
-        {'mode':mode, 'pid':pid})
+        documents = models.Document.objects.all()
+        return render(request, 'alpr/index.html', context = {
+        "files": documents})
           
+ 
+def play(request): 
+    pid = request.POST['pid']
+    return HttpResponse(json.dumps({'pid': pid}), content_type='application/json')
+ 
+
+
+def remove(request):
+    id = request.GET['id']
+    print(id)
+    filepath = settings.BASE_DIR 
+    url = models.Document.objects.get(id=id).uploadedFile.url
+
+    os.remove(rootpath+'../'+url)
+    models.Document.objects.filter(id=id).remove()
+  
+    documents = models.Document.objects.all()
+    return render(request, 'alpr/index.html', context = {
+        "files": documents})
+
 def upload_view(request):
     documents = models.Document.objects.all()
  
     return render(request, "alpr/upload.html", context = {
         "files": documents
     }) 
- 
-def play(request): 
-    pid = request.POST['pid']
-    return HttpResponse(json.dumps({'pid': pid}), content_type='application/json')
- 
+
 def upload(request):
     if request.method == "POST":
         # Fetching the form data
@@ -285,6 +305,7 @@ def upload(request):
             uploadedFile = uploadedFile
         )
         document.save()
+        
     return render(request, 'alpr/index.html', {
         'mode':0, 'pid':filename
     })
