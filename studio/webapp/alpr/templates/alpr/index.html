@@ -55,35 +55,6 @@
             });
         });
     </script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
-
-        * {
-            font-family: "Roboto";
-            font-size: small;
-        }
-
-        body {
-            background-color: #F5F5F5;
-        }
-
-        form {
-            background-color: #FFFFFF;
-            padding: 25px;
-        }
-
-        table {
-            width: 100%;
-            text-align: center;
-            margin-top: 0px;
-            padding: 0px;
-            background-color: #FFFFFF;
-        }
-
-        table tr td {
-            padding-top: 15px;
-        }
-    </style>
 </head>
 
 <body>
@@ -97,7 +68,23 @@
         {% csrf_token %}
         <input type="button" id="btplay" value="play">
     </form>
-    <table id="tbInfo">
+    <table class="mainTable" id="tbMovieInfo">
+        <tr>
+            <th>ID</th>
+            <th>File Path</th>
+            <th>Upload Date & Time</th>
+            <th>Action</th>
+        </tr>
+        {% for file in files %}
+        <tr>
+            <td>{{ file.id }}</td>
+            <td>{{ file.filename }}</td>
+            <td>{{ file.dateTimeOfUpload }}</td>
+            <td><a href="remove?id={{ file.id }}">Remove</a></td>
+        </tr>
+        {% endfor %}
+    </table>
+    <table class="mainTable" id="tbInfo">
         <tr>
             <td id="tdLeft">
                 <div id="dvPlayer"><img id="player" /></div>

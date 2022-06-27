@@ -37,8 +37,9 @@ table {
     padding: 0px;
 }
 
-#tbInfo {
+.mainTable {
     width: 1000px;
+    border: solid 1px grey;
 }
 
 #info thead {
