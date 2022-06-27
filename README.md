@@ -5,6 +5,11 @@
 $ cd studio/Script
 $ activate
 ```
+## DB Migration
+```
+python .\manage.py makemigrations
+python .\manage.py migrate   
+```
 
 ## Start Server
 ```
