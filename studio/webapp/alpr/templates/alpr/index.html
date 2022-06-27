@@ -15,6 +15,21 @@
     <script>
         var pollingStatus = true;
         var pollingTm = null;
+
+        function req_remove_vehicle_info(pid) {
+            $.ajax({
+                url: '/alpr/remove_vehicle_history?filename=' + pid,
+                type: 'GET',
+                dataType: 'json',
+                success: function (response) {
+                    $('#information').children().remove()
+                },
+                error: function (request, status, error) {
+                    console.log("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+                }
+            })
+        }
+
         function polling(pid) {
             pollingStatus = true;
             $.ajax({
@@ -48,8 +63,14 @@
                 stop_polling();
             });
 
+            $(".btnRemoveHistory").on("click", function (event) {
+                var pid = $(this).children('input').val();
+                req_remove_vehicle_info(pid)
+            });
+
             $(".btnPlay").on("click", function (event) {
                 var pid = $(this).children('input').val();
+                req_remove_vehicle_info(pid)
                 $('#player').attr("src", "playback?pid=" + pid);
                 stop_polling();
                 polling(pid);
@@ -81,15 +102,18 @@
         <tr>
             <td>{{ file.filename }}</td>
             <td>{{ file.dateTimeOfUpload }}</td>
-            <td>
+            <td style="width:300px">
                 <!-- $('#player').attr("src", "playback?pid=" + data.pid) -->
-                <div class="btnRemove"><input type="hidden" value="{{ file.id }}">Remove</div>
-                <div class="btnPlay"><input type="hidden" value="{{ file.filename }}">Play</div>
+                <div class="btn btnPlay"><input type="hidden" value="{{ file.filename }}">Play</div>
+                <div class="btn btnRemove"><input type="hidden" value="{{ file.id }}">Del Video</div>
+                <div class="btn btnRemoveHistory"><input type="hidden" value="{{ file.filename }}">Del History
+                </div>
             </td>
         </tr>
         {% endfor %}
     </table>
     <div class="stop">stop</div>
+    <div class="remove">remove</div>
     <table class="mainTable" id="tbInfo">
         <tr>
             <td id="tdLeft">

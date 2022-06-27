@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.http import StreamingHttpResponse
 from django.shortcuts import redirect
+from django.core.files.base import ContentFile
 
 from django.views.decorators import gzip
 from django.core import serializers
@@ -18,6 +19,7 @@ from openalpr import Alpr, VehicleClassifier
 import os
 import time
 import random
+import shutil 
 
 import json
 from django.http.response import JsonResponse
@@ -72,20 +74,23 @@ class VideoStream(object):
  
         (self.grabbed, self.frame) = self.video.read()
         threading.Thread(target=self.update, args=()).start()
-        # print(dllabspath)
 
     def __del__(self):
         self.video.release()
 
-    def get_frame(self):
+    def get_frame(self, frame=None):
         try:
-            image = self.frame
-            _, jpeg = cv2.imencode('.jpg', image)
+            if frame is None:
+                image = self.frame
+                _, jpeg = cv2.imencode('.jpg', image)
+            else :
+                image = frame
+                _, jpeg = cv2.imencode('.jpg', image)
         except:
             print("exception...")
             # self.remove_vehicle_by_session()
 
-        return jpeg.tobytes()
+        return image, jpeg.tobytes()
 
     def get_framenumber(self):
         return self.framenumber
@@ -114,18 +119,37 @@ class VideoStream(object):
 
     def remove_vehicle_by_session(self): 
         models.Vehicle.objects.filter(filename=self._pid, session_key=self._session_key).delete()
+ 
 
-
-    def add_database(self, pn, cd):
+    def add_database(self, pn, cd, frame_raw): 
         # Saving the information in the database
+
+        try :
+            if self.x1<0: self.x1 *=(-1)
+            if self.y1<0: self.y1 *=(-1)
+            if self.x2<0: self.x2 *=(-1)
+            if self.y2<0: self.y2 *=(-1)
+
+            cropped_img = frame_raw[self.y1:self.y2, self.x1:self.x2]
+            # print("x:{}-{}, y:{}-{} size:{} c_size:{}".format(self.x1, self.x2, self.y1, self.y2, frame_raw.size, cropped_img.size))
+            _, buf = cv2.imencode('.jpg', cropped_img)  
+            content = ContentFile(buf.tobytes())
+        except Exception as e:
+            print('add database error: %s' % (e)) 
+            pass
+ 
+            
+  
         vehicle = models.Vehicle(
-            filename = self._pid,
+            filename = self._pid, 
             plate_number = pn,
             confidence = cd,
             frame_no = self.framenumber,
             session_key = self._session_key,
-            user = self.user
-        )
+            user = self.user,   
+            captured_frame = content
+        ) 
+        vehicle.captured_frame.name = "{}.jpg".format(self.framenumber)
         vehicle.save()
 
     def update(self): 
@@ -136,34 +160,39 @@ class VideoStream(object):
         while True:
             start = time.perf_counter() 
             (self.grabbed, self.frame) = self.video.read()
+
+            clear_frame = self.frame.copy()
+            
             cv2.rectangle(self.frame, (self.x1, self.y1), (self.x2, self.y2), (0, 255, 0), 2)
             cv2.putText(self.frame, self.f_text, (self.x1, self.y1-30), font, 1, (0, 255, 0), 0, cv2.LINE_AA)
             cv2.putText(self.frame, self.fps_text, (0, height-10), font, 0.7, (0, 255, 0), 0, cv2.LINE_AA)
- 
-            results = self.alpr.recognize_array(self.get_frame())
 
+            frame_raw, frame_byte = self.get_frame(clear_frame)
+            results = self.alpr.recognize_array(frame_byte)
+ 
+ 
+ 
             if results['data_type'] == 'alpr_results': 
                 if results['results']:
                     pn = results['results'][0]['candidates'][0]['plate'] 
                     cd = results['results'][0]['candidates'][0]['confidence']
-                     
-                    print('Plate: {} ({:.2f}%)'.format(pn, cd))
-                    # print(results)
                      
                     self.f_text = '{} ({:.2f}%)'.format(pn, cd) 
                     self.x1 = results['results'][0]['coordinates'][0]['x']
                     self.y1 = results['results'][0]['coordinates'][0]['y'] 
                     self.x2 = results['results'][0]['coordinates'][2]['x']
                     self.y2 = results['results'][0]['coordinates'][2]['y']
+
                     width = results['img_width']
                     height = results['img_height']
+                    print('Plate: {} ({:.2f}%) {}x{}- x:{}-{} y:{}-{}'.format(pn, cd, width, height, self.x1, self.x2, self.y1, self.y2))
+                     
  
-                    
-
                     # todo : connet with server(ssl)
                     # 하헌진.
-                    self.add_database(pn, cd)
-                else :  
+                    self.add_database(pn, cd, frame_raw)
+
+                else :   
                     self.clear_text() 
  
             dur = time.perf_counter() - start
@@ -185,7 +214,7 @@ def remove_vehicle(self):
 
 def gen_stream(stream) :
     while True:
-        frame = stream.get_frame()
+        _, frame = stream.get_frame()
         yield(b'--frame\r\n' 
               b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n') 
 
@@ -271,12 +300,9 @@ def index(request):
 def play(request): 
     pid = request.POST['pid']
     return HttpResponse(json.dumps({'pid': pid}), content_type='application/json')
- 
-
 
 def remove(request):
     id = request.GET['id']
-    print(id)
     filepath = settings.BASE_DIR 
     url = models.Document.objects.get(id=id).uploadedFile.url
 
@@ -290,22 +316,30 @@ def remove(request):
     documents = models.Document.objects.all()
     return redirect('/alpr') 
 
+def remove_vehicle_history(request):
+    user = request.user
+    filename = request.GET['filename']
+    image_path = settings.MEDIA_ROOT + os.path.sep + 'media' + os.path.sep + user.username + os.path.sep + filename.rsplit('.')[0]
+    try:
+        models.Vehicle.objects.filter(user=user, filename=filename).delete()
+        print(image_path) 
+        shutil.rmtree(image_path)
+    except Exception as e:
+        print('remove_vehicle_history error: %s' % (e)) 
+    return redirect('/alpr') 
+
 def upload_view(request):
     documents = models.Document.objects.all()
- 
+  
     return render(request, "alpr/upload.html", context = {
         "files": documents
-    }) 
+    })  
 
 def upload(request):
     if request.method == "POST":
         # Fetching the form data
         uploadedFile = request.FILES["uploadedFile"]
-        filename = request.FILES["uploadedFile"].name
         user = request.user
-
-        # remove all data 
-        #remove_all()
 
         # Saving the information in the database
         document = models.Document(

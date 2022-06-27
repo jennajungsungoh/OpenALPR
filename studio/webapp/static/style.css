@@ -55,8 +55,7 @@ table {
     border: solid 1px grey;
 }
 
-.btnRemove,
-.btnPlay {
+.btn {
     cursor: pointer;
     display: inline;
     padding-left: 10px;
@@ -65,8 +64,7 @@ table {
     background: white;
 }
 
-.btnRemove:hover,
-.btnPlay:hover {
+.btn:hover {
     cursor: pointer;
     background: yellow;
 }

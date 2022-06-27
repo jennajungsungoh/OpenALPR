@@ -16,6 +16,8 @@ urlpatterns = [
 
     path('play', views.play, name='play'),
     path('get_vehicle', views.get_vehicle, name='get_vehicle'),
+    path('remove_vehicle_history', views.remove_vehicle_history, name='remove_vehicle_history'),
+    
     path('', views.index, name='index'),
 ]
 
