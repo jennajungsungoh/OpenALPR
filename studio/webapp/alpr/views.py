@@ -47,11 +47,14 @@ class VideoStream(object):
         self._avgfps=0
         self._fps1sec=0
         self._pid=pid
+
         if request is not None:
-            self.session_key = request.session.session_key
+            self._session_key = request.session.session_key
             self.user = request.user
         else : 
-            self.session_key = 0
+            self._session_key = 0
+        
+        
         self.remove_vehicle_by_session()
 
         if playback: 
@@ -110,7 +113,7 @@ class VideoStream(object):
         return self._avgfps
 
     def remove_vehicle_by_session(self): 
-        models.Vehicle.objects.filter(session_key=self.session_key).delete()
+        models.Vehicle.objects.filter(filename=self._pid, session_key=self._session_key).delete()
 
 
     def add_database(self, pn, cd):
@@ -120,7 +123,7 @@ class VideoStream(object):
             plate_number = pn,
             confidence = cd,
             frame_no = self.framenumber,
-            session_key = self.session_key,
+            session_key = self._session_key,
             user = self.user
         )
         vehicle.save()
@@ -189,7 +192,7 @@ def gen_stream(stream) :
 def gen_data(stream) :
     while True:
         fn = stream.get_framenumber()
-        data={}
+        data={} 
         data['framenumber'] = fn
        
         # yield(b'--fn\r\n'
