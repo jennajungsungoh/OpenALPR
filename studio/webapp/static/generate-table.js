@@ -31,7 +31,7 @@
                 //     }
                 // }
                 if ($.inArray(key, hidecolumns) <= -1) {
-                    var tbodydata = $('<td>').addClass('row').text(val);
+                    var tbodydata = $('<td>').addClass('rowA').text(val);
                     tableRow.append(tbodydata);
                 }
             });
