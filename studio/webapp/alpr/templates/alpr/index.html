@@ -13,7 +13,10 @@
     <script src="{% static 'generate-table.js' %}"></script>
 
     <script>
+        var pollingStatus = true;
+        var pollingTm = null;
         function polling(pid) {
+            pollingStatus = true;
             $.ajax({
                 url: '/alpr/get_vehicle?pid=' + pid,
                 type: 'GET',
@@ -28,18 +31,31 @@
                     console.log("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
                 },
                 timeout: 3000,
-                complete: setTimeout(function () { polling(pid); }, 3000)
+                complete: function () {
+                    if (pollingStatus) { pollingTm = setTimeout(function () { polling(pid); }, 3000); }
+                }
             })
-        };
+        }
+
+        function stop_polling() {
+            pollingStatus = false;
+            clearTimeout(pollingTm);
+        }
 
         $(document).ready(function () {
-            $("#btnPlay").on("click", function (event) {
+            $(".stop").on("click", function (event) {
+                alert("stop");
+                stop_polling();
+            });
+
+            $(".btnPlay").on("click", function (event) {
                 var pid = $(this).children('input').val();
                 $('#player').attr("src", "playback?pid=" + pid);
+                stop_polling();
                 polling(pid);
             });
 
-            $("#btnRemove").on("click", function (event) {
+            $(".btnRemove").on("click", function (event) {
                 var id = $(this).children('input').val();
                 window.location.href = 'remove?id=' + id;
             });
@@ -49,31 +65,31 @@
 </head>
 
 <body>
-    <form action="{% url 'alpr:upload' %}" method="POST" enctype="multipart/form-data">
+    <form id="upload_form" action="{% url 'alpr:upload' %}" method="POST" enctype="multipart/form-data">
         <input type="file" name="uploadedFile">
         {% csrf_token %}
         <input type="submit" value="Upload">
     </form>
+    <div>&nbsp;</div>
     <table class="mainTable" id="tbMovieInfo">
         <tr>
-            <th>ID</th>
             <th>Video Name</th>
             <th>Upload Date & Time</th>
             <th>Action</th>
         </tr>
         {% for file in files %}
         <tr>
-            <td>{{ file.id }}</td>
             <td>{{ file.filename }}</td>
             <td>{{ file.dateTimeOfUpload }}</td>
             <td>
                 <!-- $('#player').attr("src", "playback?pid=" + data.pid) -->
-                <div id="btnRemove"><input type="hidden" value="{{ file.id }}">Remove</div>
-                <div id="btnPlay"><input type="hidden" value="{{ file.filename }}">Play</div>
+                <div class="btnRemove"><input type="hidden" value="{{ file.id }}">Remove</div>
+                <div class="btnPlay"><input type="hidden" value="{{ file.filename }}">Play</div>
             </td>
         </tr>
         {% endfor %}
     </table>
+    <div class="stop">stop</div>
     <table class="mainTable" id="tbInfo">
         <tr>
             <td id="tdLeft">
