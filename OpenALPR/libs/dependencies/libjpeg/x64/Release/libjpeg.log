@@ -1,0 +1,54 @@
+﻿  jaricom.c
+  jcapimin.c
+  jcapistd.c
+  jcarith.c
+  jccoefct.c
+  jccolor.c
+  jcdctmgr.c
+  jchuff.c
+  jcinit.c
+  jcmainct.c
+  jcmarker.c
+  jcmaster.c
+  jcomapi.c
+  jcparam.c
+  jcprepct.c
+  jcsample.c
+  jctrans.c
+  jdapimin.c
+  jdapistd.c
+  jdarith.c
+  컴파일하고 있습니다...
+  jdatadst.c
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\dependencies\libjpeg\src\jdatadst.c(185,34): warning C4267: '=': 'size_t'에서 'unsigned long'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  jdatasrc.c
+  jdcoefct.c
+  jdcolor.c
+  jddctmgr.c
+  jdhuff.c
+  jdinput.c
+  jdmainct.c
+  jdmarker.c
+  jdmaster.c
+  jdmerge.c
+  jdpostct.c
+  jdsample.c
+  jdtrans.c
+  jerror.c
+  jfdctflt.c
+  jfdctfst.c
+  jfdctint.c
+  jidctflt.c
+  jidctfst.c
+  컴파일하고 있습니다...
+  jidctint.c
+  jmemmgr.c
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\dependencies\libjpeg\src\jmemmgr.c(306,47): warning C4267: '+=': 'size_t'에서 'long'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\dependencies\libjpeg\src\jmemmgr.c(366,46): warning C4267: '+=': 'size_t'에서 'long'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\dependencies\libjpeg\src\jmemmgr.c(976,35): warning C4267: '-=': 'size_t'에서 'long'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\dependencies\libjpeg\src\jmemmgr.c(990,35): warning C4267: '-=': 'size_t'에서 'long'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  jmemnobs.c
+  jquant1.c
+  jquant2.c
+  jutils.c
+  libjpeg.vcxproj -> D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\x64\Release\libjpeg.lib

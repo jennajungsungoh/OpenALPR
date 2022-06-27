@@ -1,0 +1,83 @@
+﻿  tif_aux.c
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\dependencies\libtiff\src\tif_aux.c(41,24): warning C4267: '초기화 중': 'size_t'에서 'tsize_t'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  tif_close.c
+  tif_codec.c
+  tif_color.c
+  tif_compress.c
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\dependencies\libtiff\src\tif_compress.c(197,70): warning C4267: '함수': 'size_t'에서 'tsize_t'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  tif_dir.c
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\dependencies\libtiff\src\tif_dir.c(49,25): warning C4267: '초기화 중': 'size_t'에서 'tsize_t'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\dependencies\libtiff\src\tif_dir.c(125,13): warning C4244: 'return': '__int64'에서 'uint32'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  tif_dirinfo.c
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\dependencies\libtiff\src\tif_dirinfo.c(548,38): warning C4267: '함수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\dependencies\libtiff\src\tif_dirinfo.c(797,28): warning C4133: '함수': 'size_t *'과(와) 'unsigned int *' 사이의 형식이 호환되지 않습니다.
+  tif_dirread.c
+  tif_dirwrite.c
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\dependencies\libtiff\src\tif_dirwrite.c(179,24): warning C4267: '=': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\dependencies\libtiff\src\tif_dirwrite.c(486,24): warning C4267: '=': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\dependencies\libtiff\src\tif_dirwrite.c(1167,58): warning C4334: '<<': 32비트 시프트의 결과가 암시적으로 64비트로 변환됩니다. 64비트 시프트를 사용하시겠습니까?
+  tif_dumpmode.c
+  tif_error.c
+  tif_extension.c
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\dependencies\libtiff\src\tif_extension.c(105,51): warning C4267: '함수': 'size_t'에서 'tsize_t'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  tif_fax3.c
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\dependencies\libtiff\src\tif_fax3.c(260,3): warning C4244: '-=': '__int64'에서 'tsize_t'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\dependencies\libtiff\src\tif_fax3.c(263,2): warning C4244: '-=': '__int64'에서 'tsize_t'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\dependencies\libtiff\src\tif_fax3.c(313,3): warning C4244: '-=': '__int64'에서 'tsize_t'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\dependencies\libtiff\src\tif_fax3.c(316,2): warning C4244: '-=': '__int64'에서 'tsize_t'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\dependencies\libtiff\src\tif_fax3.c(395,21): warning C4311: '형식 캐스트': 'unsigned char *'에서 'unsigned long'(으)로 포인터가 잘립니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\dependencies\libtiff\src\tif_fax3.c(430,21): warning C4311: '형식 캐스트': 'unsigned char *'에서 'unsigned long'(으)로 포인터가 잘립니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\dependencies\libtiff\src\tif_fax3.c(822,11): warning C4311: '형식 캐스트': 'unsigned char *'에서 'unsigned long'(으)로 포인터가 잘립니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\dependencies\libtiff\src\tif_fax3.c(881,11): warning C4311: '형식 캐스트': 'unsigned char *'에서 'unsigned long'(으)로 포인터가 잘립니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\dependencies\libtiff\src\tif_fax3.c(956,8): warning C4311: '형식 캐스트': 'tidata_t'에서 'unsigned long'(으)로 포인터가 잘립니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\dependencies\libtiff\src\tif_fax3.c(1462,3): warning C4244: '-=': '__int64'에서 'tsize_t'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\dependencies\libtiff\src\tif_fax3.c(1465,2): warning C4244: '-=': '__int64'에서 'tsize_t'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\dependencies\libtiff\src\tif_fax3.c(1568,27): warning C4311: '형식 캐스트': 'unsigned char *'에서 'unsigned long'(으)로 포인터가 잘립니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\dependencies\libtiff\src\tif_fax3.c(1577,3): warning C4244: '-=': '__int64'에서 'tsize_t'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\dependencies\libtiff\src\tif_fax3.c(1580,2): warning C4244: '-=': '__int64'에서 'tsize_t'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  tif_fax3sm.c
+  tif_flush.c
+  tif_getimage.c
+  tif_jbig.c
+  tif_jpeg.c
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\dependencies\libtiff\src\tif_jpeg.c(481,35): warning C4267: '-=': 'size_t'에서 'uint32'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  tif_luv.c
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\dependencies\libtiff\src\tif_luv.c(1167,20): warning C4267: '초기화 중': 'size_t'에서 'uint32'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  tif_lzw.c
+  컴파일하고 있습니다...
+  tif_next.c
+  tif_ojpeg.c
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\dependencies\libtiff\src\tif_ojpeg.c(651,27): warning C4244: '=': 'tsample_t'에서 'uint8'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\dependencies\libtiff\src\tif_ojpeg.c(1009,36): warning C4244: '=': 'uint16'에서 'uint8'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  tif_open.c
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\dependencies\libtiff\src\tif_open.c(161,57): warning C4267: '함수': 'size_t'에서 'tsize_t'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  tif_packbits.c
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\dependencies\libtiff\src\tif_packbits.c(101,15): warning C4244: '=': '__int64'에서 'long'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\dependencies\libtiff\src\tif_packbits.c(102,35): warning C4244: '+=': '__int64'에서 'tsize_t'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\dependencies\libtiff\src\tif_packbits.c(110,26): warning C4244: '+=': '__int64'에서 'tsize_t'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\dependencies\libtiff\src\tif_packbits.c(186,23): warning C4244: '+=': '__int64'에서 'tsize_t'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  tif_pixarlog.c
+  tif_predict.c
+  tif_print.c
+  tif_read.c
+  tif_strip.c
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\dependencies\libtiff\src\tif_strip.c(41,26): warning C4267: '초기화 중': 'size_t'에서 'uint32'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\dependencies\libtiff\src\tif_strip.c(54,23): warning C4267: '초기화 중': 'size_t'에서 'uint32'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  tif_swab.c
+  tif_thunder.c
+  tif_tile.c
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\dependencies\libtiff\src\tif_tile.c(41,26): warning C4267: '초기화 중': 'size_t'에서 'uint32'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\dependencies\libtiff\src\tif_tile.c(54,23): warning C4267: '초기화 중': 'size_t'에서 'uint32'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  tif_unix.c
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\dependencies\libtiff\src\tif_unix.c(58,33): warning C4311: '형식 캐스트': 'thandle_t'에서 'int'(으)로 포인터가 잘립니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\dependencies\libtiff\src\tif_unix.c(64,34): warning C4311: '형식 캐스트': 'thandle_t'에서 'int'(으)로 포인터가 잘립니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\dependencies\libtiff\src\tif_unix.c(70,33): warning C4311: '형식 캐스트': 'thandle_t'에서 'int'(으)로 포인터가 잘립니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\dependencies\libtiff\src\tif_unix.c(76,24): warning C4311: '형식 캐스트': 'thandle_t'에서 'int'(으)로 포인터가 잘립니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\dependencies\libtiff\src\tif_unix.c(88,33): warning C4311: '형식 캐스트': 'thandle_t'에서 'int'(으)로 포인터가 잘립니다.
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\dependencies\libtiff\src\tif_unix.c(140,20): warning C4312: '형식 캐스트': 'int'에서 더 큰 'thandle_t'(으)로의 변환입니다.
+  tif_version.c
+  tif_warning.c
+  tif_write.c
+D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\libs\dependencies\libtiff\src\tif_write.c(633,49): warning C4018: '>=': signed 또는 unsigned가 일치하지 않습니다.
+  tif_zip.c
+  libtiff.vcxproj -> D:\VS_ws\OpenALPR-web.git\OpenALPR\OpenALPR\x64\Release\libtiff.lib
