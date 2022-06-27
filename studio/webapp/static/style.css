@@ -60,7 +60,7 @@ table {
     border: solid 1px grey;
 }
 
-.btn {
+.btnA {
     cursor: pointer;
     display: inline;
     padding-left: 10px;
@@ -69,7 +69,7 @@ table {
     background: white;
 }
 
-.btn:hover {
+.btnA:hover {
     cursor: pointer;
     background: yellow;
 }

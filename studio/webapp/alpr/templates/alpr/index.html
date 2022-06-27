@@ -114,6 +114,7 @@
 </head>
 
 <body>
+    {% include "base.html" %}
     <form id="upload_form" action="{% url 'alpr:upload' %}" method="POST" enctype="multipart/form-data">
         <input type="file" name="uploadedFile">
         {% csrf_token %}
@@ -132,9 +133,9 @@
             <td>{{ file.dateTimeOfUpload }}</td>
             <td style="width:300px">
                 <!-- $('#player').attr("src", "playback?pid=" + data.pid) -->
-                <div class="btn btnPlay"><input type="hidden" value="{{ file.filename }}">Play</div>
-                <div class="btn btnRemove"><input type="hidden" value="{{ file.id }}">Del Video</div>
-                <div class="btn btnRemoveHistory"><input type="hidden" value="{{ file.filename }}">Del History
+                <div class="btnA btnPlay"><input type="hidden" value="{{ file.filename }}">Play</div>
+                <div class="btnA btnRemove"><input type="hidden" value="{{ file.id }}">Del Video</div>
+                <div class="btnA btnRemoveHistory"><input type="hidden" value="{{ file.filename }}">Del History
                 </div>
             </td>
         </tr>
