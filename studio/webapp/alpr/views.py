@@ -20,6 +20,7 @@ import os
 import time
 import random
 import shutil 
+import base64
 
 import json
 from django.http.response import JsonResponse
@@ -121,16 +122,20 @@ class VideoStream(object):
         models.Vehicle.objects.filter(filename=self._pid, session_key=self._session_key).delete()
  
 
-    def add_database(self, pn, cd, frame_raw): 
+    def add_database(self, pn, cd, frame_raw, w, h): 
         # Saving the information in the database
 
         try :
-            if self.x1<0: self.x1 *=(-1)
-            if self.y1<0: self.y1 *=(-1)
-            if self.x2<0: self.x2 *=(-1)
-            if self.y2<0: self.y2 *=(-1)
+            if self.x1-100<0: x1 = 0 
+            else: x1 = self.x1 - 100 
+            if self.y1-100<0: y1 = 0 
+            else: y1 = self.y1 - 100
+            if self.x2+100>w: x2 = w 
+            else: x2 = self.x2 + 100
+            if self.y2+100>h: y2 = h 
+            else: y2 = self.y2 + 100
 
-            cropped_img = frame_raw[self.y1:self.y2, self.x1:self.x2]
+            cropped_img = frame_raw[y1:y2, x1:x2]
             # print("x:{}-{}, y:{}-{} size:{} c_size:{}".format(self.x1, self.x2, self.y1, self.y2, frame_raw.size, cropped_img.size))
             _, buf = cv2.imencode('.jpg', cropped_img)  
             content = ContentFile(buf.tobytes())
@@ -190,7 +195,7 @@ class VideoStream(object):
  
                     # todo : connet with server(ssl)
                     # 하헌진.
-                    self.add_database(pn, cd, frame_raw)
+                    self.add_database(pn, cd, frame_raw, width, height)
 
                 else :   
                     self.clear_text() 
@@ -283,23 +288,39 @@ def get_frame(request):
         pass
     return HttpResponse(json.dumps({'fn': frameno}), content_type='application/json')
 
-def index(request):
+def index(request): 
     
     if request.method == "POST":
         mode = request.POST["mode"] 
         pid = request.POST["pid"]
         
-        return render(request, 'alpr/index.html',
-        {'mode':mode, 'pid':pid})
-    else:
+        return render(request, 'alpr/index.html',  
+        {'mode':mode, 'pid':pid}) 
+    else: 
         documents = models.Document.objects.all()
         return render(request, 'alpr/index.html', context = {
         "files": documents})
           
- 
+def get_captured_plate(request):
+    plate_number = request.POST['plate_number']
+    filename = request.POST['filename']
+    user = request.user
+
+    vehicles = models.Vehicle.objects.filter(plate_number=plate_number, filename=filename, user=user).order_by('-confidence').first()
+    plate_path = settings.MEDIA_ROOT + os.path.sep + vehicles.captured_frame.name
+    
+    image = cv2.imread(plate_path)
+    cv2.putText(image, "frame No. {}".format(vehicles.frame_no), (10, 20), font, 1, (0, 255, 0), 0, cv2.LINE_AA)
+    encode_image = cv2.imencode('.jpg', image)
+    binary = base64.b64encode(encode_image[1]).decode('utf-8')
+
+    
+    return HttpResponse(binary)
+    # return HttpResponse(json.dumps({'pid': plate_number}), content_type='application/json')
+
 def play(request): 
     pid = request.POST['pid']
-    return HttpResponse(json.dumps({'pid': pid}), content_type='application/json')
+    return render(request, 'index.html', ctx)
 
 def remove(request):
     id = request.GET['id']
@@ -322,7 +343,6 @@ def remove_vehicle_history(request):
     image_path = settings.MEDIA_ROOT + os.path.sep + 'media' + os.path.sep + user.username + os.path.sep + filename.rsplit('.')[0]
     try:
         models.Vehicle.objects.filter(user=user, filename=filename).delete()
-        print(image_path) 
         shutil.rmtree(image_path)
     except Exception as e:
         print('remove_vehicle_history error: %s' % (e)) 
