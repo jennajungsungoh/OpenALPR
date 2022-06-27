@@ -6,36 +6,10 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Django File Upload</title>
+    <link href="{% static 'style.css' %}" rel="stylesheet" type="text/css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
 
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
-
-        * {
-            font-family: "Roboto";
-        }
-
-        body {
-            background-color: #F5F5F5;
-        }
-
-        form {
-            background-color: #FFFFFF;
-            padding: 25px;
-        }
-
-        table {
-            width: 100%;
-            text-align: center;
-            margin-top: 25px;
-            padding: 25px;
-            background-color: #FFFFFF;
-        }
-
-        table tr td {
-            padding-top: 15px;
-        }
-    </style>
+    <title>File Upload</title>
 </head>
 
 <body>
@@ -47,14 +21,13 @@
     <table>
         <tr>
             <th>ID</th>
-            <th>Title</th>
             <th>File Path</th>
             <th>Upload Date & Time</th>
         </tr>
         {% for file in files %}
         <tr>
             <td>{{ file.id }}</td>
-            <td>{{ file.uploadedFile.url }}</td>
+            <td>{{ file.filename }}</td>
             <td>{{ file.dateTimeOfUpload }}</td>
         </tr>
         {% endfor %}
