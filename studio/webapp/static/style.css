@@ -5,6 +5,15 @@
     font-size: small;
 }
 
+a,
+a:visited,
+a:hover,
+a:link,
+a:active {
+    text-decoration: none;
+    color: black;
+}
+
 body {
     background-color: #F5F5F5;
 }
@@ -44,4 +53,23 @@ table {
 
 #info thead {
     border: solid 1px grey;
+}
+
+#btnRemove,
+#btnPlay {
+    cursor: pointer;
+    display: inline;
+    padding-left: 10px;
+    padding-right: 10px;
+    border: solid 1px black;
+}
+
+#btnRemove:hover,
+#btnPlay:hover {
+    cursor: pointer;
+    background: yellow;
+}
+
+#tbMovieInfo {
+    background-color: rgb(196, 210, 255);
 }
