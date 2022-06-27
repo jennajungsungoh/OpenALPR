@@ -14,6 +14,10 @@
 
     <script>
         $(document).ready(function () {
+            $("#dvPlay").on("click", function (event) {
+                alert($(this).data())
+            });
+
             $("#btplay").on("click", function (event) {
 
                 (function poll() {
@@ -71,7 +75,7 @@
     <table class="mainTable" id="tbMovieInfo">
         <tr>
             <th>ID</th>
-            <th>File Path</th>
+            <th>Video Name</th>
             <th>Upload Date & Time</th>
             <th>Action</th>
         </tr>
@@ -80,7 +84,11 @@
             <td>{{ file.id }}</td>
             <td>{{ file.filename }}</td>
             <td>{{ file.dateTimeOfUpload }}</td>
-            <td><a href="remove?id={{ file.id }}">Remove</a></td>
+            <td>
+                <!-- $('#player').attr("src", "playback?pid=" + data.pid) -->
+                <div><a href="remove?id={{ file.id }}">Remove</a></div>
+                <div id="dvPlay"><input type="hidden" value="{{ file.filename }}"></div>
+            </td>
         </tr>
         {% endfor %}
     </table>

@@ -34,9 +34,9 @@ font = cv2.FONT_HERSHEY_COMPLEX_SMALL
 
 class Round(Func): 
     function = 'ROUND'
-    template='%(function)s(%(expressions)s, 2)' 
+    template='%(function)s(%(expressions)s, 2)'
   
- 
+
 
 class VideoStream(object):
     def __init__(self, playback=False, pid=None, request=None):
@@ -275,8 +275,11 @@ def remove(request):
     filepath = settings.BASE_DIR 
     url = models.Document.objects.get(id=id).uploadedFile.url
 
-    os.remove(rootpath+'../'+url)
-    models.Document.objects.filter(id=id).remove()
+    try:
+        models.Document.objects.filter(id=id).delete()
+        os.remove(rootpath+'../'+url)
+    except:
+        print("remove error")
   
     documents = models.Document.objects.all()
     return render(request, 'alpr/index.html', context = {
