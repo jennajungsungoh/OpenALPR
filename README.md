@@ -8,7 +8,7 @@ $ activate
 
 ## Start Server
 ```
-$ cd stduio/webapp/alpr
+$ cd stduio/webapp/
 $ python .\manage.py runserver 0.0.0.0:8000
 ```
 
