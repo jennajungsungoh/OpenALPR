@@ -16,6 +16,12 @@ python .\manage.py migrate
 $ cd stduio/webapp/
 $ python .\manage.py runserver 0.0.0.0:8000
 
+#loging page
+http://127.0.0.1:8000/
+or
+http://127.0.0.1:8000/login/login
+
+-------------
 http://127.0.0.1:8000/alpr/
 ```
 
