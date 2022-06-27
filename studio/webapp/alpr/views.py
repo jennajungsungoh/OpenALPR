@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.http import StreamingHttpResponse
+from django.shortcuts import redirect
+
 from django.views.decorators import gzip
 from django.core import serializers
 from django.db.models import Avg, F, Count, Min, Value, CharField, Func
@@ -277,13 +279,13 @@ def remove(request):
 
     try:
         models.Document.objects.filter(id=id).delete()
+        print(rootpath+'../'+url)
         os.remove(rootpath+'../'+url)
     except:
         print("remove error")
   
     documents = models.Document.objects.all()
-    return render(request, 'alpr/index.html', context = {
-        "files": documents})
+    return redirect('/alpr') 
 
 def upload_view(request):
     documents = models.Document.objects.all()
@@ -308,7 +310,5 @@ def upload(request):
             uploadedFile = uploadedFile
         )
         document.save()
-        
-    return render(request, 'alpr/index.html', {
-        'mode':0, 'pid':filename
-    })
+    return redirect('/alpr') 
+ 

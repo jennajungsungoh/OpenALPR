@@ -13,51 +13,37 @@
     <script src="{% static 'generate-table.js' %}"></script>
 
     <script>
+        function polling(pid) {
+            $.ajax({
+                url: '/alpr/get_vehicle?pid=' + pid,
+                type: 'GET',
+                dataType: 'json',
+                success: function (response) {
+                    // console.log(response[0].plate_number)
+                    $('#information').children('tbody').remove();
+                    $("#information").generateTable(response, ['plate', 'count']);
+
+                },
+                error: function (request, status, error) {
+                    console.log("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+                },
+                timeout: 3000,
+                complete: setTimeout(function () { polling(pid); }, 3000)
+            })
+        };
+
         $(document).ready(function () {
-            $("#dvPlay").on("click", function (event) {
+            $("#btnPlay").on("click", function (event) {
                 var pid = $(this).children('input').val();
-                $('#player').attr("src", "playback?pid=" + pid)
+                $('#player').attr("src", "playback?pid=" + pid);
+                polling(pid);
             });
 
-            $("#btplay").on("click", function (event) {
-
-                (function poll() {
-                    $.ajax({
-                        url: '/alpr/get_vehicle?pid=' + $("#pid").val(),
-                        type: 'GET',
-                        dataType: 'json',
-                        success: function (response) {
-                            // console.log(response[0].plate_number)
-                            $('#information').children('tbody').remove();
-                            $("#information").generateTable(response, ['plate', 'count']);
-
-                        },
-                        error: function (request, status, error) {
-                            console.log("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
-                        },
-                        timeout: 3000,
-                        complete: setTimeout(function () { poll(); }, 3000)
-                    })
-                })();
-
-                $.ajax({
-                    type: "POST",
-                    url: "/alpr/play",
-                    headers: {
-                        'X-CSRFTOKEN': '{{ csrf_token }}'
-                    },
-                    data: {
-                        'pid': $("#pid").val() // from form
-                    },
-                    success: function (data) {
-                        $('#player').attr("src", "playback?pid=" + data.pid)
-                    },
-                    error: function (data) {
-                        console.log("error")
-                    }
-                });
-                return false;
+            $("#btnRemove").on("click", function (event) {
+                var id = $(this).children('input').val();
+                window.location.href = 'remove?id=' + id;
             });
+
         });
     </script>
 </head>
@@ -67,11 +53,6 @@
         <input type="file" name="uploadedFile">
         {% csrf_token %}
         <input type="submit" value="Upload">
-    </form>
-    <form action="" method="POST" enctype="multipart/form-data" id="playback">
-        <input type="text" id="pid" name="pid">
-        {% csrf_token %}
-        <input type="button" id="btplay" value="play">
     </form>
     <table class="mainTable" id="tbMovieInfo">
         <tr>
@@ -87,8 +68,8 @@
             <td>{{ file.dateTimeOfUpload }}</td>
             <td>
                 <!-- $('#player').attr("src", "playback?pid=" + data.pid) -->
-                <div><a href="remove?id={{ file.id }}">Remove</a></div>
-                <div id="dvPlay"><input type="hidden" value="{{ file.filename }}">Play</div>
+                <div id="btnRemove"><input type="hidden" value="{{ file.id }}">Remove</div>
+                <div id="btnPlay"><input type="hidden" value="{{ file.filename }}">Play</div>
             </td>
         </tr>
         {% endfor %}
