@@ -18,13 +18,13 @@
         var g_filename = null;
 
         function req_remove_vehicle_info(pid) {
-            $('#information').children('tbody').remove()
+            $('#information').children('tbody').remove();
+
             $.ajax({
                 url: '/alpr/remove_vehicle_history?filename=' + pid,
                 type: 'GET',
                 dataType: 'json',
                 success: function (response) {
-
                 },
                 error: function (request, status, error) {
                     console.log("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
@@ -32,7 +32,7 @@
             })
         }
 
-        function polling(pid) {
+        function start_polling(pid) {
             g_pollingStatus = true;
             $.ajax({
                 url: '/alpr/get_vehicle?pid=' + pid,
@@ -49,7 +49,7 @@
                 },
                 timeout: 3000,
                 complete: function () {
-                    if (g_pollingStatus) { g_pollingTm = setTimeout(function () { polling(pid); }, 3000); }
+                    if (g_pollingStatus) { g_pollingTm = setTimeout(function () { start_polling(pid); }, 3000); }
                 }
             })
         }
@@ -100,8 +100,9 @@
                 g_filename = pid;
                 req_remove_vehicle_info(pid)
                 $('#player').attr("src", "playback?pid=" + pid);
+
                 stop_polling();
-                polling(pid);
+                setTimeout(function () { start_polling(pid); }, 3000);
             });
 
             $(".btnRemove").on("click", function (event) {
@@ -164,7 +165,7 @@
         <tr>
             <td id="tdRightBottom">
                 <div id="dvCaptured">
-                    <img id="imgPlate" />
+                    <img style="max-width: 299px;height: 250px;" id="imgPlate" />
                 </div>
             </td>
         </tr>
