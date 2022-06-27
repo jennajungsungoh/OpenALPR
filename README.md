@@ -1,4 +1,4 @@
-# OpenALPR
+# OpenALPR (Team 2, 2022-Security Specialist)
 
 ## Python Environment
 ```
