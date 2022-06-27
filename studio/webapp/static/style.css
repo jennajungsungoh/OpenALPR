@@ -33,7 +33,7 @@ table {
 
 #dvPlate {
     overflow: auto;
-    height: 500px;
+    height: 250px;
 }
 
 #tdLeft {
@@ -41,9 +41,14 @@ table {
 }
 
 #tdLeft,
-#tdRight {
+#tdRight,
+#tdRightBottom {
     border: solid 1px grey;
     padding: 0px;
+}
+
+#tdRightBottom {
+    height: 250px;
 }
 
 .mainTable {
@@ -67,6 +72,11 @@ table {
 .btn:hover {
     cursor: pointer;
     background: yellow;
+}
+
+.row:hover {
+    cursor: pointer;
+    background: rgb(219, 219, 219);
 }
 
 #tbMovieInfo {
