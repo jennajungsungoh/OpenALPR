@@ -15,7 +15,7 @@
     <script>
         $(document).ready(function () {
             $("#dvPlay").on("click", function (event) {
-                alert($(this).data())
+                alert($(this).children('input').value)
             });
 
             $("#btplay").on("click", function (event) {
