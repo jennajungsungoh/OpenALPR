@@ -15,7 +15,8 @@
     <script>
         $(document).ready(function () {
             $("#dvPlay").on("click", function (event) {
-                alert($(this).children('input').value)
+                var pid = $(this).children('input').val();
+                $('#player').attr("src", "playback?pid=" + pid)
             });
 
             $("#btplay").on("click", function (event) {
@@ -87,7 +88,7 @@
             <td>
                 <!-- $('#player').attr("src", "playback?pid=" + data.pid) -->
                 <div><a href="remove?id={{ file.id }}">Remove</a></div>
-                <div id="dvPlay"><input type="hidden" value="{{ file.filename }}"></div>
+                <div id="dvPlay"><input type="hidden" value="{{ file.filename }}">Play</div>
             </td>
         </tr>
         {% endfor %}
