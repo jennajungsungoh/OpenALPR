@@ -16,7 +16,7 @@ bool logging_start()
 
 int Logging_Index(char * data)
 {
-    std::cout << data << "\n";
+    //std::cout << data << "\n";
     PLOGD << data;
 
 
