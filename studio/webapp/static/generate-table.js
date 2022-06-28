@@ -31,6 +31,20 @@
                 //     }
                 // }
                 if ($.inArray(key, hidecolumns) <= -1) {
+                    var tbodydata;
+                    switch (key) {
+                        case 'plate_number':
+                            tbodydata = $('<td>').addClass('rowA').text(val);
+                            break;
+                        case 'confidence_avg':
+                            tbodydata = $('<td>').addClass('rowA').text(val);
+                            break;
+                        case 'time':
+                            tbodydata = $('<td>').addClass('rowA').text(val);
+                            break;
+                    }
+
+
                     var tbodydata = $('<td>').addClass('rowA').text(val);
                     tableRow.append(tbodydata);
                 }

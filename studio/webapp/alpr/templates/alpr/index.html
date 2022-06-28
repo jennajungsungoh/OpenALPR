@@ -28,7 +28,7 @@
                 success: function (response) {
                 },
                 error: function (request, status, error) {
-                    console.log("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+                    // console.log("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
                 }
             })
         }
@@ -60,6 +60,43 @@
             clearTimeout(g_pollingTm);
         }
 
+        function blankForNull(s) {
+            return s.toUpperCase() === "NULL" ? "" : s;
+        }
+
+        function get_captured_vehicle(pn, cd, time) {
+            $.ajax({
+                url: "/alpr/get_captured_vehicle",
+                type: "POST",
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                data: {
+                    plate_number: pn,
+                    filename: g_filename
+                },
+                success: function (result) {
+                    // console.log(result.plate_number);
+                    // $('#imgPlate').attr("src", "data:image/jpg;base64," + result);
+                    $("#data_plate_number").text(blankForNull(result.plate_number));
+                    $("#data_status").text(blankForNull(result.status));
+                    $("#data_exp").text(blankForNull(result.regist_exp));
+                    $("#data_owner").text(blankForNull(result.owner));
+                    $("#data_birth").text(blankForNull(result.owner_birth));
+                    $("#data_addr").text(blankForNull(result.owner_addr));
+                    $("#data_zip").text(blankForNull(result.owner_zip));
+                    $("#data_yom").text(blankForNull(result.yom));
+                    $("#data_maker").text(blankForNull(result.maker));
+                    $("#data_model").text(blankForNull(result.model));
+                    $("#data_color").text(blankForNull(result.color));
+
+                },
+                error: function (request, status, error) {
+                    console.log("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+                }
+            })
+        }
+
         $(document).ready(function () {
             $("#information").on("click", 'tr', function (event) {
                 var pn = $(this).children("td").eq(0).text();
@@ -77,8 +114,9 @@
                         filename: g_filename
                     },
                     success: function (result) {
-                        console.log(result);
+                        // console.log(result);
                         $('#imgPlate').attr("src", "data:image/jpg;base64," + result);
+                        get_captured_vehicle(pn, cd, time);
                     },
                     error: function (request, status, error) {
                         console.log("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
@@ -158,36 +196,124 @@
             </table>
         </div>
     </div>
-    <div class="stop">stop</div>
-    <table class="mainTable" id="tbInfo">
-        <tr>
-            <td rowspan="2" id="tdLeft">
-                <div id="dvPlayer"><img id="player" /></div>
-            </td>
+    <div class="dvBoard horiz">
+        <div>
+            <h4>Detected Information</h4>
+        </div>
+        <div>
             <td id="tdRight">
                 <div id="dvPlate">
                     <table id="information">
-                        <thead>
-                            <tr>
-                                <th>Plante No.</th>
-                                <th>Confidence(Avg.)</th>
-                                <th>Logged Time</th>
-                            </tr>
-                        </thead>
                     </table>
                 </div>
             </td>
-        </tr>
-        <tr>
-            <td id="tdRightBottom">
-                <div id="dvCaptured">
-                    <img style="max-width: 299px;height: 250px;" id="imgPlate" />
-                </div>
-            </td>
-        </tr>
-    </table>
-    <table class="mainTable" id="tbVehicleInfo">
-        <tr></tr>
-    </table>
+        </div>
+    </div>
+    <div class="dvBoard Alarge">
+        <div id="dvPlayer"><img id="player" /></div>
+    </div>
+    <div class="dvBoard horiz Atall">
+        <div>
+            <h4>Vehicle Information</h4>
+        </div>
+
+        <div id="dvCaptured">
+            <img style="max-width: 270px;height: 130px;" id="imgPlate" />
+        </div>
+        <div>&nbsp;</div>
+        <div id="dvVInfo">
+            <table>
+                <tr>
+                    <td>
+                        <div class="small-title">Plate Number</div>
+                    </td>
+                    <td>
+                        <div class="small-contents" id="data_plate_number"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="small-title">Status</div>
+                    </td>
+                    <td>
+                        <div class="small-contents" id="data_status"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="small-title">Regist Exp.</div>
+                    </td>
+                    <td>
+                        <div class="small-contents" id="data_exp"></div>
+                    </td>
+
+                </tr>
+                <tr>
+                    <td>
+                        <div class="small-title">Owner</div>
+                    </td>
+                    <td>
+                        <div class="small-contents" id="data_owner"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="small-title">Owner Birth</div>
+                    </td>
+                    <td>
+                        <div class="small-contents" id="data_birth"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="small-title">Addr</div>
+                    </td>
+                    <td>
+                        <div class="small-contents" id="data_addr"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="small-title">Zip</div>
+                    </td>
+                    <td>
+                        <div class="small-contents" id="data_zip"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="small-title">Vehicle YoM</div>
+                    </td>
+                    <td>
+                        <div class="small-contents" id="data_yom"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="small-title">Maker</div>
+                    </td>
+                    <td>
+                        <div class="small-contents" id="data_maker"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="small-title">Model</div>
+                    </td>
+                    <td>
+                        <div class="small-contents" id="data_model"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="small-title">Color</div>
+                    </td>
+                    <td>
+                        <div class="small-contents" id="data_color"></div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
 
 </body>

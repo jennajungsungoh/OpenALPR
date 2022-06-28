@@ -37,7 +37,7 @@ table {
 
 #dvPlate {
     overflow: auto;
-    height: 250px;
+    /* height: 250px; */
 }
 
 #tdLeft {
@@ -86,13 +86,28 @@ table {
 
 .dvBoard {
     background-color: white;
-    width: 300px;
+    width: 350px;
     height: 200px;
     border: 0px;
     padding: 15px;
     margin: 10px;
     overflow: auto;
 }
+
+#dvCaptured {
+    text-align: center;
+}
+
+.Alarge {
+    display: inline-block;
+    width: 724px;
+    height: 520px;
+}
+
+.Atall {
+    height: 520px;
+}
+
 
 .horiz {
     display: inline-block;
@@ -119,4 +134,20 @@ table {
 .btnImg {
     width: 15px;
     height: 15px;
+}
+
+.small-title {
+    text-align: left;
+    width: 80px;
+    font-weight: bold;
+    color: rgb(121, 121, 121);
+    padding: 0px;
+    height: 25px;
+}
+
+.small-contents {
+    text-align: left;
+    padding-left: 20px;
+    height: 25px;
+    width: 210px;
 }
