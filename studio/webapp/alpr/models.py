@@ -7,10 +7,13 @@ import os
 def get_upload_path(instance, filename):
     return 'media/{0}/{1}'.format(instance.user.username, filename)
 
+def get_upload_tmp_path(instance, filename):
+    return 'media/{0}/{1}/{2}'.format(instance.user.username, instance.filename.rsplit('.')[0], filename)
+
 class Document(models.Model): 
     # uploadedFile        = models.FileField(upload_to = "media/")
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    uploadedFile        = models.FileField(upload_to = get_upload_path)
+    uploadedFile        = models.FileField(upload_to=get_upload_path)
     dateTimeOfUpload    = models.DateTimeField(auto_now = True)
 
     def filename(self):
@@ -24,6 +27,7 @@ class Vehicle(models.Model):
     detected_at     = models.DateTimeField(auto_now_add=True)
     session_key     = models.CharField(max_length=256, null=False)
     user            = models.ForeignKey(User, on_delete=models.CASCADE)
+    captured_frame  = models.FileField(upload_to=get_upload_tmp_path)
 
     class Meta:
         ordering = ['frame_no']

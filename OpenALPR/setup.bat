@@ -4,6 +4,10 @@ XCOPY /y opencv\build\x64\vc15\bin\opencv_videoio_ffmpeg455_64.dll x64\Release\o
 XCOPY /y opencv\build\x64\vc15\bin\opencv_videoio_ffmpeg455_64.dll x64\Debug\opencv_videoio_ffmpeg455_64.dll*
 XCOPY /y opencv\build\x64\vc15\bin\opencv_videoio_msmf455_64d.dll x64\Debug\opencv_videoio_msmf455_64d.dll*
 XCOPY /y opencv\build\x64\vc15\bin\opencv_videoio_msmf455_64.dll x64\Release\opencv_videoio_msmf455_64.dll*
+XCOPY /y libs\openssl\lib\libcrypto-3-x64.dll x64\Release\libcrypto-3-x64.dll*
+XCOPY /y libs\openssl\lib\libcrypto-3-x64.dll x64\Debug\libcrypto-3-x64.dll*
+XCOPY /y libs\openssl\lib\libssl-3-x64.dll x64\Release\libssl-3-x64.dll*
+XCOPY /y libs\openssl\lib\libssl-3-x64.dll x64\Debug\libssl-3-x64.dll*
 XCOPY /y db-18.1.40\libdb181.dll x64\Release\libdb181.dll*
 XCOPY /y db-18.1.40\libdb181.dll x64\Debug\libdb181.dll*
 XCOPY /y faker\datafile.txt x64\Release\datafile.txt*

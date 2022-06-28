@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 {% load static %}
+{% load bootstrap_icons %}
 <html lang="en">
 
 <head>
@@ -13,10 +14,27 @@
     <script src="{% static 'generate-table.js' %}"></script>
 
     <script>
-        var pollingStatus = true;
-        var pollingTm = null;
-        function polling(pid) {
-            pollingStatus = true;
+        var g_pollingStatus = true;
+        var g_pollingTm = null;
+        var g_filename = null;
+
+        function req_remove_vehicle_info(pid) {
+            $('#information').children('tbody').remove();
+
+            $.ajax({
+                url: '/alpr/remove_vehicle_history?filename=' + pid,
+                type: 'GET',
+                dataType: 'json',
+                success: function (response) {
+                },
+                error: function (request, status, error) {
+                    console.log("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+                }
+            })
+        }
+
+        function start_polling(pid) {
+            g_pollingStatus = true;
             $.ajax({
                 url: '/alpr/get_vehicle?pid=' + pid,
                 type: 'GET',
@@ -32,27 +50,60 @@
                 },
                 timeout: 3000,
                 complete: function () {
-                    if (pollingStatus) { pollingTm = setTimeout(function () { polling(pid); }, 3000); }
+                    if (g_pollingStatus) { g_pollingTm = setTimeout(function () { start_polling(pid); }, 3000); }
                 }
             })
         }
 
         function stop_polling() {
-            pollingStatus = false;
-            clearTimeout(pollingTm);
+            g_pollingStatus = false;
+            clearTimeout(g_pollingTm);
         }
 
         $(document).ready(function () {
+            $("#information").on("click", 'tr', function (event) {
+                var pn = $(this).children("td").eq(0).text();
+                var cd = $(this).children("td").eq(1).text();
+                var time = $(this).children("td").eq(2).text();
+
+                $.ajax({
+                    url: "/alpr/get_captured_plate",
+                    type: "POST",
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    },
+                    data: {
+                        plate_number: pn,
+                        filename: g_filename
+                    },
+                    success: function (result) {
+                        console.log(result);
+                        $('#imgPlate').attr("src", "data:image/jpg;base64," + result);
+                    },
+                    error: function (request, status, error) {
+                        console.log("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+                    }
+                })
+            });
+
             $(".stop").on("click", function (event) {
                 alert("stop");
                 stop_polling();
             });
 
+            $(".btnRemoveHistory").on("click", function (event) {
+                var pid = $(this).children('input').val();
+                req_remove_vehicle_info(pid)
+            });
+
             $(".btnPlay").on("click", function (event) {
                 var pid = $(this).children('input').val();
+                g_filename = pid;
+                req_remove_vehicle_info(pid)
                 $('#player').attr("src", "playback?pid=" + pid);
+
                 stop_polling();
-                polling(pid);
+                setTimeout(function () { start_polling(pid); }, 3000);
             });
 
             $(".btnRemove").on("click", function (event) {
@@ -65,34 +116,52 @@
 </head>
 
 <body>
+    {% include "base.html" %}
     <form id="upload_form" action="{% url 'alpr:upload' %}" method="POST" enctype="multipart/form-data">
         <input type="file" name="uploadedFile">
         {% csrf_token %}
         <input type="submit" value="Upload">
     </form>
     <div>&nbsp;</div>
-    <table class="mainTable" id="tbMovieInfo">
-        <tr>
-            <th>Video Name</th>
-            <th>Upload Date & Time</th>
-            <th>Action</th>
-        </tr>
-        {% for file in files %}
-        <tr>
-            <td>{{ file.filename }}</td>
-            <td>{{ file.dateTimeOfUpload }}</td>
-            <td>
-                <!-- $('#player').attr("src", "playback?pid=" + data.pid) -->
-                <div class="btnRemove"><input type="hidden" value="{{ file.id }}">Remove</div>
-                <div class="btnPlay"><input type="hidden" value="{{ file.filename }}">Play</div>
-            </td>
-        </tr>
-        {% endfor %}
-    </table>
+    <div class="dvBoard horiz">
+        <div>
+            <h4>Menu</h4>
+        </div>
+    </div>
+    <div class="dvBoard horiz">
+        <div>
+            <h4>Uploaded Video</h4>
+        </div>
+        <div>
+            <table class="mainTable" id="tbMovieInfo">
+                {% for file in files %}
+                <tr>
+                    <td style="text-align: left; padding:5px;">{{ file.filename }}</td>
+                    <!-- <td>{{ file.dateTimeOfUpload }}</td> -->
+                    <td>
+                        <!-- $('#player').attr("src", "playback?pid=" + data.pid) -->
+                        <div class="btnA btnPlay" title="Play!">
+                            <input type="hidden" value="{{ file.filename }}">
+                            {% bs_icon 'play-circle' %}
+                        </div>
+                        <div class="btnA btnRemove" title="Remove Playback">
+                            <input type="hidden" value="{{ file.id }}">
+                            {% bs_icon 'trash3' %}
+                        </div>
+                        <div class="btnA btnRemoveHistory" title="Remove History">
+                            <input type="hidden" value="{{ file.filename }}">
+                            {% bs_icon 'journal-minus' %}
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
     <div class="stop">stop</div>
     <table class="mainTable" id="tbInfo">
         <tr>
-            <td id="tdLeft">
+            <td rowspan="2" id="tdLeft">
                 <div id="dvPlayer"><img id="player" /></div>
             </td>
             <td id="tdRight">
@@ -108,8 +177,17 @@
                     </table>
                 </div>
             </td>
-
         </tr>
+        <tr>
+            <td id="tdRightBottom">
+                <div id="dvCaptured">
+                    <img style="max-width: 299px;height: 250px;" id="imgPlate" />
+                </div>
+            </td>
+        </tr>
+    </table>
+    <table class="mainTable" id="tbVehicleInfo">
+        <tr></tr>
     </table>
 
 </body>

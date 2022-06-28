@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.http import StreamingHttpResponse
 from django.shortcuts import redirect
+from django.core.files.base import ContentFile
 
 from django.views.decorators import gzip
 from django.core import serializers
@@ -18,12 +19,26 @@ from openalpr import Alpr, VehicleClassifier
 import os
 import time
 import random
+import shutil 
+import base64
 
 import json
 from django.http.response import JsonResponse
 
 
 from django.conf import settings
+
+import socket
+import ssl
+import json
+
+HOST = 'localhost'
+PORT = 2222
+server_sni_hostname = 'example.com'
+server_cert = 'rootca.crt'
+
+json_key_list = ['PlateNumber' , 'Status' , 'RegistrationExpiration', 'OwnerName' , 'OwnerBirth' , 'OwnerAddress' , 'OwnerZipCode' , 'VehicleYearOfManufacture' , 'VehicleMake' , 'VehicleModel' , 'VehicleColor']
+
 
 rootpath = os.path.dirname(os.path.abspath(__file__)) + os.path.sep
 dllabspath = rootpath + "../../openalpr64-sdk-4.1.1"
@@ -72,20 +87,23 @@ class VideoStream(object):
  
         (self.grabbed, self.frame) = self.video.read()
         threading.Thread(target=self.update, args=()).start()
-        # print(dllabspath)
 
     def __del__(self):
         self.video.release()
 
-    def get_frame(self):
+    def get_frame(self, frame=None):
         try:
-            image = self.frame
-            _, jpeg = cv2.imencode('.jpg', image)
+            if frame is None:
+                image = self.frame
+                _, jpeg = cv2.imencode('.jpg', image)
+            else :
+                image = frame
+                _, jpeg = cv2.imencode('.jpg', image)
         except:
             print("exception...")
             # self.remove_vehicle_by_session()
 
-        return jpeg.tobytes()
+        return image, jpeg.tobytes()
 
     def get_framenumber(self):
         return self.framenumber
@@ -114,56 +132,115 @@ class VideoStream(object):
 
     def remove_vehicle_by_session(self): 
         models.Vehicle.objects.filter(filename=self._pid, session_key=self._session_key).delete()
+ 
 
-
-    def add_database(self, pn, cd):
+    def add_database(self, pn, cd, frame_raw, w, h): 
         # Saving the information in the database
+
+        try :
+            if self.x1-100<0: x1 = 0 
+            else: x1 = self.x1 - 100 
+            if self.y1-100<0: y1 = 0 
+            else: y1 = self.y1 - 100
+            if self.x2+100>w: x2 = w 
+            else: x2 = self.x2 + 100
+            if self.y2+100>h: y2 = h 
+            else: y2 = self.y2 + 100
+
+            cropped_img = frame_raw[y1:y2, x1:x2]
+            # print("x:{}-{}, y:{}-{} size:{} c_size:{}".format(self.x1, self.x2, self.y1, self.y2, frame_raw.size, cropped_img.size))
+            _, buf = cv2.imencode('.jpg', cropped_img)  
+            content = ContentFile(buf.tobytes())
+        except Exception as e:
+            print('add database error: %s' % (e)) 
+            pass
+ 
+            
+  
         vehicle = models.Vehicle(
-            filename = self._pid,
+            filename = self._pid, 
             plate_number = pn,
             confidence = cd,
             frame_no = self.framenumber,
             session_key = self._session_key,
-            user = self.user
-        )
+            user = self.user,   
+            captured_frame = content
+        ) 
+        vehicle.captured_frame.name = "{}.jpg".format(self.framenumber)
         vehicle.save()
 
     def update(self): 
         self.clear_text()
         self.framenumber = 0
         height = int(self.video.get(4))
+
+
+        context = ssl.create_default_context(ssl.Purpose.SERVER_AUTH, cafile=server_cert)
+        context.check_hostname = False
+        context.load_verify_locations('rootca.crt')
+
+
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        conn = context.wrap_socket(s, server_side=False, server_hostname=server_sni_hostname)
+        conn.connect((HOST, PORT))
+        
        
         while True:
+            vehicleInfo = []
+            vehicleInfo_json = {}
             start = time.perf_counter() 
             (self.grabbed, self.frame) = self.video.read()
+
+            clear_frame = self.frame.copy()
+            
             cv2.rectangle(self.frame, (self.x1, self.y1), (self.x2, self.y2), (0, 255, 0), 2)
             cv2.putText(self.frame, self.f_text, (self.x1, self.y1-30), font, 1, (0, 255, 0), 0, cv2.LINE_AA)
             cv2.putText(self.frame, self.fps_text, (0, height-10), font, 0.7, (0, 255, 0), 0, cv2.LINE_AA)
- 
-            results = self.alpr.recognize_array(self.get_frame())
 
+            frame_raw, frame_byte = self.get_frame(clear_frame)
+            results = self.alpr.recognize_array(frame_byte)
+ 
+ 
+ 
             if results['data_type'] == 'alpr_results': 
                 if results['results']:
                     pn = results['results'][0]['candidates'][0]['plate'] 
                     cd = results['results'][0]['candidates'][0]['confidence']
-                     
-                    print('Plate: {} ({:.2f}%)'.format(pn, cd))
-                    # print(results)
                      
                     self.f_text = '{} ({:.2f}%)'.format(pn, cd) 
                     self.x1 = results['results'][0]['coordinates'][0]['x']
                     self.y1 = results['results'][0]['coordinates'][0]['y'] 
                     self.x2 = results['results'][0]['coordinates'][2]['x']
                     self.y2 = results['results'][0]['coordinates'][2]['y']
+
                     width = results['img_width']
                     height = results['img_height']
+                    print('Plate: {} ({:.2f}%) {}x{}- x:{}-{} y:{}-{}'.format(pn, cd, width, height, self.x1, self.x2, self.y1, self.y2))
+                     
  
-                    
-
                     # todo : connet with server(ssl)
-                    # 하헌진.
-                    self.add_database(pn, cd)
-                else :  
+                    sendMsgHdr=(len(pn)+1)
+                    sendMsgHdr2=sendMsgHdr.to_bytes(2, 'big')
+                    conn.sendall(sendMsgHdr2)
+                    #print('Data : {} , Data Length : {}'.format(pn, sendMsgHdr2))
+
+                    conn.sendall(pn.encode('utf-8'))
+                    
+                    data = conn.recv(1024)
+                    
+                    if data != b'\x00\x00' :
+                        data = conn.recv(1024)
+                        data=data.decode('utf-8')
+                        vehicleInfo = data.split('\n')
+                        vehicleInfo_json = dict( zip(json_key_list, vehicleInfo) )
+                        json.dumps(vehicleInfo_json)        
+                        print(vehicleInfo_json)
+                    else:
+                        print("<<No Matched>>");
+                    
+                    self.add_database(pn, cd, frame_raw, width, height)
+
+                else :   
                     self.clear_text() 
  
             dur = time.perf_counter() - start
@@ -185,7 +262,7 @@ def remove_vehicle(self):
 
 def gen_stream(stream) :
     while True:
-        frame = stream.get_frame()
+        _, frame = stream.get_frame()
         yield(b'--frame\r\n' 
               b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n') 
 
@@ -254,29 +331,42 @@ def get_frame(request):
         pass
     return HttpResponse(json.dumps({'fn': frameno}), content_type='application/json')
 
-def index(request):
+def index(request): 
     
     if request.method == "POST":
         mode = request.POST["mode"] 
         pid = request.POST["pid"]
         
-        return render(request, 'alpr/index.html',
-        {'mode':mode, 'pid':pid})
-    else:
+        return render(request, 'alpr/index.html',  
+        {'mode':mode, 'pid':pid}) 
+    else: 
         documents = models.Document.objects.all()
         return render(request, 'alpr/index.html', context = {
         "files": documents})
           
- 
+def get_captured_plate(request):
+    plate_number = request.POST['plate_number']
+    filename = request.POST['filename']
+    user = request.user
+
+    vehicles = models.Vehicle.objects.filter(plate_number=plate_number, filename=filename, user=user).order_by('-confidence').first()
+    plate_path = settings.MEDIA_ROOT + os.path.sep + vehicles.captured_frame.name
+    
+    image = cv2.imread(plate_path)
+    cv2.putText(image, "frame No. {}".format(vehicles.frame_no), (10, 20), font, 1, (0, 255, 0), 0, cv2.LINE_AA)
+    encode_image = cv2.imencode('.jpg', image)
+    binary = base64.b64encode(encode_image[1]).decode('utf-8')
+
+    
+    return HttpResponse(binary)
+    # return HttpResponse(json.dumps({'pid': plate_number}), content_type='application/json')
+
 def play(request): 
     pid = request.POST['pid']
-    return HttpResponse(json.dumps({'pid': pid}), content_type='application/json')
- 
-
+    return render(request, 'index.html', ctx)
 
 def remove(request):
     id = request.GET['id']
-    print(id)
     filepath = settings.BASE_DIR 
     url = models.Document.objects.get(id=id).uploadedFile.url
 
@@ -290,22 +380,29 @@ def remove(request):
     documents = models.Document.objects.all()
     return redirect('/alpr') 
 
+def remove_vehicle_history(request):
+    user = request.user
+    filename = request.GET['filename']
+    image_path = settings.MEDIA_ROOT + os.path.sep + 'media' + os.path.sep + user.username + os.path.sep + filename.rsplit('.')[0]
+    try:
+        models.Vehicle.objects.filter(user=user, filename=filename).delete()
+        shutil.rmtree(image_path)
+    except Exception as e:
+        print('remove_vehicle_history error: %s' % (e)) 
+    return redirect('/alpr') 
+
 def upload_view(request):
     documents = models.Document.objects.all()
- 
+  
     return render(request, "alpr/upload.html", context = {
         "files": documents
-    }) 
+    })  
 
 def upload(request):
     if request.method == "POST":
         # Fetching the form data
         uploadedFile = request.FILES["uploadedFile"]
-        filename = request.FILES["uploadedFile"].name
         user = request.user
-
-        # remove all data 
-        #remove_all()
 
         # Saving the information in the database
         document = models.Document(

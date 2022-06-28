@@ -31,10 +31,11 @@
                 //     }
                 // }
                 if ($.inArray(key, hidecolumns) <= -1) {
-                    var tbodydata = $('<td>').text(val);
+                    var tbodydata = $('<td>').addClass('rowA').text(val);
                     tableRow.append(tbodydata);
                 }
             });
+
             $(tableBody).append(tableRow);
         });
 
