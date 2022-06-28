@@ -28,7 +28,9 @@ class Vehicle(models.Model):
     user            = models.ForeignKey(User, on_delete=models.CASCADE)
     captured_frame  = models.FileField(upload_to=get_upload_tmp_path)
     
-    plate_number    = models.CharField(max_length=30, null=False)
+    plate_number        = models.CharField(max_length=30, null=False)
+    plate_number_likely  = models.CharField(max_length=30, null=True)
+
     status          = models.CharField(max_length=100, null=True)
     regist_exp      = models.CharField(max_length=30, null=True)
     owner           = models.CharField(max_length=100, null=True)
