@@ -5,10 +5,14 @@
 $ cd studio/Script
 $ activate
 ```
-## DB Migration
+## Set Env & DB Migration
 ```
-python .\manage.py makemigrations
-python .\manage.py migrate   
+$ cd studio
+$ pip install -r requirement.txt
+
+$ cd
+$ python .\manage.py makemigrations
+$ python .\manage.py migrate   
 ```
 
 ## Start Server
