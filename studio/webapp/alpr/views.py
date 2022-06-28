@@ -3,6 +3,8 @@ from django.http import HttpResponse
 from django.http import StreamingHttpResponse
 from django.shortcuts import redirect
 from django.core.files.base import ContentFile
+from django.contrib.auth.decorators import login_required
+
 
 from django.views.decorators import gzip
 from django.core import serializers
@@ -126,15 +128,15 @@ class VideoStream(object):
             self._fpsstart = clock
             self._avgfps = 0.7 * self._avgfps + 0.3 * self._fps1sec
             self._fps1sec = 0
-        
-        self._fps1sec+=1
+         
+        self._fps1sec+=1 
         return self._avgfps
 
     def remove_vehicle_by_session(self): 
         models.Vehicle.objects.filter(filename=self._pid, session_key=self._session_key).delete()
  
 
-    def add_database(self, pn, cd, frame_raw, w, h): 
+    def add_database(self, pn, cd, frame_raw, w, h, vehicle_info = None): 
         # Saving the information in the database
 
         try :
@@ -154,9 +156,19 @@ class VideoStream(object):
         except Exception as e:
             print('add database error: %s' % (e)) 
             pass
- 
-            
-  
+
+        if vehicle_info is not None:
+            state = vehicle_info.get('Status')
+            regist_exp = vehicle_info.get('RegistrationExpiration')
+            owner = vehicle_info.get('OwnerName')
+            owner_birth = vehicle_info.get('OwnerBirth')
+            owner_addr = vehicle_info.get('OwnerAddress')
+            owner_zip = vehicle_info.get('OwnerZipCode')
+            yom= vehicle_info.get('VehicleYearOfManufacture')
+            maker = vehicle_info.get('VehicleMake')
+            model= vehicle_info.get('VehicleModel')
+            color = vehicle_info.get('VehicleColor')
+        
         vehicle = models.Vehicle(
             filename = self._pid, 
             plate_number = pn,
@@ -164,7 +176,17 @@ class VideoStream(object):
             frame_no = self.framenumber,
             session_key = self._session_key,
             user = self.user,   
-            captured_frame = content
+            captured_frame = content,
+            status = vehicle_info.get('Status'),
+            regist_exp = regist_exp,
+            owner = owner,
+            owner_birth = owner_birth,
+            owner_addr = owner_addr,
+            owner_zip = owner_zip,
+            yom = yom,
+            maker = maker,
+            model= model,
+            color = color,
         ) 
         vehicle.captured_frame.name = "{}.jpg".format(self.framenumber)
         vehicle.save()
@@ -234,11 +256,15 @@ class VideoStream(object):
                         vehicleInfo = data.split('\n')
                         vehicleInfo_json = dict( zip(json_key_list, vehicleInfo) )
                         json.dumps(vehicleInfo_json)        
-                        print(vehicleInfo_json)
-                    else:
-                        print("<<No Matched>>");
+                        # print(vehicleInfo_json)
+                    # else:
+                        # print("<<No Matched>>");
                     
-                    self.add_database(pn, cd, frame_raw, width, height)
+                    # print(vehicleInfo_json.get("Status"))
+                    if vehicleInfo_json is not None:
+                        self.add_database(pn, cd, frame_raw, width, height, vehicleInfo_json)
+                    else :
+                        self.add_database(pn, cd, frame_raw, width, height)
 
                 else :   
                     self.clear_text() 
@@ -278,6 +304,7 @@ def gen_data(stream) :
  
 # Create your views here.'  
 @gzip.gzip_page   
+@login_required(login_url='/login/login')
 def playback(request):  
     try: 
         pid = request.GET['pid']
@@ -289,6 +316,7 @@ def playback(request):
         pass
 
 @gzip.gzip_page
+@login_required(login_url='/login/login')
 def webcam(request):
     try:
         stream = VideoStream(playback = False)
@@ -297,7 +325,7 @@ def webcam(request):
         print("error")
         pass 
 
-
+@login_required(login_url='/login/login')
 def get_vehicle(request): 
     pid = request.GET['pid']
     session_key = request.session.session_key
@@ -314,6 +342,7 @@ def get_vehicle(request):
     # return HttpResponse(vehicles, content_type='application/json')
     return JsonResponse(list(vehicles), safe=False)
 
+@login_required(login_url='/login/login')
 def post_frame(request):
     while True : 
         request.session['frameno'] = request.session['frameno']+10
@@ -323,6 +352,7 @@ def post_frame(request):
     frameno = request.session['frameno'] 
     return HttpResponse(json.dumps({'fn': frameno}), content_type='application/json')
 
+@login_required(login_url='/login/login')
 def get_frame(request): 
     try:
         frameno = request.session['frameno']
@@ -331,6 +361,7 @@ def get_frame(request):
         pass
     return HttpResponse(json.dumps({'fn': frameno}), content_type='application/json')
 
+@login_required(login_url='/login/login')
 def index(request): 
     
     if request.method == "POST":
@@ -344,6 +375,19 @@ def index(request):
         return render(request, 'alpr/index.html', context = {
         "files": documents})
           
+@login_required(login_url='/login/login')
+def get_captured_vehicle(request):
+    plate_number = request.POST['plate_number']
+    filename = request.POST['filename']
+    user = request.user
+
+    vehicles = models.Vehicle.objects.filter(plate_number=plate_number, filename=filename, user=user).order_by('-confidence').values().first()
+    # vehilcle = serializers.serialize("json", vehicles)
+    # print(vehilcle) 
+    # print(list(vehicles))
+    return JsonResponse(vehicles, safe=False)
+
+@login_required(login_url='/login/login')
 def get_captured_plate(request):
     plate_number = request.POST['plate_number']
     filename = request.POST['filename']
@@ -361,10 +405,12 @@ def get_captured_plate(request):
     return HttpResponse(binary)
     # return HttpResponse(json.dumps({'pid': plate_number}), content_type='application/json')
 
+@login_required(login_url='/login/login')
 def play(request): 
     pid = request.POST['pid']
     return render(request, 'index.html', ctx)
 
+@login_required(login_url='/login/login')
 def remove(request):
     id = request.GET['id']
     filepath = settings.BASE_DIR 
@@ -380,6 +426,7 @@ def remove(request):
     documents = models.Document.objects.all()
     return redirect('/alpr') 
 
+@login_required(login_url='/login/login')
 def remove_vehicle_history(request):
     user = request.user
     filename = request.GET['filename']
@@ -391,6 +438,7 @@ def remove_vehicle_history(request):
         print('remove_vehicle_history error: %s' % (e)) 
     return redirect('/alpr') 
 
+@login_required(login_url='/login/login')
 def upload_view(request):
     documents = models.Document.objects.all()
   
@@ -398,6 +446,7 @@ def upload_view(request):
         "files": documents
     })  
 
+@login_required(login_url='/login/login')
 def upload(request):
     if request.method == "POST":
         # Fetching the form data
