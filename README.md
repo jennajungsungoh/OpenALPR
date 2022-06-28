@@ -38,7 +38,7 @@ http://127.0.0.1:8000/alpr/
 
 ## Execute Plate lookup server 
 ```
-> cd OpenALPR
+> cd plateServer
 > run setup.bat
 > cd x64/Release
 > run loaddb.exe
