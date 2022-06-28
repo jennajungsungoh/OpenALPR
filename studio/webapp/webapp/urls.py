@@ -22,4 +22,5 @@ urlpatterns = [
     path('login/', include('login.urls')),
     path('', include('login.urls')),
     path('duo/', include('duo_universal_auth.urls')),
+	path('accounts/', include('login.urls')),
 ]
