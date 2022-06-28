@@ -21,13 +21,25 @@ class Document(models.Model):
 
 class Vehicle(models.Model):
     filename        = models.CharField(max_length=256, null=False)
-    plate_number    = models.CharField(max_length=30, null=False)
     confidence      = models.FloatField(null=False)
     frame_no        = models.IntegerField(null=False)
     detected_at     = models.DateTimeField(auto_now_add=True)
     session_key     = models.CharField(max_length=256, null=False)
     user            = models.ForeignKey(User, on_delete=models.CASCADE)
     captured_frame  = models.FileField(upload_to=get_upload_tmp_path)
+    
+    plate_number    = models.CharField(max_length=30, null=False)
+    status          = models.CharField(max_length=100, null=True)
+    regist_exp      = models.CharField(max_length=30, null=True)
+    owner           = models.CharField(max_length=100, null=True)
+    owner_birth     = models.CharField(max_length=30, null=True)
+    owner_addr      = models.CharField(max_length=256, null=True)
+    owner_zip       = models.CharField(max_length=20, null=True)
+    yom             = models.CharField(max_length=10, null=True)
+    maker           = models.CharField(max_length=50, null=True)
+    model           = models.CharField(max_length=50, null=True)
+    color           = models.CharField(max_length=50, null=True)
+
 
     class Meta:
         ordering = ['frame_no']
