@@ -1,4 +1,3 @@
-
 #include <iostream>
 #include <string>
 #include <vector>
@@ -14,9 +13,9 @@ bool logging_start()
     return 1;
 }
 
-int Logging_Index(char * data)
+int Logging_Index(char* data)
 {
-    std::cout << data << "\n";
+    //std::cout << data << "\n";
     PLOGD << data;
 
 
