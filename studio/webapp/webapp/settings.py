@@ -151,3 +151,9 @@ DUO_UNIVERSAL_AUTH = {
     }
 }
 
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = '587'
+EMAIL_HOST_USER = 'anyone98@gmail.com'
+EMAIL_HOST_PASSWORD = 'xrjpafueiotsxcur'
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
