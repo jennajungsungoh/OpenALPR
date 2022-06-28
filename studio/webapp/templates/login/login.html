@@ -5,19 +5,19 @@
         {% csrf_token %}
         {% include "form_errors.html" %}
         {% if user.is_authenticated %}
-        <h5 class="my-3 border-bottom pb-2">로그인 중입니다.</h5>
+        <h5 class="my-3 border-bottom pb-2">Login ID : {{ user.username }}</h5>
         {% else %}
         <div class="mb-3">
-            <label for="username">사용자ID</label>
+            <label for="username">User ID</label>
             <input type="text" class="form-control" name="username" id="username"
-                   value="{{ form.username.value|default_if_none:'' }}">
+                value="{{ form.username.value|default_if_none:'' }}">
         </div>
         <div class="mb-3">
-            <label for="password">비밀번호</label>
+            <label for="password">Password</label>
             <input type="password" class="form-control" name="password" id="password"
-                   value="{{ form.password.value|default_if_none:'' }}">
+                value="{{ form.password.value|default_if_none:'' }}">
         </div>
-        <button type="submit" class="btn btn-primary">로그인</button>
+        <button type="submit" class="btn btn-primary">Login</button>
         {% endif %}
     </form>
 </div>
