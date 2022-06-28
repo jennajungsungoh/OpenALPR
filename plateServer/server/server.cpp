@@ -53,7 +53,7 @@ int main()
     if (conf.IsSuccess())
     {
         MaxClientNum = conf.GetInt("MaxClientNum");
-        MinThreshold = conf.GetFloat("MinThreshold");       
+        MinThreshold = conf.GetFloat("MinThreshold");
     }
     else
     {
@@ -61,7 +61,7 @@ int main()
         MaxClientNum = 5;       // default 5
         MinThreshold = 80.0;    // default 80%     
     }
-	//printf("MaxClientNum is %d & MinThreshold is %f\n", MaxClientNum, MinThreshold);
+    //printf("MaxClientNum is %d & MinThreshold is %f\n", MaxClientNum, MinThreshold);
 
     /*Start Logging Thread*/
     loggingThread = CreateThread(NULL, 0, Logging_info_perSec, 0, 0, &threadID);
@@ -231,6 +231,7 @@ DWORD WINAPI ProcessClient(LPVOID arg)
     unsigned short PlateStringLength;
     char PlateString[1024];
     char DBRecord[2048];
+    char logging_info[1024];
     TTcpConnectedPort* TcpConnectedPort = (TTcpConnectedPort*)arg;
     int Query_num = 0;
     int i;
@@ -239,19 +240,19 @@ DWORD WINAPI ProcessClient(LPVOID arg)
     bool matchResult = false;  // Result of Partial Match 
 
      /*Openssl init 부분*/
-     ssl = InitOpensslServer();
-     if (ssl == 0)
-     {
-         printf("Failed init openssl\n");
-         CLOSE_SOCKET((*TcpConnectedPort).ConnectedFd);
-         return 0;
-     }
+    ssl = InitOpensslServer();
+    if (ssl == 0)
+    {
+        printf("Failed init openssl\n");
+        CLOSE_SOCKET((*TcpConnectedPort).ConnectedFd);
+        return 0;
+    }
 
-   /*DB 부분. */
+    /*DB 부분. */
 
- /* Initialize the structure. This
-  * database is not opened in an environment,
-  * so the environment pointer is NULL. */
+  /* Initialize the structure. This
+   * database is not opened in an environment,
+   * so the environment pointer is NULL. */
     ret = db_create(&dbp, NULL, 0);
     if (ret != 0) {
         /* Error handling goes here */
@@ -335,12 +336,26 @@ DWORD WINAPI ProcessClient(LPVOID arg)
 
         if (PlateStringLength > sizeof(PlateString)) //plate stringdms 1024 
         {
+            WaitForSingleObject(ghMutex, INFINITE);
+            Query[Query_num][0] = 0;
+            Query[Query_num][1] = 0;
+            Query[Query_num][2] = 0;
+            Client_num--;
+            //std::cout << "Delate Query" << Query[1][0] << ", " << Query[2][0] << ", " << Query[3][0] << ", " << Query[4][0] << ", " << Query[5][0]  << "\n";
+            ReleaseMutex(ghMutex);
             printf("Plate string length  error\n");
             break;
         }
         if (ReadDataTcp(ssl, TcpConnectedPort, (unsigned char*)&PlateString,
             PlateStringLength) != PlateStringLength)
         {
+            WaitForSingleObject(ghMutex, INFINITE);
+            Query[Query_num][0] = 0;
+            Query[Query_num][1] = 0;
+            Query[Query_num][2] = 0;
+            Client_num--;
+            //std::cout << "Delate Query" << Query[1][0] << ", " << Query[2][0] << ", " << Query[3][0] << ", " << Query[4][0] << ", " << Query[5][0]  << "\n";
+            ReleaseMutex(ghMutex);
             printf("ReadDataTcp 2 error\n");
             break;
         }
@@ -348,9 +363,12 @@ DWORD WINAPI ProcessClient(LPVOID arg)
 
         /*Query incremental*/
         WaitForSingleObject(ghMutex, INFINITE);
+
         Query[0][2]++; //Total Query
         Query[Query_num][2]++; // Client Query
-        Logging_Index(PlateString);
+        /*logging informaiton*/
+        sprintf_s(logging_info, 1024, " Port Number (%d)  requested plate (%s)  ", Query[Query_num][1], PlateString);
+        Logging_Index(logging_info);
         ReleaseMutex(ghMutex);
         //std::cout << "Total Query " << Query[0][2] << "    Port Number : " <<  Query[Query_num][1] << "   Number of QUERY : " << Query[Query_num][2] << "\n";
         /* Zero out the DBTs before using them. */
@@ -400,7 +418,7 @@ DWORD WINAPI ProcessClient(LPVOID arg)
 
                     int sendlength = (int)(strlen((char*)data.data) + 1);
                     short SendMsgHdr = ntohs(sendlength);
-                    if ((result = WriteDataTcp(ssl,TcpConnectedPort, (unsigned char*)&SendMsgHdr, sizeof(SendMsgHdr))) != sizeof(SendMsgHdr))
+                    if ((result = WriteDataTcp(ssl, TcpConnectedPort, (unsigned char*)&SendMsgHdr, sizeof(SendMsgHdr))) != sizeof(SendMsgHdr))
                         printf("WriteDataTcp %lld\n", result);
                     if ((result = WriteDataTcp(ssl, TcpConnectedPort, (unsigned char*)data.data, sendlength)) != sendlength)
                         printf("WriteDataTcp %lld\n", result);
@@ -413,7 +431,7 @@ DWORD WINAPI ProcessClient(LPVOID arg)
 
             printf("matchReuslt : %d\n", matchResult);
 
-            if(matchResult == false)
+            if (matchResult == false)
             {
                 int sendlength = 0;
                 short SendMsgHdr = ntohs(sendlength);
@@ -445,9 +463,9 @@ DWORD WINAPI Logging_info_perSec(LPVOID arg)
         //print logging
         if (Client_num > 0)
         {
-            
+
             j = sprintf_s(test, 1024, "Total Query = %d", Query[0][2]);
-            //std::cout << "Total Query " << Query[0][2] << Client_num  <<"\n";
+            //std::cout << "Total Query " << Query[0][2] <<"   client number  : " << Client_num << "\n";
 
             Query[0][2] = 0;
             for (i = 1; i < MAXCLIENT; i++)
