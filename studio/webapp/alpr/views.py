@@ -3,7 +3,6 @@ from django.http import HttpResponse
 from django.http import StreamingHttpResponse
 from django.shortcuts import redirect
 from django.core.files.base import ContentFile
-from django.contrib.auth.decorators import login_required
 
 from django.views.decorators import gzip
 from django.core import serializers
@@ -31,12 +30,15 @@ from django.conf import settings
 
 import socket
 import ssl
-
+import json
 
 HOST = 'localhost'
 PORT = 2222
 server_sni_hostname = 'example.com'
 server_cert = 'rootca.crt'
+
+json_key_list = ['PlateNumber' , 'Status' , 'RegistrationExpiration', 'OwnerName' , 'OwnerBirth' , 'OwnerAddress' , 'OwnerZipCode' , 'VehicleYearOfManufacture' , 'VehicleMake' , 'VehicleModel' , 'VehicleColor']
+
 
 rootpath = os.path.dirname(os.path.abspath(__file__)) + os.path.sep
 dllabspath = rootpath + "../../openalpr64-sdk-4.1.1"
@@ -184,6 +186,8 @@ class VideoStream(object):
         
        
         while True:
+            vehicleInfo = []
+            vehicleInfo_json = {}
             start = time.perf_counter() 
             (self.grabbed, self.frame) = self.video.read()
 
@@ -230,7 +234,11 @@ class VideoStream(object):
                     
                     if data != b'\x00\x00' :
                         data = conn.recv(1024)
-                        print("Rev Plate data : " + str(data))
+                        data=data.decode('utf-8')
+                        vehicleInfo = data.split('\n')
+                        vehicleInfo_json = dict( zip(json_key_list, vehicleInfo) )
+                        json.dumps(vehicleInfo_json)        
+                        print(vehicleInfo_json)
                     else:
                         print("<<No Matched>>");
                     
@@ -280,7 +288,7 @@ def playback(request):
         stream = VideoStream(playback = True, pid = pid, request = request)
         return StreamingHttpResponse(gen_stream(stream), content_type="multipart/x-mixed-replace;boundary=frame") 
         # return StreamingHttpResponse(gen_data(stream), content_type="text/event-stream") 
-    except:  
+    except: 
         print("error")
         pass
 
@@ -327,10 +335,8 @@ def get_frame(request):
         pass
     return HttpResponse(json.dumps({'fn': frameno}), content_type='application/json')
 
-
-
-@login_required(login_url='/login/login/')
 def index(request): 
+    
     if request.method == "POST":
         mode = request.POST["mode"] 
         pid = request.POST["pid"]
@@ -338,13 +344,10 @@ def index(request):
         return render(request, 'alpr/index.html',  
         {'mode':mode, 'pid':pid}) 
     else: 
-        user = request.user
-        documents = models.Document.objects.filter(user=user)
-
+        documents = models.Document.objects.all()
         return render(request, 'alpr/index.html', context = {
         "files": documents})
-
-@login_required(login_url='/login/login/')          
+          
 def get_captured_plate(request):
     plate_number = request.POST['plate_number']
     filename = request.POST['filename']
@@ -362,12 +365,10 @@ def get_captured_plate(request):
     return HttpResponse(binary)
     # return HttpResponse(json.dumps({'pid': plate_number}), content_type='application/json')
 
-@login_required(login_url='/login/login/')
 def play(request): 
     pid = request.POST['pid']
     return render(request, 'index.html', ctx)
 
-@login_required(login_url='/login/login/')
 def remove(request):
     id = request.GET['id']
     filepath = settings.BASE_DIR 
@@ -383,8 +384,7 @@ def remove(request):
     documents = models.Document.objects.all()
     return redirect('/alpr') 
 
-@login_required(login_url='/login/login/')
-def remove_vehicle_history(request) :
+def remove_vehicle_history(request):
     user = request.user
     filename = request.GET['filename']
     image_path = settings.MEDIA_ROOT + os.path.sep + 'media' + os.path.sep + user.username + os.path.sep + filename.rsplit('.')[0]
@@ -393,9 +393,8 @@ def remove_vehicle_history(request) :
         shutil.rmtree(image_path)
     except Exception as e:
         print('remove_vehicle_history error: %s' % (e)) 
-    return redirect('/alpr')  
+    return redirect('/alpr') 
 
-@login_required(login_url='/login/login/')
 def upload_view(request):
     documents = models.Document.objects.all()
   
@@ -403,7 +402,6 @@ def upload_view(request):
         "files": documents
     })  
 
-@login_required(login_url='/login/login/')
 def upload(request):
     if request.method == "POST":
         # Fetching the form data
