@@ -25,6 +25,7 @@ SECRET_KEY = 'django-insecure-y8#$fhl57+rtxbu-86#%$@rerrhaa@iy92n_9nqh6y_-)qguu%
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+IPADDRESS = '10.58.7.138'
 PORTNUMBER = '8000'
 ALLOWED_HOSTS = ['*']
 
@@ -32,6 +33,7 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
+    'sslserver',
     'login.apps.LoginConfig',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -39,7 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-#    'duo_universal_auth.apps.DuoUniversalAuthConfig', 	
+    'duo_universal_auth.apps.DuoUniversalAuthConfig', 	
     'alpr',
     'django_bootstrap_icons',
 ]
@@ -52,7 +54,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-#    'duo_universal_auth.middleware.DuoUniversalAuthMiddleware', # Add this!
+    'duo_universal_auth.middleware.DuoUniversalAuthMiddleware', # Add this!
 ]
 
 ROOT_URLCONF = 'webapp.urls'
@@ -144,7 +146,7 @@ DUO_UNIVERSAL_AUTH = {
         'DUO_HOST': 'api-5bba1b27.duosecurity.com',
         'CLIENT_ID': 'DI7NHXI4C993ITGXQM2A',
         'CLIENT_SECRET': 'W9YxVy8w80O49M7zKwHBtTndTuP9XlA9kGHgO8Ky',
-        'REDIRECT_URI': 'http://localhost:' + PORTNUMBER + '/duo/callback/',
+        'REDIRECT_URI': 'https://' + IPADDRESS + '.nip.io:' + PORTNUMBER + '/duo/callback/',
         'AUTH_BACKENDS': [
             'django.contrib.auth.backends.ModelBackend',
         ],
