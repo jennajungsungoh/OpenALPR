@@ -2,6 +2,10 @@
 
 ## Python Environment
 ```
+## Internal dns settting. https://nip.io/   (One time only)
+$ cd nip.io-master
+$ build_and_run_docker.sh
+
 $ cd studio/Script
 $ activate
 ```
@@ -10,28 +14,36 @@ $ activate
 $ cd studio
 $ pip install -r requirement.txt
 
+
+$ cd webapp
+$ change IPADDRESS = '10.58.7.138' to correct ipaddress in settings.py
+
 $ cd
 $ python .\manage.py makemigrations
 $ python .\manage.py migrate   
 ```
 
+
 ## Start Server
 ```
 $ cd stduio/webapp/
-$ python .\manage.py runserver 0.0.0.0:8000
+$ python .\manage.py runsslserver 0.0.0.0:8000 --certificate django.crt --key django.key
 
 #loging page
-http://127.0.0.1:8000/
+https://{ipaddress}.nip.io:8000/
+ex>  if ipadress is 10.58.7.138 https://10.58.7.138.nip.io:8000/
 or
-http://127.0.0.1:8000/login/login
-
+https://{ipaddress}.nip.io:8000/login/login
+ex>  if ipadress is 10.58.7.138 https://10.58.7.138.nip.io:8000/login/login
 -------------
-http://127.0.0.1:8000/alpr/
+https://{ipaddress}.nip.io:8000/alpr/
+ex>  if ipadress is 10.58.7.138 https://10.58.7.138.nip.io:8000/alpr/
 ```
 
 ## Admin
 ```
-  http://127.0.0.1:8000/admin
+https://{ipaddress}.nip.io:8000/admin
+ex>  if ipadress is 10.58.7.138 https://10.58.7.138.nip.io:8000/admin/
   ID: admin
   PW: ahnlab
 ```

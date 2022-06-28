@@ -1,0 +1,14 @@
+*.ipr
+*.iml
+*.iws
+*.pyc
+.DS_Store
+build
+nip.io.egg-info
+dist
+
+.idea/*.xml
+.idea/inspectionProfiles
+
+.cache
+.eggs
