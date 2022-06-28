@@ -219,16 +219,12 @@ class VideoStream(object):
                      
  
                     # todo : connet with server(ssl)
-                    # 하헌진.
-
-                    
                     sendMsgHdr=(len(pn)+1)
                     sendMsgHdr2=sendMsgHdr.to_bytes(2, 'big')
                     conn.sendall(sendMsgHdr2)
                     #print('Data : {} , Data Length : {}'.format(pn, sendMsgHdr2))
 
                     conn.sendall(pn.encode('utf-8'))
-                    
                     
                     data = conn.recv(1024)
                     

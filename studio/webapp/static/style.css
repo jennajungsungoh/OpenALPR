@@ -5,6 +5,10 @@
     font-size: small;
 }
 
+h4 {
+    color: rgb(150, 150, 150);
+}
+
 a,
 a:visited,
 a:hover,
@@ -63,15 +67,16 @@ table {
 .btnA {
     cursor: pointer;
     display: inline;
-    padding-left: 10px;
-    padding-right: 10px;
-    border: solid 1px black;
-    background: white;
+    padding: 5px;
+    /* padding-left: 5px;
+    padding-right: 5px; */
+    /* border: solid 1px rgb(255, 255, 255); */
+    /* background: white; */
 }
 
 .btnA:hover {
     cursor: pointer;
-    background: yellow;
+    /* border: solid 1px black; */
 }
 
 .rowA:hover {
@@ -79,13 +84,39 @@ table {
     background: rgb(219, 219, 219);
 }
 
+.dvBoard {
+    background-color: white;
+    width: 300px;
+    height: 200px;
+    border: 0px;
+    padding: 15px;
+    margin: 10px;
+    overflow: auto;
+}
+
+.horiz {
+    display: inline-block;
+}
+
 #tbMovieInfo {
-    background-color: rgb(196, 210, 255);
+    background-color: white;
+    width: 100%;
+    border: 0px;
+}
+
+#tbMovieInfo>tr {
+    padding: 5px;
 }
 
 #upload_form {
-    width: 600px;
-    border: solid 1px #727297;
+    width: 100%;
+    border: 0px;
     background: #c9c9c9;
-    padding: 1px;
+    padding: 5px;
+}
+
+
+.btnImg {
+    width: 15px;
+    height: 15px;
 }

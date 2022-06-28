@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 #    'duo_universal_auth.apps.DuoUniversalAuthConfig', 	
     'alpr',
+    'django_bootstrap_icons',
 ]
 
 MIDDLEWARE = [
