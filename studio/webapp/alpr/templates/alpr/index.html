@@ -34,6 +34,8 @@
         }
 
         function start_polling(pid) {
+            $('#btnInprogress').removeClass('btnHidden').addClass('btnVisible');
+            $('#btnRealTime').removeClass('btnVisible').addClass('btnHidden');
             g_pollingStatus = true;
             $.ajax({
                 url: '/alpr/get_vehicle?pid=' + pid,
@@ -43,6 +45,8 @@
                     // console.log(response[0].plate_number)
                     $('#information').children('tbody').remove();
                     $("#information").generateTable(response, ['plate', 'count']);
+                    $('#information').children('tbody').children('tr:first').click();
+                    $('#information').children('tbody').children('tr:first').addClass("A-highlight");
 
                 },
                 error: function (request, status, error) {
@@ -58,10 +62,12 @@
         function stop_polling() {
             g_pollingStatus = false;
             clearTimeout(g_pollingTm);
+            $('#btnInprogress').removeClass('btnVisible').addClass('btnHidden');
+            $('#btnRealTime').removeClass('btnHidden').addClass('btnVisible');
         }
 
         function blankForNull(s) {
-            return s.toUpperCase() === "NULL" ? "" : s;
+            return (s == null) ? "" : s;
         }
 
         function get_captured_vehicle(pn, cd, time) {
@@ -78,8 +84,10 @@
                 success: function (result) {
                     // console.log(result.plate_number);
                     // $('#imgPlate').attr("src", "data:image/jpg;base64," + result);
-                    $("#data_plate_number").text(blankForNull(result.plate_number));
-                    $("#data_status").text(blankForNull(result.status));
+                    s_status = blankForNull(result.status);
+
+                    $("#data_plate_number").text(blankForNull(result.plate_number_likely));
+                    $("#data_status").text(s_status);
                     $("#data_exp").text(blankForNull(result.regist_exp));
                     $("#data_owner").text(blankForNull(result.owner));
                     $("#data_birth").text(blankForNull(result.owner_birth));
@@ -89,7 +97,16 @@
                     $("#data_maker").text(blankForNull(result.maker));
                     $("#data_model").text(blankForNull(result.model));
                     $("#data_color").text(blankForNull(result.color));
-
+                    if (s_status == "") {
+                        $("#alert_area").removeClass('AlertRed');
+                        $("#alert_area").removeClass('AlertGreen');
+                    } else if (s_status == "No Wants / Warrants") {
+                        $("#alert_area").removeClass('AlertRed');
+                        $("#alert_area").addClass('AlertGreen');
+                    } else {
+                        $("#alert_area").removeClass('AlertGreen');
+                        $("#alert_area").addClass('AlertRed');
+                    }
                 },
                 error: function (request, status, error) {
                     console.log("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
@@ -99,9 +116,16 @@
 
         $(document).ready(function () {
             $("#information").on("click", 'tr', function (event) {
-                var pn = $(this).children("td").eq(0).text();
-                var cd = $(this).children("td").eq(1).text();
-                var time = $(this).children("td").eq(2).text();
+                var pn = $(this).children("td").eq(1).text();
+                var cd = $(this).children("td").eq(2).text();
+                var time = $(this).children("td").eq(3).text();
+
+                $("#information").children('tbody').children('tr:gt(0)').removeClass("A-highlight");
+                $("#information").children('tbody').children('tr:eq(0)').removeClass("A-highlight");
+                $(this).addClass("A-highlight");
+                // $(this).closest('tr').children('td:first').children('div').addClass("btnHidden");
+                // $(this).children('td:first').children('div').removeClass("btnHidden");
+                // $("#information").children('tbody').children('tr:eq(0)').closest('div').removeClass("btnHidden");
 
                 $.ajax({
                     url: "/alpr/get_captured_plate",
@@ -124,9 +148,11 @@
                 })
             });
 
-            $(".stop").on("click", function (event) {
-                alert("stop");
+            $("#btnInprogress").on("click", function (event) {
                 stop_polling();
+            });
+            $("#btnRealTime").on("click", function (event) {
+                start_polling(g_filename);
             });
 
             $(".btnRemoveHistory").on("click", function (event) {
@@ -161,159 +187,168 @@
         <input type="submit" value="Upload">
     </form>
     <div>&nbsp;</div>
-    <div class="dvBoard horiz">
-        <div>
-            <h4>Menu</h4>
+    <div style="width:1200px;">
+        <div class="dvBoard horiz">
+            <div>
+                <h4>Menu</h4>
+            </div>
         </div>
-    </div>
-    <div class="dvBoard horiz">
-        <div>
-            <h4>Uploaded Video</h4>
+        <div class="dvBoard horiz">
+            <div>
+                <h4>Uploaded Video</h4>
+            </div>
+            <div>
+                <table class="mainTable" id="tbMovieInfo">
+                    {% for file in files %}
+                    <tr>
+                        <td style="text-align: left; padding:5px;">{{ file.filename }}</td>
+                        <!-- <td>{{ file.dateTimeOfUpload }}</td> -->
+                        <td>
+                            <!-- $('#player').attr("src", "playback?pid=" + data.pid) -->
+                            <div class="btnA btnPlay" title="Play!">
+                                <input type="hidden" value="{{ file.filename }}">
+                                {% bs_icon 'play-circle' %}
+                            </div>
+                            <div class="btnA btnRemove" title="Remove Playback">
+                                <input type="hidden" value="{{ file.id }}">
+                                {% bs_icon 'trash3' %}
+                            </div>
+                            <div class="btnA btnRemoveHistory" title="Remove History">
+                                <input type="hidden" value="{{ file.filename }}">
+                                {% bs_icon 'journal-minus' %}
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
         </div>
-        <div>
-            <table class="mainTable" id="tbMovieInfo">
-                {% for file in files %}
-                <tr>
-                    <td style="text-align: left; padding:5px;">{{ file.filename }}</td>
-                    <!-- <td>{{ file.dateTimeOfUpload }}</td> -->
-                    <td>
-                        <!-- $('#player').attr("src", "playback?pid=" + data.pid) -->
-                        <div class="btnA btnPlay" title="Play!">
-                            <input type="hidden" value="{{ file.filename }}">
-                            {% bs_icon 'play-circle' %}
-                        </div>
-                        <div class="btnA btnRemove" title="Remove Playback">
-                            <input type="hidden" value="{{ file.id }}">
-                            {% bs_icon 'trash3' %}
-                        </div>
-                        <div class="btnA btnRemoveHistory" title="Remove History">
-                            <input type="hidden" value="{{ file.filename }}">
-                            {% bs_icon 'journal-minus' %}
-                        </div>
-                    </td>
-                </tr>
-                {% endfor %}
-            </table>
-        </div>
-    </div>
-    <div class="dvBoard horiz">
-        <div>
-            <h4>Detected Information</h4>
-        </div>
-        <div>
-            <td id="tdRight">
-                <div id="dvPlate">
-                    <table id="information">
-                    </table>
+        <div class="dvBoard horiz">
+            <div>
+                <h4 style="display: inline-block;">Detected Information</h4>
+                <div id="btnInprogress" class="btnTimer btnHidden">
+                    <div class="spinner-grow spinner-grow-sm" role="status">
+                        <span class="sr-only"></span>
+                    </div>
                 </div>
-            </td>
+                <div id="btnRealTime" class="btnTimer">
+                    {% bs_icon 'play-circle-fill' %}
+                </div>
+            </div>
+            <div>
+                <td id="tdRight">
+                    <div id="dvPlate">
+                        <table id="information">
+                        </table>
+                    </div>
+                </td>
+            </div>
+        </div>
+        <div class="dvBoard Alarge">
+            <div id="dvPlayer"><img id="player" /></div>
+        </div>
+        <div id="alert_area" class="dvBoard horiz Atall">
+            <div>
+                <h4>Vehicle Information</h4>
+            </div>
+
+            <div id="dvCaptured">
+                <img style="max-width: 270px;height: 130px;" id="imgPlate" />
+            </div>
+            <div>&nbsp;</div>
+            <div id="dvVInfo">
+                <table>
+                    <tr>
+                        <td>
+                            <div class="small-title">Plate Number</div>
+                        </td>
+                        <td>
+                            <div class="small-contents" id="data_plate_number"></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="small-title">Status</div>
+                        </td>
+                        <td>
+                            <div class="small-contents" id="data_status"></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="small-title">Regist Exp.</div>
+                        </td>
+                        <td>
+                            <div class="small-contents" id="data_exp"></div>
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="small-title">Owner</div>
+                        </td>
+                        <td>
+                            <div class="small-contents" id="data_owner"></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="small-title">Owner Birth</div>
+                        </td>
+                        <td>
+                            <div class="small-contents" id="data_birth"></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="small-title">Addr</div>
+                        </td>
+                        <td>
+                            <div class="small-contents" id="data_addr"></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="small-title">Zip</div>
+                        </td>
+                        <td>
+                            <div class="small-contents" id="data_zip"></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="small-title">Vehicle YoM</div>
+                        </td>
+                        <td>
+                            <div class="small-contents" id="data_yom"></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="small-title">Maker</div>
+                        </td>
+                        <td>
+                            <div class="small-contents" id="data_maker"></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="small-title">Model</div>
+                        </td>
+                        <td>
+                            <div class="small-contents" id="data_model"></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="small-title">Color</div>
+                        </td>
+                        <td>
+                            <div class="small-contents" id="data_color"></div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
         </div>
     </div>
-    <div class="dvBoard Alarge">
-        <div id="dvPlayer"><img id="player" /></div>
-    </div>
-    <div class="dvBoard horiz Atall">
-        <div>
-            <h4>Vehicle Information</h4>
-        </div>
-
-        <div id="dvCaptured">
-            <img style="max-width: 270px;height: 130px;" id="imgPlate" />
-        </div>
-        <div>&nbsp;</div>
-        <div id="dvVInfo">
-            <table>
-                <tr>
-                    <td>
-                        <div class="small-title">Plate Number</div>
-                    </td>
-                    <td>
-                        <div class="small-contents" id="data_plate_number"></div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <div class="small-title">Status</div>
-                    </td>
-                    <td>
-                        <div class="small-contents" id="data_status"></div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <div class="small-title">Regist Exp.</div>
-                    </td>
-                    <td>
-                        <div class="small-contents" id="data_exp"></div>
-                    </td>
-
-                </tr>
-                <tr>
-                    <td>
-                        <div class="small-title">Owner</div>
-                    </td>
-                    <td>
-                        <div class="small-contents" id="data_owner"></div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <div class="small-title">Owner Birth</div>
-                    </td>
-                    <td>
-                        <div class="small-contents" id="data_birth"></div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <div class="small-title">Addr</div>
-                    </td>
-                    <td>
-                        <div class="small-contents" id="data_addr"></div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <div class="small-title">Zip</div>
-                    </td>
-                    <td>
-                        <div class="small-contents" id="data_zip"></div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <div class="small-title">Vehicle YoM</div>
-                    </td>
-                    <td>
-                        <div class="small-contents" id="data_yom"></div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <div class="small-title">Maker</div>
-                    </td>
-                    <td>
-                        <div class="small-contents" id="data_maker"></div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <div class="small-title">Model</div>
-                    </td>
-                    <td>
-                        <div class="small-contents" id="data_model"></div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <div class="small-title">Color</div>
-                    </td>
-                    <td>
-                        <div class="small-contents" id="data_color"></div>
-                    </td>
-                </tr>
-            </table>
-        </div>
-    </div>
-
 </body>

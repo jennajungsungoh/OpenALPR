@@ -64,6 +64,7 @@ class VideoStream(object):
         self._avgfps=0
         self._fps1sec=0
         self._pid=pid
+        self.recognized_plate_numbers = []
 
         if request is not None:
             self._session_key = request.session.session_key
@@ -89,9 +90,10 @@ class VideoStream(object):
  
         (self.grabbed, self.frame) = self.video.read()
         threading.Thread(target=self.update, args=()).start()
-
+ 
     def __del__(self):
         self.video.release()
+        print("destroy.............")
 
     def get_frame(self, frame=None):
         try:
@@ -102,8 +104,10 @@ class VideoStream(object):
                 image = frame
                 _, jpeg = cv2.imencode('.jpg', image)
         except:
-            print("exception...")
-            # self.remove_vehicle_by_session()
+            print("close connection")
+            # connection close
+            self.conn.close() 
+            return None, None
 
         return image, jpeg.tobytes()
 
@@ -139,15 +143,16 @@ class VideoStream(object):
     def add_database(self, pn, cd, frame_raw, w, h, vehicle_info = None): 
         # Saving the information in the database
 
+        cropped_size = 30
         try :
-            if self.x1-100<0: x1 = 0 
-            else: x1 = self.x1 - 100 
-            if self.y1-100<0: y1 = 0 
-            else: y1 = self.y1 - 100
-            if self.x2+100>w: x2 = w 
-            else: x2 = self.x2 + 100
-            if self.y2+100>h: y2 = h 
-            else: y2 = self.y2 + 100
+            if self.x1-cropped_size<0: x1 = 0 
+            else: x1 = self.x1 - cropped_size 
+            if self.y1-cropped_size<0: y1 = 0 
+            else: y1 = self.y1 - cropped_size
+            if self.x2+cropped_size>w: x2 = w 
+            else: x2 = self.x2 + cropped_size
+            if self.y2+cropped_size>h: y2 = h 
+            else: y2 = self.y2 + cropped_size
 
             cropped_img = frame_raw[y1:y2, x1:x2]
             # print("x:{}-{}, y:{}-{} size:{} c_size:{}".format(self.x1, self.x2, self.y1, self.y2, frame_raw.size, cropped_img.size))
@@ -158,6 +163,7 @@ class VideoStream(object):
             pass
 
         if vehicle_info is not None:
+            plate_number_likely = vehicle_info.get('PlateNumber')
             state = vehicle_info.get('Status')
             regist_exp = vehicle_info.get('RegistrationExpiration')
             owner = vehicle_info.get('OwnerName')
@@ -169,9 +175,11 @@ class VideoStream(object):
             model= vehicle_info.get('VehicleModel')
             color = vehicle_info.get('VehicleColor')
         
+        # print(plate_number_likely)
         vehicle = models.Vehicle(
             filename = self._pid, 
             plate_number = pn,
+            plate_number_likely = plate_number_likely,
             confidence = cd,
             frame_no = self.framenumber,
             session_key = self._session_key,
@@ -191,11 +199,46 @@ class VideoStream(object):
         vehicle.captured_frame.name = "{}.jpg".format(self.framenumber)
         vehicle.save()
 
+    def is_duplicated(self, pn):
+        if pn in self.recognized_plate_numbers: 
+            # print("already recognized..{}".format(pn))
+            return True
+        else: 
+            # print("new one - {}".format(pn))
+            self.recognized_plate_numbers.append(pn)
+            return False 
+
+    def query_and_save(self, pn, cd, width, height, frame_raw): 
+        vehicle_data = []
+        vehicle_data_json = {} 
+
+        if not self.is_duplicated(pn):  
+            # todo : connet with server(ssl) 
+            sendMsgHdr=(len(pn)+1)
+            sendMsgHdr2=sendMsgHdr.to_bytes(2, 'big')
+            self.conn.sendall(sendMsgHdr2) 
+            #print('Data : {} , Data Length : {}'.format(pn, sendMsgHdr2))
+
+            self.conn.sendall(pn.encode('utf-8')) 
+            
+            data = self.conn.recv(1024)
+            
+            if data != b'\x00\x00' :
+                data = self.conn.recv(1024)
+                data=data.decode('utf-8')
+                vehicle_data = data.split('\n') 
+                vehicle_data_json = dict( zip(json_key_list, vehicle_data) )
+                json.dumps(vehicle_data_json)        
+            
+            if vehicle_data_json is not None:
+                self.add_database(pn, cd, frame_raw, width, height, vehicle_data_json)
+            else :
+                self.add_database(pn, cd, frame_raw, width, height)
+
     def update(self): 
         self.clear_text()
         self.framenumber = 0
         height = int(self.video.get(4))
-
 
         context = ssl.create_default_context(ssl.Purpose.SERVER_AUTH, cafile=server_cert)
         context.check_hostname = False
@@ -203,79 +246,58 @@ class VideoStream(object):
 
 
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        conn = context.wrap_socket(s, server_side=False, server_hostname=server_sni_hostname)
-        conn.connect((HOST, PORT))
-        
+        self.conn = context.wrap_socket(s, server_side=False, server_hostname=server_sni_hostname)
+        self.conn.connect((HOST, PORT))
+        print("conn...")
        
         while True:
-            vehicleInfo = []
-            vehicleInfo_json = {}
-            start = time.perf_counter() 
-            (self.grabbed, self.frame) = self.video.read()
+            try:
+                start = time.perf_counter() 
+                (self.grabbed, self.frame) = self.video.read()
 
-            clear_frame = self.frame.copy()
+                if self.frame is not None:
+                    clear_frame = self.frame.copy()
+                else:
+                    break
+                
+                cv2.rectangle(self.frame, (self.x1, self.y1), (self.x2, self.y2), (0, 255, 0), 2)
+                cv2.putText(self.frame, self.f_text, (self.x1, self.y1-30), font, 1, (0, 255, 0), 0, cv2.LINE_AA)
+                cv2.putText(self.frame, self.fps_text, (0, height-10), font, 0.7, (0, 255, 0), 0, cv2.LINE_AA)
+
+                frame_raw, frame_byte = self.get_frame(clear_frame)
+                results = self.alpr.recognize_array(frame_byte)
+    
+    
+    
+                if results['data_type'] == 'alpr_results': 
+                    if results['results']:
+                        pn = results['results'][0]['candidates'][0]['plate'] 
+                        cd = results['results'][0]['candidates'][0]['confidence']
+                        
+                        self.f_text = '{} ({:.2f}%)'.format(pn, cd) 
+                        self.x1 = results['results'][0]['coordinates'][0]['x']
+                        self.y1 = results['results'][0]['coordinates'][0]['y'] 
+                        self.x2 = results['results'][0]['coordinates'][2]['x']
+                        self.y2 = results['results'][0]['coordinates'][2]['y']
+
+                        width = results['img_width']
+                        height = results['img_height']
+                        print('Plate: {} ({:.2f}%) {}x{}- x:{}-{} y:{}-{}'.format(pn, cd, width, height, self.x1, self.x2, self.y1, self.y2))
+                        
+                        self.query_and_save(pn, cd, width, height, frame_raw)
+
+                        
+                    else :    
+                        self.clear_text() 
+    
+                dur = time.perf_counter() - start
             
-            cv2.rectangle(self.frame, (self.x1, self.y1), (self.x2, self.y2), (0, 255, 0), 2)
-            cv2.putText(self.frame, self.f_text, (self.x1, self.y1-30), font, 1, (0, 255, 0), 0, cv2.LINE_AA)
-            cv2.putText(self.frame, self.fps_text, (0, height-10), font, 0.7, (0, 255, 0), 0, cv2.LINE_AA)
-
-            frame_raw, frame_byte = self.get_frame(clear_frame)
-            results = self.alpr.recognize_array(frame_byte)
- 
- 
- 
-            if results['data_type'] == 'alpr_results': 
-                if results['results']:
-                    pn = results['results'][0]['candidates'][0]['plate'] 
-                    cd = results['results'][0]['candidates'][0]['confidence']
-                     
-                    self.f_text = '{} ({:.2f}%)'.format(pn, cd) 
-                    self.x1 = results['results'][0]['coordinates'][0]['x']
-                    self.y1 = results['results'][0]['coordinates'][0]['y'] 
-                    self.x2 = results['results'][0]['coordinates'][2]['x']
-                    self.y2 = results['results'][0]['coordinates'][2]['y']
-
-                    width = results['img_width']
-                    height = results['img_height']
-                    print('Plate: {} ({:.2f}%) {}x{}- x:{}-{} y:{}-{}'.format(pn, cd, width, height, self.x1, self.x2, self.y1, self.y2))
-                     
- 
-                    # todo : connet with server(ssl)
-                    sendMsgHdr=(len(pn)+1)
-                    sendMsgHdr2=sendMsgHdr.to_bytes(2, 'big')
-                    conn.sendall(sendMsgHdr2)
-                    #print('Data : {} , Data Length : {}'.format(pn, sendMsgHdr2))
-
-                    conn.sendall(pn.encode('utf-8'))
-                    
-                    data = conn.recv(1024)
-                    
-                    if data != b'\x00\x00' :
-                        data = conn.recv(1024)
-                        data=data.decode('utf-8')
-                        vehicleInfo = data.split('\n')
-                        vehicleInfo_json = dict( zip(json_key_list, vehicleInfo) )
-                        json.dumps(vehicleInfo_json)        
-                        # print(vehicleInfo_json)
-                    # else:
-                        # print("<<No Matched>>");
-                    
-                    # print(vehicleInfo_json.get("Status"))
-                    if vehicleInfo_json is not None:
-                        self.add_database(pn, cd, frame_raw, width, height, vehicleInfo_json)
-                    else :
-                        self.add_database(pn, cd, frame_raw, width, height)
-
-                else :   
-                    self.clear_text() 
- 
-            dur = time.perf_counter() - start
-          
-            # print (dur*1000)             
-            self.fps_text = 'avg time per frame {:.5f} ms. fps {:.2f}. frameno = {}'.format(self.avgdur(dur*1000), self.avgfps(), self.framenumber)
-            self.framenumber+=1
-            
-            # print(self.fps_text)
+                # print (dur*1000)             
+                self.fps_text = 'avg time per frame {:.5f} ms. fps {:.2f}. frameno = {}'.format(self.avgdur(dur*1000), self.avgfps(), self.framenumber)
+                self.framenumber+=1
+            except Exception as e:
+                print('update error: %s' % (e)) 
+                self.conn.close()  
 
 def remove_video():
     for f in models.Document.objects.all():
@@ -289,8 +311,11 @@ def remove_vehicle(self):
 def gen_stream(stream) :
     while True:
         _, frame = stream.get_frame()
-        yield(b'--frame\r\n' 
-              b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n') 
+        if frame is not None:
+            yield(b'--frame\r\n' 
+                  b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n') 
+        else :
+            break
 
 def gen_data(stream) :
     while True:
@@ -311,8 +336,8 @@ def playback(request):
         stream = VideoStream(playback = True, pid = pid, request = request)
         return StreamingHttpResponse(gen_stream(stream), content_type="multipart/x-mixed-replace;boundary=frame") 
         # return StreamingHttpResponse(gen_data(stream), content_type="text/event-stream") 
-    except: 
-        print("error")
+    except Exception as e:
+        print('remove_vehicle_history error: %s' % (e)) 
         pass
 
 @gzip.gzip_page
@@ -397,10 +422,10 @@ def get_captured_plate(request):
     plate_path = settings.MEDIA_ROOT + os.path.sep + vehicles.captured_frame.name
     
     image = cv2.imread(plate_path)
-    cv2.putText(image, "frame No. {}".format(vehicles.frame_no), (10, 20), font, 1, (0, 255, 0), 0, cv2.LINE_AA)
+    cv2.putText(image, "frame:{}".format(vehicles.frame_no), (10, 20), font, 0.6, (0, 0, 255), 0, cv2.LINE_AA)
     encode_image = cv2.imencode('.jpg', image)
     binary = base64.b64encode(encode_image[1]).decode('utf-8')
-
+ 
     
     return HttpResponse(binary)
     # return HttpResponse(json.dumps({'pid': plate_number}), content_type='application/json')
