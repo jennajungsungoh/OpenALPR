@@ -22,8 +22,7 @@ urlpatterns = [
     path('', views.index, name='index'),
 ]
 
-if settings.DEBUG: 
+if settings: 
     urlpatterns += static(
         settings.MEDIA_URL, 
-        document_root = settings.MEDIA_ROOT
-    ) 
+        document_root = settings.MEDIA_ROOT) 

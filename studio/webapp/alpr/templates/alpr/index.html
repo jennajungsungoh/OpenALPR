@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 {% load static %}
+{% load bootstrap_icons %}
 <html lang="en">
 
 <head>
@@ -122,26 +123,41 @@
         <input type="submit" value="Upload">
     </form>
     <div>&nbsp;</div>
-    <table class="mainTable" id="tbMovieInfo">
-        <tr>
-            <th>Video Name</th>
-            <th>Upload Date & Time</th>
-            <th>Action</th>
-        </tr>
-        {% for file in files %}
-        <tr>
-            <td>{{ file.filename }}</td>
-            <td>{{ file.dateTimeOfUpload }}</td>
-            <td style="width:300px">
-                <!-- $('#player').attr("src", "playback?pid=" + data.pid) -->
-                <div class="btnA btnPlay"><input type="hidden" value="{{ file.filename }}">Play</div>
-                <div class="btnA btnRemove"><input type="hidden" value="{{ file.id }}">Del Video</div>
-                <div class="btnA btnRemoveHistory"><input type="hidden" value="{{ file.filename }}">Del History
-                </div>
-            </td>
-        </tr>
-        {% endfor %}
-    </table>
+    <div class="dvBoard horiz">
+        <div>
+            <h4>Menu</h4>
+        </div>
+    </div>
+    <div class="dvBoard horiz">
+        <div>
+            <h4>Uploaded Video</h4>
+        </div>
+        <div>
+            <table class="mainTable" id="tbMovieInfo">
+                {% for file in files %}
+                <tr>
+                    <td style="text-align: left; padding:5px;">{{ file.filename }}</td>
+                    <!-- <td>{{ file.dateTimeOfUpload }}</td> -->
+                    <td>
+                        <!-- $('#player').attr("src", "playback?pid=" + data.pid) -->
+                        <div class="btnA btnPlay" title="Play!">
+                            <input type="hidden" value="{{ file.filename }}">
+                            {% bs_icon 'play-circle' %}
+                        </div>
+                        <div class="btnA btnRemove" title="Remove Playback">
+                            <input type="hidden" value="{{ file.id }}">
+                            {% bs_icon 'trash3' %}
+                        </div>
+                        <div class="btnA btnRemoveHistory" title="Remove History">
+                            <input type="hidden" value="{{ file.filename }}">
+                            {% bs_icon 'journal-minus' %}
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
     <div class="stop">stop</div>
     <table class="mainTable" id="tbInfo">
         <tr>
