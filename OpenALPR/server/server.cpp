@@ -231,6 +231,7 @@ DWORD WINAPI ProcessClient(LPVOID arg)
     unsigned short PlateStringLength;
     char PlateString[1024];
     char DBRecord[2048];
+    char logging_info[1024];
     TTcpConnectedPort* TcpConnectedPort = (TTcpConnectedPort*)arg;
     int Query_num = 0;
     int i;
@@ -335,12 +336,26 @@ DWORD WINAPI ProcessClient(LPVOID arg)
 
         if (PlateStringLength > sizeof(PlateString)) //plate stringdms 1024 
         {
+            WaitForSingleObject(ghMutex, INFINITE);
+            Query[Query_num][0] = 0;
+            Query[Query_num][1] = 0;
+            Query[Query_num][2] = 0;
+            Client_num--;
+            //std::cout << "Delate Query" << Query[1][0] << ", " << Query[2][0] << ", " << Query[3][0] << ", " << Query[4][0] << ", " << Query[5][0]  << "\n";
+            ReleaseMutex(ghMutex);
             printf("Plate string length  error\n");
             break;
         }
         if (ReadDataTcp(ssl, TcpConnectedPort, (unsigned char*)&PlateString,
             PlateStringLength) != PlateStringLength)
         {
+            WaitForSingleObject(ghMutex, INFINITE);
+            Query[Query_num][0] = 0;
+            Query[Query_num][1] = 0;
+            Query[Query_num][2] = 0;
+            Client_num--;
+            //std::cout << "Delate Query" << Query[1][0] << ", " << Query[2][0] << ", " << Query[3][0] << ", " << Query[4][0] << ", " << Query[5][0]  << "\n";
+            ReleaseMutex(ghMutex);
             printf("ReadDataTcp 2 error\n");
             break;
         }
@@ -348,9 +363,12 @@ DWORD WINAPI ProcessClient(LPVOID arg)
 
         /*Query incremental*/
         WaitForSingleObject(ghMutex, INFINITE);
+        
         Query[0][2]++; //Total Query
         Query[Query_num][2]++; // Client Query
-        Logging_Index(PlateString);
+        /*logging informaiton*/
+        sprintf_s(logging_info, 1024, " Port Number (%d)  requested plate (%s)  ", Query[Query_num][1], PlateString);
+        Logging_Index(logging_info);
         ReleaseMutex(ghMutex);
         //std::cout << "Total Query " << Query[0][2] << "    Port Number : " <<  Query[Query_num][1] << "   Number of QUERY : " << Query[Query_num][2] << "\n";
         /* Zero out the DBTs before using them. */
@@ -447,7 +465,7 @@ DWORD WINAPI Logging_info_perSec(LPVOID arg)
         {
             
             j = sprintf_s(test, 1024, "Total Query = %d", Query[0][2]);
-            //std::cout << "Total Query " << Query[0][2] << Client_num  <<"\n";
+            //std::cout << "Total Query " << Query[0][2] <<"   client number  : " << Client_num << "\n";
 
             Query[0][2] = 0;
             for (i = 1; i < MAXCLIENT; i++)
