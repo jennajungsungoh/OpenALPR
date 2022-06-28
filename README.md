@@ -35,3 +35,12 @@ http://127.0.0.1:8000/alpr/
   ID: admin
   PW: ahnlab
 ```
+
+## Execute Plate lookup server 
+```
+> cd OpenALPR
+> run setup.bat
+> cd x64/Release
+> run loaddb.exe
+> run server.exe
+```
