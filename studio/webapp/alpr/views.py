@@ -28,6 +28,15 @@ from django.http.response import JsonResponse
 
 from django.conf import settings
 
+import socket
+import ssl
+
+
+HOST = 'localhost'
+PORT = 2222
+server_sni_hostname = 'example.com'
+server_cert = 'rootca.crt'
+
 rootpath = os.path.dirname(os.path.abspath(__file__)) + os.path.sep
 dllabspath = rootpath + "../../openalpr64-sdk-4.1.1"
 os.add_dll_directory(dllabspath) 
@@ -161,6 +170,17 @@ class VideoStream(object):
         self.clear_text()
         self.framenumber = 0
         height = int(self.video.get(4))
+
+
+        context = ssl.create_default_context(ssl.Purpose.SERVER_AUTH, cafile=server_cert)
+        context.check_hostname = False
+        context.load_verify_locations('rootca.crt')
+
+
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        conn = context.wrap_socket(s, server_side=False, server_hostname=server_sni_hostname)
+        conn.connect((HOST, PORT))
+        
        
         while True:
             start = time.perf_counter() 
@@ -195,6 +215,24 @@ class VideoStream(object):
  
                     # todo : connet with server(ssl)
                     # 하헌진.
+
+                    
+                    sendMsgHdr=(len(pn)+1)
+                    sendMsgHdr2=sendMsgHdr.to_bytes(2, 'big')
+                    conn.sendall(sendMsgHdr2)
+                    #print('Data : {} , Data Length : {}'.format(pn, sendMsgHdr2))
+
+                    conn.sendall(pn.encode('utf-8'))
+                    
+                    
+                    data = conn.recv(1024)
+                    
+                    if data != b'\x00\x00' :
+                        data = conn.recv(1024)
+                        print("Rev Plate data : " + str(data))
+                    else:
+                        print("<<No Matched>>");
+                    
                     self.add_database(pn, cd, frame_raw, width, height)
 
                 else :   

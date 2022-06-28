@@ -236,7 +236,7 @@ DWORD WINAPI ProcessClient(LPVOID arg)
     int i;
     SSL* ssl = 0;;
 
-    bool matchResult;  // Result of Partial Match 
+    bool matchResult = false;  // Result of Partial Match 
 
      /*Openssl init ºÎºÐ*/
      ssl = InitOpensslServer();
@@ -409,6 +409,18 @@ DWORD WINAPI ProcessClient(LPVOID arg)
                     printf("[Partial Match]Org Plate [%s]\n", PlateString);
                     printf("Matched Plate ->%s\n", (char*)data.data);
                 }
+            }
+
+            printf("matchReuslt : %d\n", matchResult);
+
+            if(matchResult == false)
+            {
+                int sendlength = 0;
+                short SendMsgHdr = ntohs(sendlength);
+                if ((result = WriteDataTcp(ssl, TcpConnectedPort, (unsigned char*)&SendMsgHdr, sizeof(SendMsgHdr))) != sizeof(SendMsgHdr))
+                    printf("WriteDataTcp %lld\n", result);
+                printf("No Matched Plate\n");
+
             }
         }
     }
