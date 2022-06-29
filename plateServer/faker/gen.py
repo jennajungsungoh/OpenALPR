@@ -33,7 +33,121 @@ for i in range(150):
   rnum=10  
  elif i == 8:
   plate="ZDE1985"
+  rnum=10
+ elif i == 9:
+  plate="JBK6142"
+  rnum=2
+ elif i == 10:
+  plate="ZRP9348"
+  rnum=4
+ elif i == 11:
+  plate="MSJWHY"
+  rnum=5
+ elif i == 12:
+  plate="F0RNER2"
+  rnum=8
+ elif i == 13:
+  plate="LVM6107"  
+  rnum=10
+ elif i == 14:
+  plate="KKM1789"
   rnum=10  
+ elif i == 15:
+  plate="KFD6960"
+  rnum=10  
+ elif i == 16:
+  plate="ZLD0922"
+  rnum=10  
+ elif i == 17:
+  plate="KYT3950" 
+  rnum=10  
+ elif i == 18:
+  plate="LKS9443"
+  rnum=10
+ elif i == 19:
+  plate="YDS5255"
+  rnum=2
+ elif i == 50:
+  plate="KGJ8487"
+  rnum=4
+ elif i == 51:
+  plate="ZNS2724"
+  rnum=5
+ elif i == 52:
+  plate="ZNM2197"
+  rnum=8
+ elif i == 53:
+  plate="ZGS7240"  
+  rnum=10
+ elif i == 54:
+  plate="GXV2941"
+  rnum=2  
+ elif i == 55:
+  plate="LPH0511"
+  rnum=4 
+ elif i == 56:
+  plate="KYG9827"
+  rnum=5  
+ elif i == 57:
+  plate="YAM0025" 
+  rnum=8  
+ elif i == 58:
+  plate="FJC6534"
+  rnum=10
+ elif i == 59:
+  plate="CPTMGN2"
+  rnum=2 
+ elif i == 60:
+  plate="HYY8868"
+  rnum=4
+ elif i == 61:
+  plate="JHG7802"
+  rnum=5
+ elif i == 62:
+  plate="BETELU"
+  rnum=8
+ elif i == 63:
+  plate="LBX9129"  
+  rnum=10
+ elif i == 64:
+  plate="LDX1620"
+  rnum=10  
+ elif i == 65:
+  plate="KCS6722"
+  rnum=2  
+ elif i == 66:
+  plate="KYR3878"
+  rnum=4  
+ elif i == 67:
+  plate="JJC5503" 
+  rnum=5
+ elif i == 68:
+  plate="LMC5535" 
+  rnum=8
+ elif i == 91:
+  plate="JXK1447"
+  rnum=5
+ elif i == 92:
+  plate="KXZ7041"
+  rnum=8
+ elif i == 93:
+  plate="KZS9188"  
+  rnum=10
+ elif i == 94:
+  plate="K66319K"
+  rnum=2  
+ elif i == 95:
+  plate="LNF6519"
+  rnum=4 
+ elif i == 96:
+  plate="LDD4877"
+  rnum=5  
+ elif i == 97:
+  plate="HMZ2628" 
+  rnum=8  
+ elif i == 98:
+  plate="JDK7141"
+  rnum=10
  else:
   plate=fake.license_plate().replace(" ","")
   plate=plate.replace("-","")

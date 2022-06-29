@@ -3,6 +3,9 @@ studio/webapp/alpr/__pycache__/views.cpython-310.pyc
 studio/webapp/media/media/*
 studio/Lib/site-packages/certifi/__pycache__/*
 studio/Lib/site-packages/duo_universal/__pycache__/*
+<<<<<<< HEAD
 .vs/*
 OpenALPR/x64/Debug/opencv_world455d.dll
 OpenALPR/openalpr-opencv4/*
+=======
+>>>>>>> c4aed8bf8b464cb4588e930a7904744165892239

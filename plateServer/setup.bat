@@ -6,5 +6,3 @@ XCOPY /y db-18.1.40\libdb181.dll x64\Release\libdb181.dll*
 XCOPY /y db-18.1.40\libdb181.dll x64\Debug\libdb181.dll*
 XCOPY /y faker\datafile.txt x64\Release\datafile.txt*
 XCOPY /y faker\datafile.txt x64\Debug\datafile.txt*
-XCOPY /y RootCA\* x64\Release\*
-XCOPY /y RootCA\* x64\Debug\*
