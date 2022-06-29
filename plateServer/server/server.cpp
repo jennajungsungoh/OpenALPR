@@ -13,6 +13,7 @@
 //5 support multiple users using multi thread
 DWORD WINAPI ProcessClient(LPVOID arg);
 DWORD WINAPI Logging_info_perSec(LPVOID arg);
+DWORD WINAPI Configure_thread_process(LPVOID arg);
 HANDLE ghMutex;
 static int Query[6][3];//[Number of Client][0:logging disable or enable, 1: Port Number, 2: Quert Info]
 static int Client_num;
@@ -46,6 +47,9 @@ int main()
     HANDLE loggingThread;
     DWORD threadID;
 
+    HANDLE configThread;
+    DWORD configThreadID;
+
     int i;
 
     // load config
@@ -62,6 +66,15 @@ int main()
         MinThreshold = 80.0;    // default 80%     
     }
     //printf("MaxClientNum is %d & MinThreshold is %f\n", MaxClientNum, MinThreshold);
+
+    /*Start configure Thread*/
+    configThread = CreateThread(NULL, 0, Configure_thread_process, 0, 0, &threadID);
+    if (configThread == NULL)
+    {
+        printf("thread not created");
+    }
+
+
 
     /*Start Logging Thread*/
     loggingThread = CreateThread(NULL, 0, Logging_info_perSec, 0, 0, &threadID);
@@ -483,5 +496,43 @@ DWORD WINAPI Logging_info_perSec(LPVOID arg)
         }
         ReleaseMutex(ghMutex);
     }
+    return 0;
+}
+
+
+DWORD WINAPI Configure_thread_process(LPVOID arg)
+{
+    TTcpListenPort* TcpListenPortConfig;
+    TTcpConnectedPort* TcpConnectedPortConfig;
+    struct sockaddr_in cli_addr_config;
+    socklen_t          clilen_config;
+    SSL* ssl = 0;
+
+    //TCP 연결
+    std::cout << "Listening configure Port\n";
+    if ((TcpListenPortConfig = OpenTcpListenPort(3333)) == NULL)  // Open UDP Network port
+    {
+        std::cout << "Config OpenTcpListenPortFailed\n";
+        return(-1);
+    }
+
+    clilen_config = sizeof(cli_addr_config);
+
+    if ((TcpConnectedPortConfig = AcceptTcpConnection(TcpListenPortConfig, &cli_addr_config, &clilen_config)) == NULL)
+    {
+        printf("Config AcceptTcpConnection Failed\n");
+        return(-1);
+    }
+
+
+    /*Openssl init 부분*/
+    ssl = InitOpensslServer();
+    if (ssl == 0)
+    {
+        printf("Failed init openssl\n");
+        CLOSE_SOCKET(TcpConnectedPortConfig->ConnectedFd);
+        return 0;
+    }
+
     return 0;
 }
