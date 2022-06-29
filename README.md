@@ -1,5 +1,24 @@
 # OpenALPR (Team 2, 2022-Security Specialist)
 
+# Prerequisites
+Python 3.10+ (tested against 3.10)
+
+
+# Step 1
+Make python env
+```
+$ python -m venv team2 
+$ cd team2\Script
+$ activate // (for vs code)
+```
+# Step 2 
+Install requirements
+```
+$ cd OpenAlpr\studio
+$ pip install -r .\requirement.txt 
+```
+
+
 ## Python Environment
 ```
 ## Internal dns settting. https://nip.io/   (One time only)
