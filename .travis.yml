@@ -1,4 +1,3 @@
-os: Windows
 language: python
 python:
   - "3.10"
