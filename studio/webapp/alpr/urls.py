@@ -19,6 +19,8 @@ urlpatterns = [
     path('remove_vehicle_history', views.remove_vehicle_history, name='remove_vehicle_history'),
     path('get_captured_plate', views.get_captured_plate, name='get_captured_plate'),
     path('get_captured_vehicle', views.get_captured_vehicle, name='get_captured_vehicle'),
+
+    path('config', views.config, name='config'),
     
     path('', views.index, name='index'),
 ]

@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-y8#$fhl57+rtxbu-86#%$@rerrhaa@iy92n_9nqh6y_-)qguu%
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-IPADDRESS = '10.58.7.138'
+IPADDRESS = '10.58.2.111'
 PORTNUMBER = '8000'
 ALLOWED_HOSTS = ['*']
 
