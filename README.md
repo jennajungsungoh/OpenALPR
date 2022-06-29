@@ -8,7 +8,7 @@ Python 3.10+ (tested against 3.10)
 Make python env
 ```
 $ python -m venv team2 
-$ cd team2\Script
+$ cd team2/Script
 $ activate // (for vs code)
 ```
 # Step 2 
