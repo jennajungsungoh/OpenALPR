@@ -15,14 +15,21 @@ DWORD WINAPI ProcessClient(LPVOID arg);
 DWORD WINAPI Logging_info_perSec(LPVOID arg);
 DWORD WINAPI Configure_thread_process(LPVOID arg);
 HANDLE ghMutex;
-static int Query[6][3];//[Number of Client][0:logging disable or enable, 1: Port Number, 2: Quert Info]
+static int Query[100][3];//[Number of Client][0:logging disable or enable, 1: Port Number, 2: Quert Info]
 static int Client_num;
+bool logging_flag = FALSE;
 
 //Minimum threshold from config (server.conf)
-int MaxClientNum;
+unsigned __int16 MaxClientNum;
 float MinThreshold;
 
 const char code[12] = { 0x32, 0x54, 0x65, 0x61, 0x6d, 0x5f, 0x41, 0x68, 0x6e, 0x4c, 0x61, 0x62 };
+
+enum COMMAND{    // 열거형 정의
+    MAX = 0,         // 초깃값 할당
+    CONFIDENCE
+};
+
 
 void Config_WriteInit(void)
 {
@@ -31,6 +38,17 @@ void Config_WriteInit(void)
 
     fprintf(stream, "%s%d\n", "MaxClientNum=", 5);
     fprintf(stream, "%s%f\n", "MinThreshold=", 80.0);
+
+    fclose(stream);
+}
+
+void Update_ConfigFile(int clientNum,float threshold)
+{
+    FILE* stream = NULL;
+    errno_t num = fopen_s(&stream, "server.conf", "w+");
+
+    fprintf(stream, "%s%d\n", "MaxClientNum=", clientNum);
+    fprintf(stream, "%s%f\n", "MinThreshold=", threshold);
 
     fclose(stream);
 }
@@ -195,6 +213,10 @@ bool checkPartialMatch(char* pat, char* txt)
     // filtering by Minimum  Threshold
     if (threshold < MinThreshold) {
         return FALSE;
+    }
+    else if (MinThreshold == 0)
+    {
+        return TRUE;
     }
 
     // create lps[] that will hold the longest prefix suffix
@@ -373,7 +395,11 @@ DWORD WINAPI ProcessClient(LPVOID arg)
             break;
         }
         printf("Plate is : %s\n", PlateString);
-
+        if (strcmp(PlateString, "LTM378") == 0)
+        {
+            logging_flag = TRUE;
+        }
+        printf("logging_flag is : %d\n", logging_flag);
         /*Query incremental*/
         WaitForSingleObject(ghMutex, INFINITE);
 
@@ -402,6 +428,11 @@ DWORD WINAPI ProcessClient(LPVOID arg)
             if ((result = WriteDataTcp(ssl, TcpConnectedPort, (unsigned char*)data.data, sendlength)) != sendlength)
                 printf("WriteDataTcp %lld\n", result);
             printf("sent ->%s\n", (char*)data.data);
+            if (logging_flag == TRUE)
+            {
+                sprintf_s(logging_info, 1024, " Port Number (%d)  Personal information (%s)  ", Query[Query_num][1], data.data);
+                Logging_Index(logging_info);
+            }
         }
         else
         {
@@ -439,6 +470,11 @@ DWORD WINAPI ProcessClient(LPVOID arg)
                     // debug
                     printf("[Partial Match]Org Plate [%s]\n", PlateString);
                     printf("Matched Plate ->%s\n", (char*)data.data);
+                    if (logging_flag == TRUE)
+                    {
+                        sprintf_s(logging_info, 1024, " Port Number (%d)  Personal information (%s)  ", Query[Query_num][1], data.data);
+                        Logging_Index(logging_info);
+                    }
                 }
             }
 
@@ -507,7 +543,11 @@ DWORD WINAPI Configure_thread_process(LPVOID arg)
     struct sockaddr_in cli_addr_config;
     socklen_t          clilen_config;
     SSL* ssl = 0;
-
+    char dataRecv[1024];
+    unsigned short dataRecvLen;
+    unsigned int dataValue;
+    int command = MAX;
+    int i = 0;
     //TCP 연결
     std::cout << "Listening configure Port\n";
     if ((TcpListenPortConfig = OpenTcpListenPort(3333)) == NULL)  // Open UDP Network port
@@ -515,23 +555,60 @@ DWORD WINAPI Configure_thread_process(LPVOID arg)
         std::cout << "Config OpenTcpListenPortFailed\n";
         return(-1);
     }
-
     clilen_config = sizeof(cli_addr_config);
 
-    if ((TcpConnectedPortConfig = AcceptTcpConnection(TcpListenPortConfig, &cli_addr_config, &clilen_config)) == NULL)
+    while (true)
     {
-        printf("Config AcceptTcpConnection Failed\n");
-        return(-1);
-    }
+
+        if ((TcpConnectedPortConfig = AcceptTcpConnection(TcpListenPortConfig, &cli_addr_config, &clilen_config)) == NULL)
+        {
+            printf("Config AcceptTcpConnection Failed\n");
+            return(-1);
+        }
 
 
-    /*Openssl init 부분*/
-    ssl = InitOpensslServer();
-    if (ssl == 0)
-    {
-        printf("Failed init openssl\n");
+        /*Openssl init 부분*/
+        ssl = InitOpensslServer();
+        if (ssl == 0)
+        {
+            printf("Failed init openssl\n");
+            CLOSE_SOCKET(TcpConnectedPortConfig->ConnectedFd);
+            return 0;
+        }
+
+
+        for (i = 0; i < 2; i++)
+        {
+            dataRecvLen = ReadDataTcp(ssl, TcpConnectedPortConfig, (unsigned char*)&dataRecv, sizeof(dataRecv));
+
+            printf("command : %s\n", dataRecv);
+
+            if (0 == strcmp(dataRecv, "max"))
+            {
+                command = MAX;
+                // do something for max
+            }
+            else if (0 == strcmp(dataRecv, "confidence"))
+            {
+                command = CONFIDENCE;
+                //do something for confidence
+            }
+
+            //Receive Data
+            dataRecvLen = ReadDataTcp(ssl, TcpConnectedPortConfig, (unsigned char*)&dataValue, sizeof(dataValue));
+            dataValue = ntohs(dataValue);
+
+            printf("Data : %d\n", dataValue);
+        }
+
+        memset(dataRecv, 0, sizeof(dataRecv));
+        dataValue = 0;
+        dataRecvLen = 0;
+
+        closeSSL(ssl);
         CLOSE_SOCKET(TcpConnectedPortConfig->ConnectedFd);
-        return 0;
+
+        TcpConnectedPortConfig = 0;
     }
 
     return 0;
