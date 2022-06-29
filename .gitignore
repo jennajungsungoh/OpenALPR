@@ -4,4 +4,4 @@ studio/webapp/media/media/*
 .vscode/*
 OpenALPR/x64/Debug/opencv_world455d.dll
 OpenALPR/openalpr-opencv4/*
-
+studio/webapp/alpr/__pycache__/*

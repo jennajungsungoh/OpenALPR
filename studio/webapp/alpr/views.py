@@ -15,8 +15,7 @@ from . import models
 import threading
 import cv2
 import numpy
-from alprstream import AlprStream
-from openalpr import Alpr, VehicleClassifier
+from openalpr import Alpr
 
 import os
 import time
