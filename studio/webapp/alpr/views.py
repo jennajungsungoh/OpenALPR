@@ -345,7 +345,7 @@ def webcam(request):
     try:
         stream = VideoStream(playback = False)
         return StreamingHttpResponse(gen_stream(stream), content_type="multipart/x-mixed-replace;boundary=frame") 
-    except: 
+    except:  
         print("error")
         pass 
 
@@ -485,3 +485,8 @@ def upload(request):
         document.save()
     return redirect('/alpr') 
  
+
+def config(request):
+    # todo action..
+    print("do something...")
+    return redirect('/alpr') 
