@@ -1,6 +1,9 @@
 language: python
 python:
   - "3.9"
+language: node_js
+node_js:
+  - "14"  
 install: "pip install -r requirements.txt"
 script:
   - sonar-scanner
