@@ -4,6 +4,9 @@ python:
 language: node_js
 node_js:
   - "14"
+language: java
+jdk:
+  - openjdk11
 install: "pip install -r requirements.txt"
 script:
   - sonar-scanner
