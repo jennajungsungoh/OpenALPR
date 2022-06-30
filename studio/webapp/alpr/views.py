@@ -32,9 +32,11 @@ from django.conf import settings
 import socket
 import ssl
 import json
+import time
 
 HOST = 'localhost'
 PORT = 2222
+PORT_CONFIG = 3333
 server_sni_hostname = 'example.com'
 server_cert = 'rootca.crt'
 
@@ -48,7 +50,6 @@ print(dllabspath)
 stream = None
 
 font = cv2.FONT_HERSHEY_COMPLEX_SMALL
-
 
 class Round(Func): 
     function = 'ROUND'
@@ -65,18 +66,30 @@ class VideoStream(object):
         self._pid=pid
         self.recognized_plate_numbers = []
 
+        if self._pid != 'live':
+            if pid.lower().endswith(('.png', '.jpg', '.jpeg')):
+                self.filemode = "image"
+            elif pid.lower().endswith(('.avi', '.AVI')):
+                self.filemode = "playback"
+            else:
+                self.filemode = "none"
+        else:
+            self.filemode = "camera"
+
+
         if request is not None:
             self._session_key = request.session.session_key
             self.user = request.user
         else : 
             self._session_key = 0
         
-        
         self.remove_vehicle_by_session()
 
         if playback: 
             self.TEST_VIDEO_FILE_PATH = settings.MEDIA_ROOT + settings.MEDIA_URL + self.user.username + '/' + self._pid 
-            self.video = cv2.VideoCapture(self.TEST_VIDEO_FILE_PATH)
+            
+            if self.filemode == "playback":
+                self.video = cv2.VideoCapture(self.TEST_VIDEO_FILE_PATH)
         else:
             self.video = cv2.VideoCapture(0)
  
@@ -86,12 +99,20 @@ class VideoStream(object):
 
         
         self.alpr = Alpr(ALPR_COUNTRY, OPENALPR_CONFIG, RUNTIME_DATA_PATH)
+        self.alpr.set_detect_region(False)
  
-        (self.grabbed, self.frame) = self.video.read()
+        if self.filemode == "image":
+            self.frame = cv2.imread(self.TEST_VIDEO_FILE_PATH )
+        else:
+            (self.grabbed, self.frame) = self.video.read()
         threading.Thread(target=self.update, args=()).start()
- 
+        # th.start()
+        # th.join()
+
     def __del__(self):
-        self.video.release()
+        if self.video:
+            self.video.release()
+            print("video released")
         print("destroy.............")
 
     def get_frame(self, frame=None):
@@ -106,6 +127,8 @@ class VideoStream(object):
             print("close connection")
             # connection close
             self.conn.close() 
+            self.__del__()
+            
             return None, None
 
         return image, jpeg.tobytes()
@@ -233,40 +256,90 @@ class VideoStream(object):
                 self.add_database(pn, cd, frame_raw, width, height, vehicle_data_json)
             else :
                 self.add_database(pn, cd, frame_raw, width, height)
+    
+    def is_runnable(self, filename, initial=False):
+        try :
+            status = models.Status.objects.get(user=self.user, filename=filename)
+            if initial:
+                models.Status.objects.filter(user=self.user, filename=filename).update(status=True)
+                return True
+
+        except models.Status.DoesNotExist:
+            # insert new status to Y
+            status = models.Status(
+                user = self.user,  
+                filename = filename, 
+                status = True)
+            status.save()
+            return True
+
+        return status.status
 
     def update(self): 
         self.clear_text()
         self.framenumber = 0
-        height = int(self.video.get(4))
+        self.is_runnable(self._pid, initial=True)
+
+        if self.filemode == "image":
+            height, w, c = self.frame.shape
+        else:
+            height = int(self.video.get(4))
+
 
         context = ssl.create_default_context(ssl.Purpose.SERVER_AUTH, cafile=server_cert)
         context.check_hostname = False
         context.load_verify_locations('rootca.crt')
 
 
-        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.conn = context.wrap_socket(s, server_side=False, server_hostname=server_sni_hostname)
+        self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.conn = context.wrap_socket(self.socket, server_side=False, server_hostname=server_sni_hostname)
         self.conn.connect((HOST, PORT))
         print("conn...")
-       
+        prev_frame = self.frame
+
         while True:
             try:
+                if not self.is_runnable(self._pid):
+                    print("stop...")
+                    self.conn.close()  
+                    self.__del__()
+                    break
+                
                 start = time.perf_counter() 
-                (self.grabbed, self.frame) = self.video.read()
+                if self.filemode != "image":
+                    (self.grabbed, self.frame) = self.video.read()
+                
 
                 if self.frame is not None:
                     clear_frame = self.frame.copy()
                 else:
+                    self.conn.close()
                     break
                 
                 cv2.rectangle(self.frame, (self.x1, self.y1), (self.x2, self.y2), (0, 255, 0), 2)
                 cv2.putText(self.frame, self.f_text, (self.x1, self.y1-30), font, 1, (0, 255, 0), 0, cv2.LINE_AA)
                 cv2.putText(self.frame, self.fps_text, (0, height-10), font, 0.7, (0, 255, 0), 0, cv2.LINE_AA)
 
+                frame_diff= cv2.absdiff(clear_frame, prev_frame)
+                motion=0
+                gray= cv2.cvtColor(frame_diff, cv2.COLOR_BGR2GRAY)
+                blur= cv2.GaussianBlur(gray, (5,5), 0)   
+                thresh= cv2.threshold(blur, 20,255, cv2.THRESH_BINARY)[1]
+                dilate = cv2.dilate(thresh,None, iterations=4 )
+                (contours, _)= cv2.findContours(dilate.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
+                x=0
+                y=0
+                w=0
+                h=0
+                for cnt in contours:
+                    (x,y,w,h) = cv2.boundingRect(cnt)
+            
+                prev_frame=clear_frame
+                # print("{} {} {} {}".format(x,y,w,h))
+
                 frame_raw, frame_byte = self.get_frame(clear_frame)
-                results = self.alpr.recognize_array(frame_byte)
-    
-    
+                results = self.alpr.recognize_array(frame_byte, x, y, w, h)
     
                 if results['data_type'] == 'alpr_results': 
                     if results['results']:
@@ -281,7 +354,7 @@ class VideoStream(object):
 
                         width = results['img_width']
                         height = results['img_height']
-                        print('Plate: {} ({:.2f}%) {}x{}- x:{}-{} y:{}-{}'.format(pn, cd, width, height, self.x1, self.x2, self.y1, self.y2))
+                        # print('Plate: {} ({:.2f}%) {}x{}- x:{}-{} y:{}-{}'.format(pn, cd, width, height, self.x1, self.x2, self.y1, self.y2))
                         
                         self.query_and_save(pn, cd, width, height, frame_raw)
 
@@ -293,10 +366,22 @@ class VideoStream(object):
             
                 # print (dur*1000)             
                 self.fps_text = 'avg time per frame {:.5f} ms. fps {:.2f}. frameno = {}'.format(self.avgdur(dur*1000), self.avgfps(), self.framenumber)
+                
+                if self.filemode == "image":
+                    cv2.rectangle(self.frame, (self.x1, self.y1), (self.x2, self.y2), (0, 255, 0), 2)
+                    cv2.putText(self.frame, self.f_text, (self.x1, self.y1-30), font, 1, (0, 255, 0), 0, cv2.LINE_AA)
+                    cv2.putText(self.frame, self.fps_text, (0, height-10), font, 0.7, (0, 255, 0), 0, cv2.LINE_AA)
+                    self.conn.close()
+                    self.__del__()
+                    break
+
                 self.framenumber+=1
+
             except Exception as e:
                 print('update error: %s' % (e)) 
-                self.conn.close()  
+                self.conn.close() 
+                self.__del__()
+        print("end of update")
 
 def remove_video():
     for f in models.Document.objects.all():
@@ -336,30 +421,35 @@ def playback(request):
         return StreamingHttpResponse(gen_stream(stream), content_type="multipart/x-mixed-replace;boundary=frame") 
         # return StreamingHttpResponse(gen_data(stream), content_type="text/event-stream") 
     except Exception as e:
-        print('remove_vehicle_history error: %s' % (e)) 
+        print('playback error: %s' % (e)) 
         pass
 
 @gzip.gzip_page
 @login_required(login_url='/login/login')
 def webcam(request):
     try:
-        stream = VideoStream(playback = False)
+        pid = request.GET['pid']
+        stream = VideoStream(playback = False, pid = pid, request = request)
         return StreamingHttpResponse(gen_stream(stream), content_type="multipart/x-mixed-replace;boundary=frame") 
     except:  
-        print("error")
+        print("error") 
         pass 
 
 @login_required(login_url='/login/login')
-def get_vehicle(request): 
+def get_vehicle(request):  
     pid = request.GET['pid']
+    user = request.user 
     session_key = request.session.session_key
 
-    # vehicles = models.Vehicle.objects.filter(filename=pid).order_by('-detected_at')
-    vehicles = models.Vehicle.objects.filter(filename=pid, session_key=session_key).values('detected_at__hour', 'detected_at__minute', 'detected_at__second', 'plate_number').annotate(
-            confidence_avg=Round(Avg('confidence'))).order_by(
-                '-detected_at__hour', '-detected_at__minute', '-detected_at__second', '-confidence_avg').annotate(
-                    time=Concat('detected_at__hour', Value(':'), 'detected_at__minute', Value(':'), 'detected_at__second', output_field=CharField())
-                ).values('time','plate_number','confidence_avg')
+    vehicles = models.Vehicle.objects.filter(filename=pid, user=user).order_by('-detected_at').annotate(
+        plate_number_c=Concat('plate_number', Value('   ('), Round('confidence'), Value('%)'), output_field=CharField()),
+        time=Concat('detected_at__hour', Value(':'), 'detected_at__minute', Value(':'), 'detected_at__second', output_field=CharField())
+        ).values('time','plate_number', 'plate_number_c', 'status')
+    # vehicles = models.Vehicle.objects.filter(filename=pid, user=user).values('detected_at__hour', 'detected_at__minute', 'detected_at__second', 'plate_number').annotate(
+    #         confidence_avg=Round(Avg('confidence'))).order_by(
+    #             '-detected_at__hour', '-detected_at__minute', '-detected_at__second', '-confidence_avg').annotate(
+    #                 time=Concat('detected_at__hour', Value(':'), 'detected_at__minute', Value(':'), 'detected_at__second', output_field=CharField())
+    #             ).values('time','plate_number','confidence_avg')
     
     # vehicles_list = serializers.serialize('json', vehicles,  fields=('plate_number',))
     # return HttpResponse(vehicles, content_type="text/json-comment-filtered")
@@ -416,6 +506,9 @@ def get_captured_plate(request):
     plate_number = request.POST['plate_number']
     filename = request.POST['filename']
     user = request.user
+
+    # print(plate_number)
+    # print(filename)
 
     vehicles = models.Vehicle.objects.filter(plate_number=plate_number, filename=filename, user=user).order_by('-confidence').first()
     plate_path = settings.MEDIA_ROOT + os.path.sep + vehicles.captured_frame.name
@@ -482,11 +575,55 @@ def upload(request):
             user = user,
             uploadedFile = uploadedFile
         )
-        document.save()
+        document.save() 
     return redirect('/alpr') 
- 
+
+@login_required(login_url='/login/login')
+def stop(request):
+    user = request.user
+    if request.method == "GET":
+        pid = request.GET['pid']
+        models.Status.objects.filter(user=user, filename=pid).update(status=False)
+    return HttpResponse("OK") 
+
+
+def send_configuration(max_user, confidence_level):
+    context = ssl.create_default_context(ssl.Purpose.SERVER_AUTH, cafile=server_cert)
+    context.check_hostname = False
+    context.load_verify_locations('rootca.crt')
+
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    conn_config = context.wrap_socket(s, server_side=False, server_hostname=server_sni_hostname)
+    conn_config.connect((HOST, PORT_CONFIG))
+    print("conn_config connect...")
+    
+    #send configure value 
+
+    conn_config.sendall("max".encode('utf-8')) #send Command
+    
+    value=int(max_user) # need to input value 
+    value=value.to_bytes(2, 'big')
+    conn_config.sendall(value)
+    
+    print("max : {}".format(value))
+
+    conn_config.sendall("confidence".encode('utf-8')) #send Command
+    value=int(confidence_level) # need to input value 
+    value=value.to_bytes(2, 'big')
+    conn_config.sendall(value)
+    print("confidence : {}".format(value))
+
+    #diconnect to server port 3333 
+    conn_config.close()
+
 
 def config(request):
-    # todo action..
-    print("do something...")
-    return redirect('/alpr') 
+    if request.method == "GET":
+        return render(request, 'alpr/config.html')
+    
+    if request.method == "POST":
+        max_user = request.POST["max_user"] 
+        confidence_level = request.POST["confidence_level"]
+
+        send_configuration(max_user,confidence_level)
+        return redirect('/alpr')  

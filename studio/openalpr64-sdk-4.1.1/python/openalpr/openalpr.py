@@ -239,7 +239,7 @@ class Alpr:
 
         return self._is_loaded_func(self.alpr_pointer)
 
-    def recognize_array(self, byte_array):
+    def recognize_array(self, byte_array,x,y,w,h):
         """Recognize an image passed in as a byte array.
 
         :param byte_array: This should be a string (Python 2) or a bytes object (Python 3)
@@ -248,7 +248,7 @@ class Alpr:
         if type(byte_array) != bytes:
             raise TypeError("Expected a byte array (string in Python 2, bytes in Python 3)")
         pb = ctypes.cast(byte_array, ctypes.POINTER(ctypes.c_ubyte))
-        roi = AlprCRegionOfInterest(0, 0, 1000000, 1000000)
+        roi = AlprCRegionOfInterest(x, y, w, h)
         ptr = self._recognize_array_func(self.alpr_pointer, pb, len(byte_array), roi)
         json_data = ctypes.cast(ptr, ctypes.c_char_p).value
         json_data = _convert_from_charp(json_data)

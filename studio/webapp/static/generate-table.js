@@ -23,8 +23,8 @@
 
         $.each(data, function (index, value) {
             var tableRow = $('<tr>').addClass(index % 2 === 0 ? 'even' : 'odd');
-            var first_col = '<td><div class="ight-arrow btnHidden"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-right-fill" viewBox="0 0 16 16"><path d="m12.14 8.753-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z"/></svg></div></td>'
-            tableRow.append(first_col);
+            // var first_col = '<td><div class="ight-arrow btnHidden"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-right-fill" viewBox="0 0 16 16"><path d="m12.14 8.753-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z"/></svg></div></td>'
+            // tableRow.append(first_col);
 
             $.each(value, function (key, val) {
                 // if (index == 0 && $.inArray(key, hidecolumns) <= -1) {
@@ -33,22 +33,32 @@
                 //         tblHeaderRow.append(theaddata);
                 //     }
                 // }
+
+
                 if ($.inArray(key, hidecolumns) <= -1) {
                     var tbodydata;
+                    var fill;
                     switch (key) {
-                        case 'plate_number':
-                            tbodydata = $('<td>').addClass('rowA').text(val);
+                        case 'status':
+                            if (val == "Owner Wanted" || val == "Unpaid Fines - Tow" || val == "Stolen") {
+                                fill = 'red'
+                            } else if (val == "No Wants / Warrants") {
+                                fill = 'green'
+                            } else {
+                                fill = 'black'
+                            }
+                            tbodydata = '<td><div><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="' +
+                                fill + '" class="bi bi-circle-fill" viewBox="0 0 16 16"><circle cx="8" cy="8" r="8"/></svg>  </div></td>';
                             break;
-                        case 'confidence_avg':
-                            tbodydata = $('<td>').addClass('rowA').text(val);
-                            break;
-                        case 'time':
-                            tbodydata = $('<td>').addClass('rowA').text(val);
+                        default:
+                            if (key == 'plate_number') {
+                                tbodydata = $('<td>').addClass('rowA').addClass('btnHidden').text(val);
+                            } else {
+                                tbodydata = $('<td>').addClass('rowA').text(val);
+                            }
+
                             break;
                     }
-
-
-                    var tbodydata = $('<td>').addClass('rowA').text(val);
                     tableRow.append(tbodydata);
                 }
             });

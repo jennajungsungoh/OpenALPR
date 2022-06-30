@@ -85,11 +85,10 @@ table {
     background: rgb(219, 219, 219);
 }
 
-/* 
-.rowA:hover {
-    cursor: pointer;
-    background: rgb(219, 219, 219);
-} */
+
+.rowA {
+    text-align: left;
+}
 
 .dvBoard {
     background-color: white;
@@ -180,8 +179,19 @@ table {
 
 .btnHidden {
     visibility: hidden;
+    display: none;
 }
 
 .btnVisible {
     visibility: visible;
+}
+
+#btnLiveMode {
+    display: inline-block;
+    cursor: pointer;
+}
+
+#btnLiveOffMode {
+    display: inline-block;
+    cursor: pointer;
 }

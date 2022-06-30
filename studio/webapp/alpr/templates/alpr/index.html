@@ -44,7 +44,7 @@
                 success: function (response) {
                     // console.log(response[0].plate_number)
                     $('#information').children('tbody').remove();
-                    $("#information").generateTable(response, ['plate', 'count']);
+                    $("#information").generateTable(response, null);
                     $('#information').children('tbody').children('tr:first').click();
                     $('#information').children('tbody').children('tr:first').addClass("A-highlight");
 
@@ -116,9 +116,9 @@
 
         $(document).ready(function () {
             $("#information").on("click", 'tr', function (event) {
-                var pn = $(this).children("td").eq(1).text();
-                var cd = $(this).children("td").eq(2).text();
-                var time = $(this).children("td").eq(3).text();
+                var pn = $(this).children("td").eq(0).text();
+                var cd;
+                var time;
 
                 $("#information").children('tbody').children('tr:gt(0)').removeClass("A-highlight");
                 $("#information").children('tbody').children('tr:eq(0)').removeClass("A-highlight");
@@ -148,6 +148,21 @@
                 })
             });
 
+
+            $("#btnLiveMode").on("click", function (event) {
+                g_filename = 'live'
+                req_remove_vehicle_info('live');
+                $('#player').attr("src", "webcam?pid=" + 'live');
+
+                stop_polling();
+                setTimeout(function () { start_polling('live'); }, 3000);
+            });
+
+            $("#btnLiveOffMode").on("click", function (event) {
+                $('#player').attr("src", "stop?pid=" + g_filename);
+                stop_polling();
+            });
+
             $("#btnInprogress").on("click", function (event) {
                 stop_polling();
             });
@@ -168,6 +183,13 @@
 
                 stop_polling();
                 setTimeout(function () { start_polling(pid); }, 3000);
+            });
+
+            $(".btnStop").on("click", function (event) {
+                var pid = $(this).children('input').val();
+                g_filename = pid;
+                $('#player').attr("src", "stop?pid=" + pid);
+                stop_polling();
             });
 
             $(".btnRemove").on("click", function (event) {
@@ -191,6 +213,10 @@
         <div class="dvBoard horiz">
             <div>
                 <h4>Menu</h4>
+                <div id="btnLiveMode"><button type="button" class="btn btn-success">Turn on live CAM</button></div>
+                <div id="btnLiveOffMode"><button type="button" class="btn btn-secondary">Turn off live
+                        CAM</button>
+                </div>
             </div>
         </div>
         <div class="dvBoard horiz">
@@ -208,6 +234,10 @@
                             <div class="btnA btnPlay" title="Play!">
                                 <input type="hidden" value="{{ file.filename }}">
                                 {% bs_icon 'play-circle' %}
+                            </div>
+                            <div class="btnA btnStop" title="Sop!">
+                                <input type="hidden" value="{{ file.filename }}">
+                                {% bs_icon 'stop-circle' %}
                             </div>
                             <div class="btnA btnRemove" title="Remove Playback">
                                 <input type="hidden" value="{{ file.id }}">
