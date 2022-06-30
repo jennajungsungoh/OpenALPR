@@ -18,6 +18,12 @@ $ cd OpenAlpr\studio
 $ pip install -r .\requirement.txt 
 ```
 
+# Step 3
+Install openAlpr for python
+```
+
+```
+
 
 ## Python Environment
 ```
