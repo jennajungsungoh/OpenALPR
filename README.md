@@ -21,8 +21,36 @@ $ pip install -r .\requirement.txt
 # Step 3
 Install openAlpr for python
 ```
-
+$ cd .\openalpr64-sdk-4.1.1\python\
+$ python .\setup.py install
 ```
+
+# Step 4
+Migiration DB
+```
+$ cd studio\webapp
+$ python .\manage.py makemigrations
+(select option 1 and input any text after that.)
+
+$ python .\manage.py migrate   
+```
+
+# Setup 5
+Setting Django server
+```
+$ cd webapp
+change IPADDRESS = '10.58.7.138' to correct ipaddress in settings.py
+```
+
+## Start Server
+```
+$ cd stduio/webapp/
+$ python .\manage.py runsslserver 0.0.0.0:8000 --certificate django.crt --key django.key
+```
+
+
+
+
 
 
 ## Python Environment
