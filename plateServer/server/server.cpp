@@ -25,8 +25,9 @@ float MinThreshold;
 
 const char code[12] = { 0x32, 0x54, 0x65, 0x61, 0x6d, 0x5f, 0x41, 0x68, 0x6e, 0x4c, 0x61, 0x62 };
 
-enum COMMAND{    // 열거형 정의
-    MAX = 0,         // 초깃값 할당
+enum COMMAND {    // 열거형 정의
+    NONE = 0,     // 초기값 할당
+    MAX,         
     CONFIDENCE
 };
 
@@ -36,10 +37,18 @@ void Config_WriteInit(void)
     FILE* stream = NULL;
     errno_t num = fopen_s(&stream, "server.conf", "w");
 
-    fprintf(stream, "%s%d\n", "MaxClientNum=", 5);
-    fprintf(stream, "%s%f\n", "MinThreshold=", 80.0);
+    if (num == 0)
+    {
+        fprintf(stream, "%s%d\n", "MaxClientNum=", 5);
+        fprintf(stream, "%s%f\n", "MinThreshold=", 80.0);
 
-    fclose(stream);
+        fclose(stream);
+    }
+    else
+    { 
+        printf("Open failed");
+        return;
+    }
 }
 
 void Update_ConfigFile(int clientNum,float threshold)
@@ -47,10 +56,18 @@ void Update_ConfigFile(int clientNum,float threshold)
     FILE* stream = NULL;
     errno_t num = fopen_s(&stream, "server.conf", "w+");
 
-    fprintf(stream, "%s%d\n", "MaxClientNum=", clientNum);
-    fprintf(stream, "%s%f\n", "MinThreshold=", threshold);
+    if (num == 0)
+    {
+        fprintf(stream, "%s%d\n", "MaxClientNum=", clientNum);
+        fprintf(stream, "%s%f\n", "MinThreshold=", threshold);
 
-    fclose(stream);
+        fclose(stream);
+    }
+    else
+    {
+        printf("Open failed");
+        return;
+    }
 }
 
 int main()
@@ -546,8 +563,11 @@ DWORD WINAPI Configure_thread_process(LPVOID arg)
     char dataRecv[1024];
     unsigned short dataRecvLen;
     unsigned int dataValue;
-    int command = MAX;
+    int command = NONE;
     int i = 0;
+    int maxUser = 0;
+    float confidenceLevel = 0;
+
     //TCP 연결
     std::cout << "Listening configure Port\n";
     if ((TcpListenPortConfig = OpenTcpListenPort(3333)) == NULL)  // Open UDP Network port
@@ -599,6 +619,24 @@ DWORD WINAPI Configure_thread_process(LPVOID arg)
             dataValue = ntohs(dataValue);
 
             printf("Data : %d\n", dataValue);
+
+            // Receive configuration values
+            if (command == MAX)
+            {
+                maxUser = dataValue;
+            }
+            else if (command == CONFIDENCE)
+            {
+                confidenceLevel = (float)dataValue;
+            }
+        }
+
+        //update configuration variables and config file.
+        if ((maxUser != MaxClientNum) || (confidenceLevel != MinThreshold))
+        {
+            MaxClientNum = maxUser;
+            MinThreshold = confidenceLevel;
+            Update_ConfigFile(maxUser, confidenceLevel);
         }
 
         memset(dataRecv, 0, sizeof(dataRecv));
