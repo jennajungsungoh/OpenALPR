@@ -42,7 +42,7 @@ $ cd webapp
 change IPADDRESS = '10.58.7.138' to correct ipaddress in settings.py
 ```
 
-## Start Server
+# Start Server
 ```
 $ cd stduio/webapp/
 $ python .\manage.py runsslserver 0.0.0.0:8000 --certificate django.crt --key django.key
@@ -51,7 +51,7 @@ $ python .\manage.py runsslserver 0.0.0.0:8000 --certificate django.crt --key dj
 
 
 
-
+(ignored).....
 
 ## Python Environment
 ```
