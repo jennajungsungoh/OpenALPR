@@ -300,6 +300,7 @@ class VideoStream(object):
 
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.conn = context.wrap_socket(self.socket, server_side=False, server_hostname=server_sni_hostname)
+        print("try to connect to {}".format(self._host))
         self.conn.connect((self._host, PORT))
         print("conn...")
         prev_frame = self.frame
@@ -493,9 +494,13 @@ def index(request):
         {'mode':mode, 'pid':pid}) 
     else: 
         lookup_server = request.GET.get('value')
+
         if lookup_server:
-            print(lookup_server)
             request.session['value'] = lookup_server
+        else :
+            if request.session.get('value'):
+                request.session.pop('value')
+
         documents = models.Document.objects.all()
         return render(request, 'alpr/index.html', context = {
         "files": documents})
