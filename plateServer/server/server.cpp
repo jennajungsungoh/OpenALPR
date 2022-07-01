@@ -616,9 +616,11 @@ DWORD WINAPI Configure_thread_process(LPVOID arg)
 
             //Receive Data
             dataRecvLen = ReadDataTcp(ssl, TcpConnectedPortConfig, (unsigned char*)&dataValue, sizeof(dataValue));
+            printf("1Data : %d\n", dataValue);
+            dataValue = dataValue >> 8;
             dataValue = ntohs(dataValue);
 
-            printf("Data : %d\n", dataValue);
+            printf("2Data : %d\n", dataValue);
 
             // Receive configuration values
             if (command == MAX)

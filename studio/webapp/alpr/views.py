@@ -602,14 +602,16 @@ def send_configuration(max_user, confidence_level):
     conn_config.sendall("max".encode('utf-8')) #send Command
     
     value=int(max_user) # need to input value 
-    value=value.to_bytes(2, 'big')
+    value=value.to_bytes(3, 'big')
     conn_config.sendall(value)
     
     print("max : {}".format(value))
 
+    time.sleep(0.5)
+
     conn_config.sendall("confidence".encode('utf-8')) #send Command
     value=int(confidence_level) # need to input value 
-    value=value.to_bytes(2, 'big')
+    value=value.to_bytes(3, 'big')
     conn_config.sendall(value)
     print("confidence : {}".format(value))
 
