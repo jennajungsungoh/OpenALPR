@@ -1,8 +1,8 @@
 ﻿  loaddb.cpp
-C:\Users\admin\source\repos\OpenALPR2\plateServer\loaddb\loaddb.cpp(60,16): warning C4477: 'printf' : 서식 문자열 '%d'에 'int' 형식의 인수가 필요하지만 variadic 인수 2의 형식이 'size_t'입니다.
-C:\Users\admin\source\repos\OpenALPR2\plateServer\loaddb\loaddb.cpp(60,16): message : 서식 문자열에서 '%zd'을(를) 사용하는 것이 좋습니다.
+D:\03_Study\1_Security\1_CMU\1_Studio_Project\1_src\git_orig\OpenALPR\plateServer\loaddb\loaddb.cpp(60,16): warning C4477: 'printf' : 서식 문자열 '%d'에 'int' 형식의 인수가 필요하지만 variadic 인수 2의 형식이 'size_t'입니다.
+D:\03_Study\1_Security\1_CMU\1_Studio_Project\1_src\git_orig\OpenALPR\plateServer\loaddb\loaddb.cpp(60,16): message : 서식 문자열에서 '%zd'을(를) 사용하는 것이 좋습니다.
   코드를 생성하고 있습니다.
   Previous IPDB not found, fall back to full compilation.
   All 172 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
   코드를 생성했습니다.
-  loaddb.vcxproj -> C:\Users\admin\Source\Repos\OpenALPR2\plateServer\x64\Release\loaddb.exe
+  loaddb.vcxproj -> D:\03_Study\1_Security\1_CMU\1_Studio_Project\1_src\git_orig\OpenALPR\plateServer\x64\Release\loaddb.exe

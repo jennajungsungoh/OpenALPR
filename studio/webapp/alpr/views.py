@@ -69,6 +69,9 @@ class VideoStream(object):
         self._pid=pid
         self.recognized_plate_numbers = []
 
+        self._host = request.session.get('value', 'localhost')
+        print(self._host)
+
         if self._pid != 'live':
             if pid.lower().endswith(('.png', '.jpg', '.jpeg')):
                 self.filemode = "image"
@@ -428,7 +431,38 @@ def gen_data(stream) :
         # yield(b'--fn\r\n'
         #       b'Content-Type: application/json\r\n\r\n' + json.dumps(data).encode('utf-8') + b'\r\n\r\n') 
         yield 'data: %s\n\n' % fn
+
+def send_configuration(max_user, confidence_level):
+    print("enters")
+    context = ssl.create_default_context(ssl.Purpose.SERVER_AUTH, cafile=server_cert)
+    context.check_hostname = False
+    context.load_verify_locations('rootca.crt')
+
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    conn_config = context.wrap_socket(s, server_side=False, server_hostname=server_sni_hostname)
+    conn_config.connect((HOST, PORT_CONFIG))
+    print("conn_config connect...")
+    
+    #send configure value 
+
+    conn_config.sendall("max".encode('utf-8')) #send Command
+    
+    value=int(max_user) # need to input value
+    value=value.to_bytes(2, 'big')
+    conn_config.sendall(value)
+    print("max : {}".format(value))
+
+    conn_config.sendall("confidence".encode('utf-8')) #send Command
+    value=int(confidence_level) # need to input value 
+    value=value.to_bytes(2, 'big')
+    conn_config.sendall(value)
+    print("confidence : {}".format(value))
+
+    #diconnect to server port 3333 
+    conn_config.close()
  
+
+
 # Create your views here.'  
 @gzip.gzip_page   
 @login_required(login_url='/login/login')
@@ -503,6 +537,10 @@ def index(request):
         return render(request, 'alpr/index.html',  
         {'mode':mode, 'pid':pid}) 
     else: 
+        lookup_server = request.GET.get('value')
+        if lookup_server:
+            print(lookup_server)
+            request.session['value'] = lookup_server
         documents = models.Document.objects.all()
         return render(request, 'alpr/index.html', context = {
         "files": documents})
@@ -604,37 +642,6 @@ def stop(request):
         models.Status.objects.filter(user=user, filename=pid).update(status=False)
     return HttpResponse("OK") 
 
-
-def send_configuration(max_user, confidence_level):
-    context = ssl.create_default_context(ssl.Purpose.SERVER_AUTH, cafile=server_cert)
-    context.check_hostname = False
-    context.load_verify_locations('rootca.crt')
-
-    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    conn_config = context.wrap_socket(s, server_side=False, server_hostname=server_sni_hostname)
-    conn_config.connect((HOST, PORT_CONFIG))
-    print("conn_config connect...")
-    
-    #send configure value 
-
-    conn_config.sendall("max".encode('utf-8')) #send Command
-    
-    value=int(max_user) # need to input value 
-    value=value.to_bytes(2, 'big')
-    conn_config.sendall(value)
-    
-    print("max : {}".format(value))
-
-    conn_config.sendall("confidence".encode('utf-8')) #send Command
-    value=int(confidence_level) # need to input value 
-    value=value.to_bytes(2, 'big')
-    conn_config.sendall(value)
-    print("confidence : {}".format(value))
-
-    #diconnect to server port 3333 
-    conn_config.close()
-
-
 def config(request):
     if request.method == "GET":
         return render(request, 'alpr/config.html')
@@ -643,5 +650,7 @@ def config(request):
         max_user = request.POST["max_user"] 
         confidence_level = request.POST["confidence_level"]
 
+
+        print("{} {}".format(max_user, confidence_level))
         send_configuration(max_user,confidence_level)
         return redirect('/alpr')  
