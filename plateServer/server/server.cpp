@@ -386,7 +386,7 @@ DWORD WINAPI ProcessClient(LPVOID arg)
 
         printf("PlateStringLength : %d\n", PlateStringLength);
 
-        if (PlateStringLength > sizeof(PlateString)) //plate stringdms 1024 
+        if ((PlateStringLength > sizeof(PlateString))|| (PlateStringLength == 0)) //plate stringdms 1024 
         {
             WaitForSingleObject(ghMutex, INFINITE);
             Query[Query_num][0] = 0;
