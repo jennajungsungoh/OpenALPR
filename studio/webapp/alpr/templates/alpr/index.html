@@ -87,7 +87,7 @@
                     s_status = blankForNull(result.status);
 
                     $("#data_plate_number").text(blankForNull(result.plate_number_likely));
-                    $("#data_status").text(s_status);
+                    $("#data_status").text(s_status).removeClass("Astatus").removeClass("AbtnGreen").removeClass("AbtnRed");
                     $("#data_exp").text(blankForNull(result.regist_exp));
                     $("#data_owner").text(blankForNull(result.owner));
                     $("#data_birth").text(blankForNull(result.owner_birth));
@@ -100,12 +100,19 @@
                     if (s_status == "") {
                         $("#alert_area").removeClass('AlertRed');
                         $("#alert_area").removeClass('AlertGreen');
+
                     } else if (s_status == "No Wants / Warrants") {
                         $("#alert_area").removeClass('AlertRed');
                         $("#alert_area").addClass('AlertGreen');
+                        $("#data_status").text(s_status).addClass("Astatus").addClass("AbtnGreen");
+                        $("#data_status").parents('tr').addClass("ALeftAlign");
+
+
                     } else {
                         $("#alert_area").removeClass('AlertGreen');
                         $("#alert_area").addClass('AlertRed');
+                        $("#data_status").text(s_status).addClass("Astatus").addClass("AbtnRed");
+                        $("#data_status").parents('tr').addClass("ALeftAlign");
                     }
                 },
                 error: function (request, status, error) {

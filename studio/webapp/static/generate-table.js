@@ -43,7 +43,7 @@
                             if (val == "Owner Wanted" || val == "Unpaid Fines - Tow" || val == "Stolen") {
                                 fill = 'red'
                             } else if (val == "No Wants / Warrants") {
-                                fill = 'green'
+                                fill = '#11ff00'
                             } else {
                                 fill = 'black'
                             }
