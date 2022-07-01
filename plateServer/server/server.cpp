@@ -51,7 +51,7 @@ void Config_WriteInit(void)
     }
 }
 
-void Update_ConfigFile(int clientNum,float threshold)
+void Update_ConfigFile(unsigned short clientNum,float threshold)
 {
     FILE* stream = NULL;
     errno_t num = fopen_s(&stream, "server.conf", "w+");
@@ -565,7 +565,7 @@ DWORD WINAPI Configure_thread_process(LPVOID arg)
     unsigned int dataValue;
     int command = NONE;
     int i = 0;
-    int maxUser = 0;
+    unsigned short maxUser = 0;
     float confidenceLevel = 0;
 
     //TCP ¿¬°á
