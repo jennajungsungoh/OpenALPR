@@ -170,6 +170,10 @@
                 stop_polling();
             });
 
+            $("#btnSetting").on("click", function (event) {
+                window.location.href = 'config';
+            });
+
             $("#btnInprogress").on("click", function (event) {
                 stop_polling();
             });
@@ -223,6 +227,8 @@
                 <div id="btnLiveMode"><button type="button" class="btn btn-success">Turn on live CAM</button></div>
                 <div id="btnLiveOffMode"><button type="button" class="btn btn-secondary">Turn off live
                         CAM</button>
+                </div>
+                <div id="btnSetting"><button type="button" class="btn btn-warning">Settings</button>
                 </div>
             </div>
         </div>

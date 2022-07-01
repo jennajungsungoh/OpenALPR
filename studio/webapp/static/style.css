@@ -197,12 +197,14 @@ table {
 
 #btnLiveMode {
     display: inline-block;
-    cursor: pointer;
 }
 
 #btnLiveOffMode {
     display: inline-block;
-    cursor: pointer;
+}
+
+#btnSetting {
+    display: inline-block;
 }
 
 .Astatus {

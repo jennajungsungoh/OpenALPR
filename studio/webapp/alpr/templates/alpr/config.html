@@ -26,10 +26,13 @@
                 <td><input type="number" min='10' max='100' name="confidence_level"></td>
             </tr>
             <tr>
+                <td>DB lookup server : </td>
+                <td><input type="text" value="{{ config.lookup_server }}" name="lookup_server"></td>
+            </tr>
+            <tr>
                 <td colspan="2" style="text-align: right;"><input type="submit" value="Update"></td>
             </tr>
         </table>
         {% csrf_token %}
-
     </form>
 </body>

@@ -66,6 +66,13 @@ class VideoStream(object):
         self._pid=pid
         self.recognized_plate_numbers = []
 
+        self._host = request.session.get('value', 'anonymous')
+        if (self._host == 'anonymous'):
+            config = models.Config.objects.all()[:1].get()
+            print("Lookup server: {}".format(config.lookup_server))
+            self._host = config.lookup_server
+
+
         if self._pid != 'live':
             if pid.lower().endswith(('.png', '.jpg', '.jpeg')):
                 self.filemode = "image"
@@ -293,7 +300,7 @@ class VideoStream(object):
 
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.conn = context.wrap_socket(self.socket, server_side=False, server_hostname=server_sni_hostname)
-        self.conn.connect((HOST, PORT))
+        self.conn.connect((self._host, PORT))
         print("conn...")
         prev_frame = self.frame
 
@@ -410,7 +417,7 @@ def gen_data(stream) :
         # yield(b'--fn\r\n'
         #       b'Content-Type: application/json\r\n\r\n' + json.dumps(data).encode('utf-8') + b'\r\n\r\n') 
         yield 'data: %s\n\n' % fn
- 
+
 # Create your views here.'  
 @gzip.gzip_page   
 @login_required(login_url='/login/login')
@@ -485,6 +492,10 @@ def index(request):
         return render(request, 'alpr/index.html',  
         {'mode':mode, 'pid':pid}) 
     else: 
+        lookup_server = request.GET.get('value')
+        if lookup_server:
+            print(lookup_server)
+            request.session['value'] = lookup_server
         documents = models.Document.objects.all()
         return render(request, 'alpr/index.html', context = {
         "files": documents})
@@ -556,14 +567,6 @@ def remove_vehicle_history(request):
     return redirect('/alpr') 
 
 @login_required(login_url='/login/login')
-def upload_view(request):
-    documents = models.Document.objects.all()
-  
-    return render(request, "alpr/upload.html", context = {
-        "files": documents
-    })  
-
-@login_required(login_url='/login/login')
 def upload(request):
     if request.method == "POST":
         # Fetching the form data
@@ -621,11 +624,22 @@ def send_configuration(max_user, confidence_level):
 
 def config(request):
     if request.method == "GET":
-        return render(request, 'alpr/config.html')
+        config = models.Config.objects.get()
+        print(config.lookup_server)
+        return render(request, "alpr/config.html", context = {
+            "config": config
+        })  
     
     if request.method == "POST":
         max_user = request.POST["max_user"] 
         confidence_level = request.POST["confidence_level"]
+        lookup_server = request.POST["lookup_server"]
+        
 
+        models.Config.objects.all().delete()
+        config = models.Config(lookup_server = lookup_server)
+        config.save()
+
+        print("{} {}".format(max_user, confidence_level))
         send_configuration(max_user,confidence_level)
         return redirect('/alpr')  
