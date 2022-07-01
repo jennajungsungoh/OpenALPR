@@ -38,14 +38,20 @@ $ python .\manage.py migrate
 # Setup 5
 Setting Django server
 ```
-$ cd webapp
-change IPADDRESS = '10.58.7.138' to correct ipaddress in settings.py
+add {{ALPR IP ADDRESS}} ahnlab2.lge.com to C:\Windows\System32\drivers\etc\hosts file  
+if my computer is alpr webserver and  my ip address is 10.58.7.138, change host file like below. 
+#hosts file
+10.58.7.138 ahnlab2.lge.com
 ```
+
+# Setup 6
+Register cerficication to your browser
+
 
 # Start Server
 ```
 $ cd stduio/webapp/
-$ python .\manage.py runsslserver 0.0.0.0:8000 --certificate django.crt --key django.key
+$ python .\manage.py runsslserver 0.0.0.0:8000 --certificate ahnlab2.com.crt --key ahnlab2.com.key
 ```
 
 
