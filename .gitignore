@@ -15,6 +15,9 @@ studio/webapp/login/migrations/
 studio/webapp/duo_universal_auth/__pycache__/
 studio/webapp/duo_universal_auth/migrations/
 
+studio/webapp/webapp/__pycache__/
+studio/webapp/webapp/migrations/
+
 studio/openalpr64-sdk-4.1.1/python/build/
 studio/openalpr64-sdk-4.1.1/python/dist/
 studio/openalpr64-sdk-4.1.1/python/openalpr.egg-info/
