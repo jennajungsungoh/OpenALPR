@@ -10,6 +10,9 @@ def get_upload_path(instance, filename):
 def get_upload_tmp_path(instance, filename):
     return 'media/{0}/{1}/{2}'.format(instance.user.username, instance.filename.rsplit('.')[0], filename)
 
+class Config(models.Model):
+    lookup_server = models.CharField(max_length=256, null=False)
+
 class Status(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     filename = models.CharField(max_length=256, null=False)
