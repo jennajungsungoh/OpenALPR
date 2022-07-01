@@ -1,4 +1,3 @@
-studio/webapp/db.sqlite3
 studio/webapp/media/media/*
 studio/webapp/alpr/migrations/*
 .vs/*
