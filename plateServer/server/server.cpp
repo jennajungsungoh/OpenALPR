@@ -28,7 +28,8 @@ const char code[12] = { 0x32, 0x54, 0x65, 0x61, 0x6d, 0x5f, 0x41, 0x68, 0x6e, 0x
 enum COMMAND {    // 열거형 정의
     NONE = 0,     // 초기값 할당
     MAX,         
-    CONFIDENCE
+    CONFIDENCE,
+    SHUTDOWN
 };
 
 
@@ -613,14 +614,19 @@ DWORD WINAPI Configure_thread_process(LPVOID arg)
                 command = CONFIDENCE;
                 //do something for confidence
             }
+            else if (0 == strcmp(dataRecv, "shutdown"))
+            {
+
+                command = SHUTDOWN;
+               
+            }
 
             //Receive Data
             dataRecvLen = ReadDataTcp(ssl, TcpConnectedPortConfig, (unsigned char*)&dataValue, sizeof(dataValue));
-            printf("1Data : %d\n", dataValue);
             dataValue = dataValue >> 8;
             dataValue = ntohs(dataValue);
 
-            printf("2Data : %d\n", dataValue);
+            printf("Data : %d\n", dataValue);
 
             // Receive configuration values
             if (command == MAX)
@@ -630,6 +636,11 @@ DWORD WINAPI Configure_thread_process(LPVOID arg)
             else if (command == CONFIDENCE)
             {
                 confidenceLevel = (float)dataValue;
+            }
+            else if (command == SHUTDOWN)
+            {
+                printf("Shutdown Server!\n");
+                exit(-1);
             }
         }
 

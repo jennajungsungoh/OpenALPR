@@ -576,7 +576,29 @@ def remove_vehicle_history(request):
 def send_command():
     # todo
     print("send command to server")
+    context = ssl.create_default_context(ssl.Purpose.SERVER_AUTH, cafile=server_cert)
+    context.check_hostname = False
+    context.load_verify_locations('rootca.crt')
 
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    conn_config = context.wrap_socket(s, server_side=False, server_hostname=server_sni_hostname)
+    conn_config.connect((HOST, PORT_CONFIG))
+    print("conn_command connect...")
+    
+    time.sleep(0.5)
+    
+    conn_config.sendall("shutdown".encode('utf-8')) #send Command
+    
+    value=int(0x00) # need to input value 
+    value=value.to_bytes(3, 'big')
+    conn_config.sendall(value)
+    
+    print("shutdown : {}".format(value))
+
+    
+    #diconnect to server port 3333 
+    conn_config.close()
+    
 
 @login_required(login_url='/login/login')
 def upload(request):
