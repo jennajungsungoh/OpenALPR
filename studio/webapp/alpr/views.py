@@ -5,6 +5,7 @@ from django.shortcuts import redirect
 from django.core.files.base import ContentFile
 from django.contrib.auth.decorators import login_required
 
+from PIL import Image, JpegImagePlugin
 
 from django.views.decorators import gzip
 from django.core import serializers
@@ -34,6 +35,7 @@ import ssl
 import json
 import time
 
+appname = 'Ahnlab'
 HOST = 'localhost'
 PORT = 2222
 PORT_CONFIG = 3333
@@ -571,6 +573,11 @@ def remove_vehicle_history(request):
         print('remove_vehicle_history error: %s' % (e)) 
     return redirect('/alpr') 
 
+def send_command():
+    # todo
+    print("send command to server")
+
+
 @login_required(login_url='/login/login')
 def upload(request):
     if request.method == "POST":
@@ -584,6 +591,17 @@ def upload(request):
             uploadedFile = uploadedFile
         )
         document.save() 
+
+        try:
+            video_path = settings.MEDIA_ROOT + '/..' + document.uploadedFile.url
+            pic = Image.open(video_path)
+            comment = pic.app['COM'].decode('ascii')
+            print("{}---".format(int(comment)))
+        except:
+            print("exception..")
+            # request.session['error'] = True
+            send_command()
+            pass 
     return redirect('/alpr') 
 
 @login_required(login_url='/login/login')
