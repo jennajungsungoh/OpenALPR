@@ -573,6 +573,11 @@ def remove_vehicle_history(request):
         print('remove_vehicle_history error: %s' % (e)) 
     return redirect('/alpr') 
 
+def send_command():
+    # todo
+    print("send command to server")
+
+
 @login_required(login_url='/login/login')
 def upload(request):
     if request.method == "POST":
@@ -591,12 +596,12 @@ def upload(request):
             video_path = settings.MEDIA_ROOT + '/..' + document.uploadedFile.url
             pic = Image.open(video_path)
             comment = pic.app['COM'].decode('ascii')
-            if (comment.strip('\x00') == appname.strip()):
-                print("welcome")
-            else:
-                print("not bad")
+            print("{}---".format(int(comment)))
         except:
-            pass
+            print("exception..")
+            # request.session['error'] = True
+            send_command()
+            pass 
     return redirect('/alpr') 
 
 @login_required(login_url='/login/login')
