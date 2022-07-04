@@ -6,15 +6,9 @@ from django.urls import reverse_lazy
 from .forms import UserForm, PasswordResetForm
 #from duo_universal_auth.middleware import
 from django.core.mail.message import EmailMessage
+from django.contrib.auth.decorators import login_required
 
-def send_email(request):
-    subject = "message"
-    to = ["id@gmail.com"]
-    from_email = "id@gmail.com"
-    message = "message test"
-    EmailMessage(subject=subject, body=message, to=to, from_email=from_email).send()
-
-
+@login_required(login_url='/login/login')
 def signup(request):
     if request.method == "POST":
         form = UserForm(request.POST)
@@ -26,7 +20,7 @@ def signup(request):
             # login(request, user)  # 로그인
             return redirect('/')
     else:
-        form = UserForm()
+        form = UserForm() 
     return render(request, 'login/signup.html', {'form': form})
 
 class PasswordResetView(auth_views.PasswordResetView):

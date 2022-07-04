@@ -20,17 +20,20 @@
             <tr>
                 <td>Max User : </td>
                 <td><input type="number" min='1' name="max_user"></td>
+                <td>user > 0</td>
             </tr>
             <tr>
                 <td>Confidence Level : </td>
-                <td><input type="number" min='10' max='100' name="confidence_level"></td>
+                <td><input style="width:150px" type="number" min='10' max='100' name="confidence_level"></td>
+                <td>10~100</td>
             </tr>
             <tr>
                 <td>DB lookup server : </td>
                 <td><input type="text" value="{{ config.lookup_server }}" name="lookup_server"></td>
+                <td></td>
             </tr>
             <tr>
-                <td colspan="2" style="text-align: right;"><input type="submit" value="Update"></td>
+                <td colspan="3" style="text-align: right;"><input type="submit" value="Update"></td>
             </tr>
         </table>
         {% csrf_token %}

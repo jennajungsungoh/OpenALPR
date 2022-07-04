@@ -218,3 +218,7 @@ table {
 .ALeftAlign {
     text-align: left;
 }
+
+#player {
+    max-width: 650px;
+}

@@ -35,7 +35,7 @@ import ssl
 import json
 import time
 
-appname = 'Ahnlab'
+app_name = 'Ahnlab'
 HOST = 'localhost'
 PORT = 2222
 PORT_CONFIG = 3333
@@ -168,7 +168,7 @@ class VideoStream(object):
         return self._avgfps
 
     def remove_vehicle_by_session(self): 
-        models.Vehicle.objects.filter(filename=self._pid, session_key=self._session_key).delete()
+        models.Vehicle.objects.filter(filename=self._pid, user=self.user).delete()
  
 
     def add_database(self, pn, cd, frame_raw, w, h, vehicle_info = None): 
@@ -503,7 +503,7 @@ def index(request):
             if request.session.get('value'):
                 request.session.pop('value')
 
-        documents = models.Document.objects.all()
+        documents = models.Document.objects.filter(user=request.user)
         return render(request, 'alpr/index.html', context = {
         "files": documents})
           
@@ -617,12 +617,14 @@ def upload(request):
         try:
             video_path = settings.MEDIA_ROOT + '/..' + document.uploadedFile.url
             pic = Image.open(video_path)
+            width, height = pic.size
+            if (width*height <= 1):
+                request.session['error'] = True
             comment = pic.app['COM'].decode('ascii')
-            print("{}---".format(int(comment)))
-        except:
-            print("exception..")
-            # request.session['error'] = True
-            send_command()
+            if (comment.strip('\x00') == app_name): send_command()
+            
+        except Exception as e:
+            print('exception: %s' % (e)) 
             pass 
     return redirect('/alpr') 
 
