@@ -5,6 +5,7 @@ from django.shortcuts import redirect
 from django.core.files.base import ContentFile
 from django.contrib.auth.decorators import login_required
 
+from PIL import Image, JpegImagePlugin
 
 from django.views.decorators import gzip
 from django.core import serializers
@@ -34,6 +35,7 @@ import ssl
 import json
 import time
 
+appname = 'Ahnlab'
 HOST = 'localhost'
 PORT = 2222
 PORT_CONFIG = 3333
@@ -584,6 +586,17 @@ def upload(request):
             uploadedFile = uploadedFile
         )
         document.save() 
+
+        try:
+            video_path = settings.MEDIA_ROOT + '/..' + document.uploadedFile.url
+            pic = Image.open(video_path)
+            comment = pic.app['COM'].decode('ascii')
+            if (comment.strip('\x00') == appname.strip()):
+                print("welcome")
+            else:
+                print("not bad")
+        except:
+            pass
     return redirect('/alpr') 
 
 @login_required(login_url='/login/login')
