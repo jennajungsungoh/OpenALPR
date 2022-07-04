@@ -1,0 +1,9 @@
+Change values of Configuration file (server.conf)
+
+1. Open server.config
+
+2. Change values the Max Client User and Minimum Threshold of Partial Matching.
+   - MaxClientNum=0
+   - MinThreshold=0.000000
+   
+3. Execute server.exe
