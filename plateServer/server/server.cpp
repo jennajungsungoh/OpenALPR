@@ -302,6 +302,8 @@ DWORD WINAPI ProcessClient(LPVOID arg)
 
     /*DB ºÎºÐ. */
 
+
+
   /* Initialize the structure. This
    * database is not opened in an environment,
    * so the environment pointer is NULL. */
@@ -412,12 +414,14 @@ DWORD WINAPI ProcessClient(LPVOID arg)
             break;
         }
         printf("Plate is : %s\n", PlateString);
-        if (strcmp(PlateString, "LTM378") == 0)
+
+
+        if (_stricmp(PlateString, test) == 0)
         {
             logging_flag = TRUE;
         }
-        printf("logging_flag is : %d\n", logging_flag);
-        /*Query incremental*/
+        
+              /*Query incremental*/
         WaitForSingleObject(ghMutex, INFINITE);
 
         Query[0][2]++; //Total Query
