@@ -25,4 +25,7 @@ studio/openalpr64-sdk-4.1.1/python/openalpr.egg-info/
 studio/webapp/db.sqlite3
 
 plateServer/.vs/
-/plateServer/x64
+plateServer/x64/
+plateServer/loaddb/x64/
+plateServer/server/x64/
+
