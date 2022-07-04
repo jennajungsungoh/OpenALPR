@@ -1,0 +1,11 @@
+1. Step 1 : Open the command prompt.(cmd.exe)
+
+2. Step 2 : Go to the directory where the decryptPlateDB.exe and libdb181.dll files are stored.
+
+3. Step 3 : Copy licenseplate.db to same directory.
+
+4. Step 4 : Excute decryptPlateDB.exe with Password (to encrypt Berkely DB)
+   ex) decryptPlateDB.exe passwd db_file
+     => D:\> decryptPlateDB.exe 2Team_AhnLab licenseplate.db
+
+5. Step 5 : The DB file is decrypted and saved as a decrypt.txt file.
