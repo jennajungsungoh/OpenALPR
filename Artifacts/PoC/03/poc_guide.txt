@@ -1,0 +1,44 @@
+POC3.
+
+1. Check the email password information from server and copy to poc.
+
+EMAIL_HOST = 'smtp.gmail.com'
+# gmail과의 통신하는 포트
+EMAIL_PORT = '587'
+# 발신할 이메일
+# EMAIL_HOST_USER = '구글아이디@gmail.com'
+EMAIL_HOST_USER = 'anyone98@gmail.com'#get_secret("EMAIL_HOST_USER")
+# 발신할 메일의 비밀번호
+# EMAIL_HOST_PASSWORD = '구글비밀번호'
+EMAIL_HOST_PASSWORD = 'xrjpafueiotsxcur'#get_secret("EMAIL_HOST_PASSWORD")
+# TLS 보안 방법
+EMAIL_USE_TLS = True
+# 사이트와 관련한 자동응답을 받을 이메일 주소
+DEFAULT_FROM_EMAIL = 'ALPR System'
+
+2. execute email django server
+django need to be installed.
+But we can use main solution project virtual environment.
+POC is only make for the localhost. so you can check the email in the same pc for the poc.
+
+python manage.py runserver in email/ folder.
+
+3. browse http://127.0.0.1:8000/ in chrome.
+    you can see the email form.
+
+4. you can modify and send email to the officers or anyone you want to get the information.
+    You can use it to send spam mail.
+    and you can also use it to induce to phshinng site to get password.(then you can use the default url in the mssage)
+    You may change the message like below.
+
+    Congratulations!
+    You're receiving this email because you won the event from ALPR System.
+    Please go to the following page and login more detail:
+    http://127.0.0.1:8000/login/wfioncwnncwncnlqlwweiroijiwj/deiwjodwe/
+
+    The ALPR System team
+
+5. the officer can get the email with link and if he clicked.
+
+6. Then the browser go to the phshing site, and if the office write id and password,the password is stolen by attacker.
+   This POC simply show the UserID and Password your write to prove your password is exposed.

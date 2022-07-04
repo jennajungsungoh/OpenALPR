@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container my-3">
+    <form method="post" action="{% url 'login:login' %}">
+        {% csrf_token %}
+        {% include "form_errors.html" %}
+        <h3> {{ post.username }} password is stolen. </h3>
+        <div class="mb-3">
+            <label for="username">UserID</label>
+            <input type="text" class="form-control" name="username" id="username"
+                   value="{{ post.username }}">
+        </div>
+        <div class="mb-3">
+            <label for="password">Password</label>
+            <input type="text" class="form-control" name="password" id="password"
+                   value="{{ post.password }}">
+        </div>
+    </form>
+</div>
+
+{% endblock %}

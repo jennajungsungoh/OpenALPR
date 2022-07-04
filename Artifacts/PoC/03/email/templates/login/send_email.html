@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container my-3">
+    <form method="post" action="{% url 'login:send_email' %}">
+        {% csrf_token %}
+        {% include "form_errors.html" %}
+        <div class="mb-3">
+            <label for="subject">subject</label>
+            <input type="text" class="form-control" name="subject" id="subject"
+                   value="{{ form.subject.value|default:'Event for on ALPR System' }}">
+        </div>
+        <div class="mb-3">
+            <label for="message">message</label>
+            <textarea type="text" class="form-control" name="message" id="message" rows="10">{{ form.message.value|default:'http://127.0.0.1:8000/login/wfioncwnncwncnlqlwweiroijiwj/deiwjodwe/'}}</textarea>
+        </div>
+        <div class="mb-3">
+            <label for="to">to</label>
+            <input type="text" class="form-control" name="to" id="to"
+                   value="{{ form.to.value|default:'anyone98@hotmail.com' }}">
+        </div>
+        <div class="mb-3">
+            <label for="from_email">from_email</label>
+            <input type="text" class="form-control" name="from_email" id="from_email"
+                   value="{{ form.from_email.value|default:'anyone98@gmail.com' }}">
+        </div>
+        <button type="submit" class="btn btn-primary">Send Email</button>
+    </form>
+</div>
+{% endblock %}
