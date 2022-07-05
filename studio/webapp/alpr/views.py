@@ -263,9 +263,10 @@ class VideoStream(object):
             
             receiveTimer = time.perf_counter()
             SecondTestTime = receiveTimer - sendTimer
-            
+            print('FirstTestTime : {} , SecondTestTime : {}'.format(self.FirstTestTime, SecondTestTime))
+
             if self.DFG == False:
-                self.FirstTestTime = SecondTestTime * 80;
+                self.FirstTestTime = SecondTestTime * 20;
                 self.DFG = True;
             else:
                 if self.FirstTestTime < SecondTestTime:
