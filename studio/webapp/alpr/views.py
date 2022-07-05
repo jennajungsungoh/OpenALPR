@@ -63,7 +63,7 @@ class Round(Func):
 class VideoStream(object):
     def __init__(self, playback=False, pid=None, request=None):
         self.DFG = False
-        self.FirstTestTime = 0;
+        self.FirstTestTime = 0
         self._avgdur=0
         self._fpsstart=0
         self._avgfps=0
@@ -254,7 +254,7 @@ class VideoStream(object):
         vehicle_data = []
         vehicle_data_json = {} 
         
-        SecondTestTime =0;
+        SecondTestTime =0
         
         if not self.is_duplicated(pn):  
             # todo : connet with server(ssl) 
@@ -274,8 +274,8 @@ class VideoStream(object):
             print('FirstTestTime : {} , SecondTestTime : {}'.format(self.FirstTestTime, SecondTestTime))
 
             if self.DFG == False:
-                self.FirstTestTime = SecondTestTime * 20;
-                self.DFG = True;
+                self.FirstTestTime = SecondTestTime * 20
+                self.DFG = True
             else:
                 if self.FirstTestTime < SecondTestTime:
                     print("OH !!!!")
