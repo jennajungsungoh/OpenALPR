@@ -23,6 +23,7 @@ import time
 import random
 import shutil 
 import base64
+import sys
 
 import json
 from django.http.response import JsonResponse
@@ -61,6 +62,8 @@ class Round(Func):
 
 class VideoStream(object):
     def __init__(self, playback=False, pid=None, request=None):
+        self.DFG = False
+        self.FirstTestTime = 0;
         self._avgdur=0
         self._fpsstart=0
         self._avgfps=0
@@ -242,17 +245,32 @@ class VideoStream(object):
     def query_and_save(self, pn, cd, width, height, frame_raw): 
         vehicle_data = []
         vehicle_data_json = {} 
-
+        
+        SecondTestTime =0;
+        
         if not self.is_duplicated(pn):  
             # todo : connet with server(ssl) 
             sendMsgHdr=(len(pn)+1)
             sendMsgHdr2=sendMsgHdr.to_bytes(2, 'big')
             self.conn.sendall(sendMsgHdr2) 
+            
+            sendTimer = time.perf_counter()
             #print('Data : {} , Data Length : {}'.format(pn, sendMsgHdr2))
 
             self.conn.sendall(pn.encode('utf-8')) 
             
             data = self.conn.recv(1024)
+            
+            receiveTimer = time.perf_counter()
+            SecondTestTime = receiveTimer - sendTimer
+            
+            if self.DFG == False:
+                self.FirstTestTime = SecondTestTime * 80;
+                self.DFG = True;
+            else:
+                if self.FirstTestTime < SecondTestTime:
+                    print("OH !!!!")
+                    sys.exit(0)
             
             if data != b'\x00\x00' :
                 data = self.conn.recv(1024)
