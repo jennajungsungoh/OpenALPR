@@ -63,7 +63,7 @@ class Round(Func):
 class VideoStream(object):
     def __init__(self, playback=False, pid=None, request=None):
         self.DFG = False
-        self.FirstTestTime = 0;
+        self.FirstTestTime = 0
         self._avgdur=0
         self._fpsstart=0
         self._avgfps=0
@@ -72,10 +72,18 @@ class VideoStream(object):
         self.recognized_plate_numbers = []
 
         self._host = request.session.get('value', 'anonymous')
+
+        
         if (self._host == 'anonymous'):
-            config = models.Config.objects.all()[:1].get()
-            print("Lookup server: {}".format(config.lookup_server))
-            self._host = config.lookup_server
+            try :
+                config = models.Config.objects.all()[:1].get()
+                print("Lookup server: {}".format(config.lookup_server))
+                self._host = config.lookup_server
+            except models.Config.DoesNotExist:
+                config = models.Config(lookup_server = HOST)
+                config.save()
+                self._host = HOST
+                pass
 
 
         if self._pid != 'live':
@@ -83,7 +91,7 @@ class VideoStream(object):
                 self.filemode = "image"
             elif pid.lower().endswith(('.avi', '.AVI')):
                 self.filemode = "playback"
-            else:
+            else: 
                 self.filemode = "none"
         else:
             self.filemode = "camera"
@@ -246,7 +254,7 @@ class VideoStream(object):
         vehicle_data = []
         vehicle_data_json = {} 
         
-        SecondTestTime =0;
+        SecondTestTime =0
         
         if not self.is_duplicated(pn):  
             # todo : connet with server(ssl) 
@@ -263,10 +271,11 @@ class VideoStream(object):
             
             receiveTimer = time.perf_counter()
             SecondTestTime = receiveTimer - sendTimer
-            
+            print('FirstTestTime : {} , SecondTestTime : {}'.format(self.FirstTestTime, SecondTestTime))
+
             if self.DFG == False:
-                self.FirstTestTime = SecondTestTime * 80;
-                self.DFG = True;
+                self.FirstTestTime = SecondTestTime * 20
+                self.DFG = True
             else:
                 if self.FirstTestTime < SecondTestTime:
                     print("OH !!!!")
@@ -592,7 +601,7 @@ def remove_vehicle_history(request):
     return redirect('/alpr') 
 
 def send_command():
-    # todo
+    host = get_lookupserver()
     print("send command to server")
     context = ssl.create_default_context(ssl.Purpose.SERVER_AUTH, cafile=server_cert)
     context.check_hostname = False
@@ -600,7 +609,7 @@ def send_command():
 
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     conn_config = context.wrap_socket(s, server_side=False, server_hostname=server_sni_hostname)
-    conn_config.connect((HOST, PORT_CONFIG))
+    conn_config.connect((host, PORT_CONFIG))
     print("conn_command connect...")
     
     time.sleep(0.5)
@@ -616,7 +625,19 @@ def send_command():
     
     #diconnect to server port 3333 
     conn_config.close()
+
+def get_lookupserver():
+    try :
+        config = models.Config.objects.all()[:1].get()
+        return config.lookup_server
+    except models.Config.DoesNotExist:
+        config = models.Config(lookup_server = HOST)
+        config.save()
+        pass
     
+    return HOST
+     
+
 
 @login_required(login_url='/login/login')
 def upload(request):
@@ -656,13 +677,14 @@ def stop(request):
 
 
 def send_configuration(max_user, confidence_level):
+    host = get_lookupserver()
     context = ssl.create_default_context(ssl.Purpose.SERVER_AUTH, cafile=server_cert)
     context.check_hostname = False
     context.load_verify_locations('rootca.crt')
 
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     conn_config = context.wrap_socket(s, server_side=False, server_hostname=server_sni_hostname)
-    conn_config.connect((HOST, PORT_CONFIG))
+    conn_config.connect((host, PORT_CONFIG))
     print("conn_config connect...")
     
     #send configure value 
@@ -689,6 +711,7 @@ def send_configuration(max_user, confidence_level):
 
 def config(request):
     if request.method == "GET":
+        get_lookupserver()
         config = models.Config.objects.get()
         print(config.lookup_server)
         return render(request, "alpr/config.html", context = {
