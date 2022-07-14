@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'duo_universal_auth.apps.DuoUniversalAuthConfig', 	
+    #'duo_universal_auth.apps.DuoUniversalAuthConfig', 	
     'alpr',
     'django_bootstrap_icons',
 ]
@@ -54,7 +54,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'duo_universal_auth.middleware.DuoUniversalAuthMiddleware',
+    #'duo_universal_auth.middleware.DuoUniversalAuthMiddleware',
 ]
 
 ROOT_URLCONF = 'webapp.urls'
